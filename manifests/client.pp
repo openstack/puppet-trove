@@ -25,7 +25,7 @@
 #   (optional) The state of the package
 #   Defaults to present
 #
-
+#
 class trove::client (
   $package_ensure = present
 ) {
@@ -34,7 +34,7 @@ class trove::client (
 
   package { 'python-troveclient':
     ensure => $package_ensure,
-    name   => $::trove::params::client_package,
+    name   => $::trove::params::client_package_name,
   }
 
 }
