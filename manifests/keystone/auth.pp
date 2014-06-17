@@ -80,7 +80,7 @@ class trove::keystone::auth (
   $admin_address      = '127.0.0.1',
   $internal_protocol  = 'http',
   $internal_address   = '127.0.0.1',
-  $port               = '9696',
+  $port               = '8779',
   $public_port        = undef,
   $region             = 'RegionOne'
 ) {
