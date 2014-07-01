@@ -37,7 +37,7 @@
 #   Should Neutron endpoint be configured? Defaults to 'true'.
 #
 # [*service_type*]
-#   Type of service. Defaults to 'network'.
+#   Type of service. Defaults to 'database'.
 #
 # [*public_protocol*]
 #   Protocol for public endpoint. Defaults to 'http'.
@@ -66,20 +66,21 @@
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
 #
+#
 class trove::keystone::auth (
   $password,
   $auth_name          = 'trove',
   $email              = 'trove@localhost',
   $tenant             = 'services',
   $configure_endpoint = true,
-  $service_type       = 'network',
+  $service_type       = 'database',
   $public_protocol    = 'http',
   $public_address     = '127.0.0.1',
   $admin_protocol     = 'http',
   $admin_address      = '127.0.0.1',
   $internal_protocol  = 'http',
   $internal_address   = '127.0.0.1',
-  $port               = '9696',
+  $port               = '8779',
   $public_port        = undef,
   $region             = 'RegionOne'
 ) {
