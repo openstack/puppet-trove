@@ -116,7 +116,7 @@
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
-#   Defaults to 'sqlite:///var/lib/trove/trove.sqlite'
+#   Defaults to 'sqlite:////var/lib/trove/trove.sqlite'
 #
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle db connections are reaped.
@@ -135,7 +135,7 @@ class trove(
   $kombu_ssl_keyfile        = undef,
   $kombu_ssl_version        = 'SSLv3',
   $amqp_durable_queues      = false,
-  $database_connection      = 'sqlite:///var/lib/trove/trove.sqlite',
+  $database_connection      = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_idle_timeout    = 3600,
   $mysql_module             = '0.9',
   $rpc_backend              = 'trove.openstack.common.rpc.impl_kombu',
