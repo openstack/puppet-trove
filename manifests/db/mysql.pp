@@ -55,7 +55,6 @@
 # == Dependencies
 #   Class['mysql::server']
 #
-
 class trove::db::mysql(
   $password,
   $dbname        = 'trove',

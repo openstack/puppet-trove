@@ -17,13 +17,12 @@
 #
 # Class to execute "trove-manage db_sync"
 #
-
 class trove::db::sync {
   exec { 'trove-manage db_sync':
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => [Package['trove'], trove_config['database/connection']],
+    subscribe   => [Package['trove'], Trove_config['database/connection']],
     require     => User['trove'],
   }
 }

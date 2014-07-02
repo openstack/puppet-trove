@@ -15,7 +15,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-
 define trove::db::mysql::host_access(
   $user,
   $password,
