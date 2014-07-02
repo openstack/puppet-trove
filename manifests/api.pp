@@ -361,7 +361,7 @@ class trove::api(
     }
   }
 
-  if $::trove::rpc_backend == 'nova.openstack.common.rpc.impl_qpid' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
     trove_config {
       'DEFAULT/qpid_hostname':               value => $::trove::qpid_hostname;
       'DEFAULT/qpid_port':                   value => $::trove::qpid_port;
