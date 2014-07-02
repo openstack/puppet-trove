@@ -96,11 +96,6 @@
 #   (optional) Protocol to use for auth.
 #   Defaults to 'http'.
 #
-# [*pipeline*]
-#   (optional) Partial name of a pipeline in your paste configuration file with the
-#   service name removed.
-#   Defaults to 'keystone+cachemanagement'.
-#
 # [*keystone_tenant*]
 #   (optional) Tenant to authenticate to.
 #   Defaults to services.
@@ -156,7 +151,6 @@ class trove::api(
   $auth_uri              = false,
   $auth_admin_prefix     = false,
   $auth_protocol         = 'http',
-  $pipeline              = 'keystone+cachemanagement',
   $keystone_tenant       = 'services',
   $keystone_user         = 'trove',
   $enabled               = true,
@@ -167,30 +161,17 @@ class trove::api(
   $key_file              = false,
   $ca_file               = false,
   $manage_service        = true,
-  $ensure_packages       = 'present',
+  $ensure_package        = 'present',
 ) inherits trove {
 
   require keystone::python
+  include trove::params
 
-  ensure_packages($trove::params::api_package_name)
+  Package[$::trove::params::api_package_name] -> Trove_config<||>
+  Trove_config<||> ~> Exec['post-trove_config']
+  Trove_config<||> ~> Service['trove-api']
 
-  Package[$trove::params::api_package_name] -> File['/etc/trove/']
-  Package[$trove::params::api_package_name] -> Trove_config<||>
-
-  Trove_config<||>   ~> Exec<| title == 'trove-manage db_sync' |>
-  Exec<| title == 'trove-manage db_sync' |> ~> Service['trove-api']
-  Trove_config<||>   ~> Service['trove-api']
-
-  File {
-    ensure  => present,
-    owner   => 'trove',
-    group   => 'trove',
-    mode    => '0640',
-    notify  => Service['trove-api'],
-    require => Class['trove']
-  }
-
-  if $database_connection {
+  if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
       if ($::trove::mysql_module >= 2.2) {
         require 'mysql::bindings'
@@ -213,14 +194,12 @@ class trove::api(
 
   # basic service config
   trove_config {
-    'DEFAULT/verbose':          value  => $verbose;
-    'DEFAULT/debug':            value  => $debug;
-    'DEFAULT/bind_host':        value  => $bind_host;
-    'DEFAULT/bind_port':        value  => $bind_port;
-    'DEFAULT/backlog':          value  => $backlog;
+    'DEFAULT/verbose':           value => $verbose;
+    'DEFAULT/debug':             value => $debug;
+    'DEFAULT/bind_host':         value => $bind_host;
+    'DEFAULT/bind_port':         value => $bind_port;
+    'DEFAULT/backlog':           value => $backlog;
     'DEFAULT/trove_api_workers': value => $workers;
-    'DEFAULT/verbose':          value  => $verbose;
-    'DEFAULT/debug':            value  => $debug;
   }
 
   if $auth_uri {
@@ -245,18 +224,6 @@ class trove::api(
     trove_config {
       'keystone_authtoken/auth_admin_prefix': ensure => absent;
     }
-  }
-
-  # Set the pipeline, it is allowed to be blank
-  if $pipeline != '' {
-    validate_re($pipeline, '^(\w+([+]\w+)*)*$')
-    trove_config {
-      'paste_deploy/flavor':
-        ensure => present,
-        value  => $pipeline,
-    }
-  } else {
-    trove_config { 'paste_deploy/flavor': ensure => absent }
   }
 
   # keystone config
@@ -334,10 +301,6 @@ class trove::api(
     purge => $purge_config,
   }
 
-  file { ['/etc/trove/trove.conf',
-          '/etc/trove/api-paste.ini']:
-  }
-
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
     # I may want to support exporting and collecting these
     trove_config {
@@ -375,7 +338,7 @@ class trove::api(
     }
   }
 
-  if $rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
     trove_config {
       'DEFAULT/qpid_hostname':               value => $::trove::qpid_hostname;
       'DEFAULT/qpid_port':                   value => $::trove::qpid_port;
@@ -385,12 +348,12 @@ class trove::api(
       'DEFAULT/qpid_protocol':               value => $::trove::qpid_protocol;
       'DEFAULT/qpid_tcp_nodelay':            value => $::trove::qpid_tcp_nodelay;
     }
-    if is_array($qpid_sasl_mechanisms) {
+    if is_array($::trove::qpid_sasl_mechanisms) {
       trove_config {
         'DEFAULT/qpid_sasl_mechanisms': value => join($::trove::qpid_sasl_mechanisms, ' ');
       }
     }
-    elsif $qpid_sasl_mechanisms {
+    elsif $::trove::qpid_sasl_mechanisms {
       trove_config {
         'DEFAULT/qpid_sasl_mechanisms': value => $::trove::qpid_sasl_mechanisms;
       }

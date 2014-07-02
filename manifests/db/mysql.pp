@@ -66,9 +66,9 @@ class trove::db::mysql(
   $allowed_hosts = undef
 ) {
 
-  Class['trove::db::mysql'] -> Exec<| title == 'trove-manage db_sync' |>
+  Class['trove::db::mysql'] -> Exec<| title == 'trove-db-sync' |>
   Mysql::Db[$dbname] -> Anchor<| title == 'trove-start' |>
-  Mysql::Db[$dbname] ~> Exec<| title == 'trove-manage db_sync' |>
+  Mysql::Db[$dbname] ~> Exec<| title == 'trove-db-sync' |>
 
   if ($mysql_module >= 2.2) {
     mysql::db { $dbname:
@@ -106,7 +106,7 @@ class trove::db::mysql(
       mysql_module  => $mysql_module,
     }
 
-    Trove::Db::Mysql::Host_access[$real_allowed_hosts] -> Exec<| title == 'trove-manage db_sync' |>
+    Trove::Db::Mysql::Host_access[$real_allowed_hosts] -> Exec<| title == 'trove-db-sync' |>
 
   }
 

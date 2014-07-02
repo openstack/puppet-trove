@@ -5,7 +5,6 @@ class trove::params {
   case $::osfamily {
     'RedHat': {
       $client_package_name      = 'openstack-trove'
-      $common_package_name      = 'openstack-trove-common'
       $conductor_package_name   = 'openstack-trove-conductor'
       $conductor_service_name   = 'openstack-trove-conductor'
       $api_package_name         = 'openstack-trove-api'
@@ -17,7 +16,6 @@ class trove::params {
     }
     'Debian': {
       $client_package_name      = 'python-troveclient'
-      $common_package_name      = 'trove-common'
       $conductor_package_name   = 'trove-conductor'
       $conductor_service_name   = 'trove-conductor'
       $api_package_name         = 'trove-api'

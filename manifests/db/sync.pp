@@ -15,14 +15,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Class to execute "trove-manage db_sync"
+# Class to execute "trove-manage db_sync
 #
 class trove::db::sync {
-  exec { 'trove-manage db_sync':
+  exec { 'trove-db-sync':
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => [Package['trove'], Trove_config['database/connection']],
+    subscribe   => [Package['trove'], Keystone_config['DEFAULT/sql_connection']],
     require     => User['trove'],
   }
 }
