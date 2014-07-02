@@ -65,7 +65,6 @@ define trove::generic_service(
       name      => $service_name,
       enable    => $enabled,
       hasstatus => true,
-      require   => [Package['trove-common'], Package[$package_name]],
     }
   }
 }

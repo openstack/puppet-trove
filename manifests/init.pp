@@ -141,4 +141,9 @@ class trove(
   $rpc_backend              = 'trove.openstack.common.rpc.impl_kombu',
 ){
   include trove::params
+
+  exec { 'post-trove_config':
+    command     => '/bin/echo "Trove config has changed"',
+    refreshonly => true,
+  }
 }

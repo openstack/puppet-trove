@@ -167,30 +167,18 @@ class trove::api(
   $key_file              = false,
   $ca_file               = false,
   $manage_service        = true,
-  $ensure_packages       = 'present',
+  $ensure_package        = 'present',
 ) inherits trove {
 
   require keystone::python
 
-  ensure_packages($trove::params::api_package_name)
+  ensure_packages($::trove::params::api_package_name)
 
-  Package[$trove::params::api_package_name] -> File['/etc/trove/']
   Package[$trove::params::api_package_name] -> Trove_config<||>
+  Trove_config<||> ~> Exec['post-trove_config']
+  Trove_config<||> ~> Service['trove-api']
 
-  Trove_config<||>   ~> Exec<| title == 'trove-manage db_sync' |>
-  Exec<| title == 'trove-manage db_sync' |> ~> Service['trove-api']
-  Trove_config<||>   ~> Service['trove-api']
-
-  File {
-    ensure  => present,
-    owner   => 'trove',
-    group   => 'trove',
-    mode    => '0640',
-    notify  => Service['trove-api'],
-    require => Class['trove']
-  }
-
-  if $database_connection {
+  if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
       if ($::trove::mysql_module >= 2.2) {
         require 'mysql::bindings'
@@ -219,8 +207,6 @@ class trove::api(
     'DEFAULT/bind_port':        value  => $bind_port;
     'DEFAULT/backlog':          value  => $backlog;
     'DEFAULT/trove_api_workers': value => $workers;
-    'DEFAULT/verbose':          value  => $verbose;
-    'DEFAULT/debug':            value  => $debug;
   }
 
   if $auth_uri {
@@ -375,7 +361,7 @@ class trove::api(
     }
   }
 
-  if $rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
+  if $::trove::rpc_backend == 'nova.openstack.common.rpc.impl_qpid' {
     trove_config {
       'DEFAULT/qpid_hostname':               value => $::trove::qpid_hostname;
       'DEFAULT/qpid_port':                   value => $::trove::qpid_port;
@@ -385,12 +371,12 @@ class trove::api(
       'DEFAULT/qpid_protocol':               value => $::trove::qpid_protocol;
       'DEFAULT/qpid_tcp_nodelay':            value => $::trove::qpid_tcp_nodelay;
     }
-    if is_array($qpid_sasl_mechanisms) {
+    if is_array($::trove::qpid_sasl_mechanisms) {
       trove_config {
         'DEFAULT/qpid_sasl_mechanisms': value => join($::trove::qpid_sasl_mechanisms, ' ');
       }
     }
-    elsif $qpid_sasl_mechanisms {
+    elsif $::trove::qpid_sasl_mechanisms {
       trove_config {
         'DEFAULT/qpid_sasl_mechanisms': value => $::trove::qpid_sasl_mechanisms;
       }
