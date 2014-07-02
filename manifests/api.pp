@@ -26,7 +26,7 @@
 #   Defaults to true
 #
 # [*ensure_package*]
-#   (optional) Whether the nova api package will be installed
+#   (optional) Whether the trove api package will be installed
 #   Defaults to 'present'
 #
 # [*keystone_password*]
@@ -213,14 +213,14 @@ class trove::api(
 
   # basic service config
   trove_config {
-    'DEFAULT/verbose':          value => $verbose;
-    'DEFAULT/debug':            value => $debug;
-    'DEFAULT/bind_host':        value => $bind_host;
-    'DEFAULT/bind_port':        value => $bind_port;
-    'DEFAULT/backlog':          value => $backlog;
+    'DEFAULT/verbose':          value  => $verbose;
+    'DEFAULT/debug':            value  => $debug;
+    'DEFAULT/bind_host':        value  => $bind_host;
+    'DEFAULT/bind_port':        value  => $bind_port;
+    'DEFAULT/backlog':          value  => $backlog;
     'DEFAULT/trove_api_workers': value => $workers;
-    'DEFAULT/verbose':          value => $verbose;
-    'DEFAULT/debug':            value => $debug;
+    'DEFAULT/verbose':          value  => $verbose;
+    'DEFAULT/debug':            value  => $debug;
   }
 
   if $auth_uri {
@@ -338,7 +338,7 @@ class trove::api(
           '/etc/trove/api-paste.ini']:
   }
 
-  if $::trove::rpc_backend == 'nova.openstack.common.rpc.impl_kombu' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
     # I may want to support exporting and collecting these
     trove_config {
       'DEFAULT/rabbit_password':     value => $::trove::rabbit_password, secret => true;
@@ -375,7 +375,7 @@ class trove::api(
     }
   }
 
-  if $rpc_backend == 'nova.openstack.common.rpc.impl_qpid' {
+  if $rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
     trove_config {
       'DEFAULT/qpid_hostname':               value => $::trove::qpid_hostname;
       'DEFAULT/qpid_port':                   value => $::trove::qpid_port;
@@ -402,11 +402,11 @@ class trove::api(
     }
   }
 
-  nova::generic_service { 'api':
+  trove::generic_service { 'api':
     enabled        => $enabled,
     manage_service => $manage_service,
     ensure_package => $ensure_package,
-    package_name   => $::nova::params::api_package_name,
-    service_name   => $::nova::params::api_service_name,
+    package_name   => $::trove::params::api_package_name,
+    service_name   => $::trove::params::api_service_name,
   }
 }

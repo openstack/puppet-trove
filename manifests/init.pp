@@ -105,9 +105,9 @@
 #
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
-#     nova.openstack.common.rpc.impl_kombu (for rabbitmq)
-#     nova.openstack.common.rpc.impl_qpid  (for qpid)
-#   Defaults to 'nova.openstack.common.rpc.impl_kombu'
+#     trove.openstack.common.rpc.impl_kombu (for rabbitmq)
+#     trove.openstack.common.rpc.impl_qpid  (for qpid)
+#   Defaults to 'trove.openstack.common.rpc.impl_kombu'
 #
 # [*mysql_module*]
 #   (optional) Mysql puppet module version to use
@@ -115,14 +115,13 @@
 #   Defaults to '0.9'.
 #
 # [*database_connection*]
-#   (optional) Connection url to connect to nova database.
+#   (optional) Connection url to connect to trove database.
 #   Defaults to 'sqlite:///var/lib/trove/trove.sqlite'
 #
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle db connections are reaped.
 #   Defaults to 3600
 #
-
 class trove(
   $rabbit_host              = 'localhost',
   $rabbit_hosts             = false,
@@ -139,7 +138,7 @@ class trove(
   $database_connection      = 'sqlite:///var/lib/trove/trove.sqlite',
   $database_idle_timeout    = 3600,
   $mysql_module             = '0.9',
-  $rpc_backend              = 'nova.openstack.common.rpc.impl_kombu',
+  $rpc_backend              = 'trove.openstack.common.rpc.impl_kombu',
 ){
   include trove::params
 }
