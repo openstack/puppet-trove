@@ -22,7 +22,8 @@ require 'spec_helper'
 describe 'trove::api' do
 
   let :params do
-    { :keystone_password => 'passw0rd' }
+    { :keystone_password     => 'passw0rd',
+      :nova_proxy_admin_pass => 'verysecrete' }
   end
 
   shared_examples 'trove-api' do
@@ -50,15 +51,39 @@ describe 'trove::api' do
         should contain_trove_config('DEFAULT/bind_port').with_value('8779')
         should contain_trove_config('DEFAULT/backlog').with_value('4096')
         should contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
+        should contain_trove_config('DEFAULT/trove_auth_url').with_value('http://localhost:5000/v2.0')
+        should contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
+        should contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
+        should contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
       end
 
-      context 'when using RabbitMQ' do
+      context 'when using a single RabbitMQ server' do
         let :pre_condition do
           "class { 'trove':
              rabbit_host => '10.0.0.1'}"
         end
         it 'configures trove-api with RabbitMQ' do
           should contain_trove_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+        end
+      end
+
+      context 'when using multiple RabbitMQ servers' do
+        let :pre_condition do
+          "class { 'trove':
+             rabbit_hosts => ['10.0.0.1','10.0.0.2']}"
+        end
+        it 'configures trove-api with RabbitMQ' do
+          should contain_trove_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+        end
+      end
+
+      context 'when using MySQL' do
+        let :pre_condition do
+          "class { 'trove':
+             database_connection => 'mysql://trove:pass@10.0.0.1/trove'}"
+        end
+        it 'configures trove-api with RabbitMQ' do
+          should contain_trove_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
         end
       end
     end
