@@ -96,11 +96,6 @@
 #   (optional) Protocol to use for auth.
 #   Defaults to 'http'.
 #
-# [*pipeline*]
-#   (optional) Partial name of a pipeline in your paste configuration file with the
-#   service name removed.
-#   Defaults to 'keystone+cachemanagement'.
-#
 # [*keystone_tenant*]
 #   (optional) Tenant to authenticate to.
 #   Defaults to services.
@@ -156,7 +151,6 @@ class trove::api(
   $auth_uri              = false,
   $auth_admin_prefix     = false,
   $auth_protocol         = 'http',
-  $pipeline              = 'keystone+cachemanagement',
   $keystone_tenant       = 'services',
   $keystone_user         = 'trove',
   $enabled               = true,
@@ -232,18 +226,6 @@ class trove::api(
     }
   }
 
-  # Set the pipeline, it is allowed to be blank
-  if $pipeline != '' {
-    validate_re($pipeline, '^(\w+([+]\w+)*)*$')
-    trove_config {
-      'paste_deploy/flavor':
-        ensure => present,
-        value  => $pipeline,
-    }
-  } else {
-    trove_config { 'paste_deploy/flavor': ensure => absent }
-  }
-
   # keystone config
   if $auth_type == 'keystone' {
     trove_config {
@@ -317,10 +299,6 @@ class trove::api(
 
   resources { 'trove_config':
     purge => $purge_config,
-  }
-
-  file { ['/etc/trove/trove.conf',
-          '/etc/trove/api-paste.ini']:
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {

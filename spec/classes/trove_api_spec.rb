@@ -21,16 +21,8 @@ require 'spec_helper'
 
 describe 'trove::api' do
 
-  let :pre_condition do
-    "class {'trove':}"
-  end
-
   let :params do
     { :keystone_password => 'passw0rd' }
-  end
-
-  let :facts do
-    { :processorcount => 5 }
   end
 
   shared_examples 'trove-api' do
@@ -50,12 +42,32 @@ describe 'trove::api' do
           :notify => 'Service[trove-api]'
         )
       end
+
+      it 'configures trove-api with default parameters' do
+        should contain_trove_config('DEFAULT/verbose').with_value(false)
+        should contain_trove_config('DEFAULT/debug').with_value(false)
+        should contain_trove_config('DEFAULT/bind_host').with_value('0.0.0.0')
+        should contain_trove_config('DEFAULT/bind_port').with_value('8779')
+        should contain_trove_config('DEFAULT/backlog').with_value('4096')
+        should contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
+      end
+
+      context 'when using RabbitMQ' do
+        let :pre_condition do
+          "class { 'trove':
+             rabbit_host => '10.0.0.1'}"
+        end
+        it 'configures trove-api with RabbitMQ' do
+          should contain_trove_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+        end
+      end
     end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily       => 'Debian',
+        :processorcount => 8 }
     end
 
     let :platform_params do
@@ -68,7 +80,8 @@ describe 'trove::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily       => 'RedHat',
+        :processorcount => 8 }
     end
 
     let :platform_params do
