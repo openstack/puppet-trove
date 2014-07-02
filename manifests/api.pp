@@ -171,10 +171,9 @@ class trove::api(
 ) inherits trove {
 
   require keystone::python
+  include trove::params
 
-  ensure_packages($::trove::params::api_package_name)
-
-  Package[$trove::params::api_package_name] -> Trove_config<||>
+  Package[$::trove::params::api_package_name] -> Trove_config<||>
   Trove_config<||> ~> Exec['post-trove_config']
   Trove_config<||> ~> Service['trove-api']
 
@@ -201,11 +200,11 @@ class trove::api(
 
   # basic service config
   trove_config {
-    'DEFAULT/verbose':          value  => $verbose;
-    'DEFAULT/debug':            value  => $debug;
-    'DEFAULT/bind_host':        value  => $bind_host;
-    'DEFAULT/bind_port':        value  => $bind_port;
-    'DEFAULT/backlog':          value  => $backlog;
+    'DEFAULT/verbose':           value => $verbose;
+    'DEFAULT/debug':             value => $debug;
+    'DEFAULT/bind_host':         value => $bind_host;
+    'DEFAULT/bind_port':         value => $bind_port;
+    'DEFAULT/backlog':           value => $backlog;
     'DEFAULT/trove_api_workers': value => $workers;
   }
 
