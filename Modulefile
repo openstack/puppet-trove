@@ -1,7 +1,7 @@
 name 'puppetlabs-trove'
 version '4.0.0'
 
-author 'Emilien Macchi,Sebastien Badia'
+author 'OpenStack foundation'
 license 'Apache License 2.0'
 project_page 'https://launchpad.net/puppet-trove'
 source 'https://github.com/stackforge/puppet-trove'
