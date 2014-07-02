@@ -1,4 +1,4 @@
-Puppet::Type.newtype(:trove_paste_api_ini) do
+Puppet::Type.newtype(:trove_api_paste_ini) do
 
   ensurable
 

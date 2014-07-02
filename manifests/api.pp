@@ -133,35 +133,49 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
+# [*nova_proxy_admin_user*]
+#   (optional) Admin username used to connect to nova.
+#   Defaults to 'admin'
+#
+# [*nova_proxy_admin_pass*]
+#   (required) Admin password used to connect to nova.
+#
+# [*nova_proxy_admin_tenant_name*]
+#   (optional) Admin tenant name used to connect to nova.
+#   Defaults to 'admin'
+#
 
 class trove::api(
   $keystone_password,
-  $verbose               = false,
-  $debug                 = false,
-  $bind_host             = '0.0.0.0',
-  $bind_port             = '8779',
-  $backlog               = '4096',
-  $workers               = $::processorcount,
-  $log_file              = '/var/log/trove/trove-api.log',
-  $log_dir               = '/var/log/trove',
-  $auth_type             = 'keystone',
-  $auth_host             = '127.0.0.1',
-  $auth_url              = 'http://localhost:5000/v2.0',
-  $auth_port             = '35357',
-  $auth_uri              = false,
-  $auth_admin_prefix     = false,
-  $auth_protocol         = 'http',
-  $keystone_tenant       = 'services',
-  $keystone_user         = 'trove',
-  $enabled               = true,
-  $use_syslog            = false,
-  $log_facility          = 'LOG_USER',
-  $purge_config          = false,
-  $cert_file             = false,
-  $key_file              = false,
-  $ca_file               = false,
-  $manage_service        = true,
-  $ensure_package        = 'present',
+  $nova_proxy_admin_pass,
+  $verbose                      = false,
+  $debug                        = false,
+  $bind_host                    = '0.0.0.0',
+  $bind_port                    = '8779',
+  $backlog                      = '4096',
+  $workers                      = $::processorcount,
+  $log_file                     = '/var/log/trove/trove-api.log',
+  $log_dir                      = '/var/log/trove',
+  $auth_type                    = 'keystone',
+  $auth_host                    = '127.0.0.1',
+  $auth_url                     = 'http://localhost:5000/v2.0',
+  $auth_port                    = '35357',
+  $auth_uri                     = false,
+  $auth_admin_prefix            = false,
+  $auth_protocol                = 'http',
+  $keystone_tenant              = 'services',
+  $keystone_user                = 'trove',
+  $enabled                      = true,
+  $use_syslog                   = false,
+  $log_facility                 = 'LOG_USER',
+  $purge_config                 = false,
+  $cert_file                    = false,
+  $key_file                     = false,
+  $ca_file                      = false,
+  $manage_service               = true,
+  $ensure_package               = 'present',
+  $nova_proxy_admin_user        = 'admin',
+  $nova_proxy_admin_tenant_name = 'admin',
 ) inherits trove {
 
   require keystone::python
@@ -194,18 +208,22 @@ class trove::api(
 
   # basic service config
   trove_config {
-    'DEFAULT/verbose':           value => $verbose;
-    'DEFAULT/debug':             value => $debug;
-    'DEFAULT/bind_host':         value => $bind_host;
-    'DEFAULT/bind_port':         value => $bind_port;
-    'DEFAULT/backlog':           value => $backlog;
-    'DEFAULT/trove_api_workers': value => $workers;
+    'DEFAULT/verbose':                      value => $verbose;
+    'DEFAULT/debug':                        value => $debug;
+    'DEFAULT/bind_host':                    value => $bind_host;
+    'DEFAULT/bind_port':                    value => $bind_port;
+    'DEFAULT/backlog':                      value => $backlog;
+    'DEFAULT/trove_api_workers':            value => $workers;
+    'DEFAULT/trove_auth_url':               value => $auth_url;
+    'DEFAULT/nova_proxy_admin_user':        value => $nova_proxy_admin_user;
+    'DEFAULT/nova_proxy_admin_pass':        value => $nova_proxy_admin_pass;
+    'DEFAULT/nova_proxy_admin_tenant_name': value => $nova_proxy_admin_tenant_name;
   }
 
   if $auth_uri {
-    trove_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
+    trove_api_paste_ini { 'keystone_authtoken/auth_uri': value => $auth_uri; }
   } else {
-    trove_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
+    trove_api_paste_ini { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
   }
 
   # auth config
