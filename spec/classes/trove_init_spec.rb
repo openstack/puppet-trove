@@ -22,6 +22,10 @@ require 'spec_helper'
 
 describe 'trove' do
 
+  let :params do
+    { :nova_proxy_admin_pass => 'passw0rd' }
+  end
+
   shared_examples_for 'trove' do
     it { should contain_class('trove::params') }
   end

@@ -23,19 +23,23 @@ describe 'trove::api' do
 
   let :params do
     { :keystone_password     => 'passw0rd',
-      :nova_proxy_admin_pass => 'verysecrete',
       :auth_host             => '10.0.0.10',
       :auth_url              => 'http://10.0.0.10:5000/v2.0',
       :auth_port             => '35357',
       :auth_protocol         => 'https',
       :keystone_tenant       => '_services_',
       :keystone_user         => 'trove',
-}
+    }
   end
 
   shared_examples 'trove-api' do
 
     context 'with default parameters' do
+
+      let :pre_condition do
+        "class { 'trove':
+         nova_proxy_admin_pass => 'verysecrete'}"
+      end
 
       it 'installs trove-api package and service' do
         should contain_service('trove-api').with(
@@ -73,7 +77,8 @@ describe 'trove::api' do
       context 'when using a single RabbitMQ server' do
         let :pre_condition do
           "class { 'trove':
-             rabbit_host => '10.0.0.1'}"
+             nova_proxy_admin_pass => 'verysecrete',
+             rabbit_host           => '10.0.0.1'}"
         end
         it 'configures trove-api with RabbitMQ' do
           should contain_trove_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
@@ -83,7 +88,8 @@ describe 'trove::api' do
       context 'when using multiple RabbitMQ servers' do
         let :pre_condition do
           "class { 'trove':
-             rabbit_hosts => ['10.0.0.1','10.0.0.2']}"
+             nova_proxy_admin_pass => 'verysecrete',
+             rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
         end
         it 'configures trove-api with RabbitMQ' do
           should contain_trove_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
@@ -93,7 +99,8 @@ describe 'trove::api' do
       context 'when using MySQL' do
         let :pre_condition do
           "class { 'trove':
-             database_connection => 'mysql://trove:pass@10.0.0.1/trove'}"
+             nova_proxy_admin_pass => 'verysecrete',
+             database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
         end
         it 'configures trove-api with RabbitMQ' do
           should contain_trove_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')

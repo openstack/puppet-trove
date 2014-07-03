@@ -49,6 +49,10 @@
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to false
 #
+# [*rabbit_notification_topic*]
+#   (optional) Notification topic.
+#   Defaults to false.
+#
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
 #   Defaults to undef
@@ -122,23 +126,39 @@
 #   (optional) Timeout before idle db connections are reaped.
 #   Defaults to 3600
 #
+# [*nova_proxy_admin_user*]
+#   (optional) Admin username used to connect to nova.
+#   Defaults to 'admin'
+#
+# [*nova_proxy_admin_pass*]
+#   (required) Admin password used to connect to nova.
+#
+# [*nova_proxy_admin_tenant_name*]
+#   (optional) Admin tenant name used to connect to nova.
+#   Defaults to 'admin'
+#
+
 class trove(
-  $rabbit_host              = 'localhost',
-  $rabbit_hosts             = false,
-  $rabbit_password          = 'guest',
-  $rabbit_port              = '5672',
-  $rabbit_userid            = 'guest',
-  $rabbit_virtual_host      = '/',
-  $rabbit_use_ssl           = false,
-  $kombu_ssl_ca_certs       = undef,
-  $kombu_ssl_certfile       = undef,
-  $kombu_ssl_keyfile        = undef,
-  $kombu_ssl_version        = 'SSLv3',
-  $amqp_durable_queues      = false,
-  $database_connection      = 'sqlite:////var/lib/trove/trove.sqlite',
-  $database_idle_timeout    = 3600,
-  $mysql_module             = '0.9',
-  $rpc_backend              = 'trove.openstack.common.rpc.impl_kombu',
+  $nova_proxy_admin_pass,
+  $rabbit_host                  = 'localhost',
+  $rabbit_hosts                 = false,
+  $rabbit_password              = 'guest',
+  $rabbit_port                  = '5672',
+  $rabbit_userid                = 'guest',
+  $rabbit_virtual_host          = '/',
+  $rabbit_use_ssl               = false,
+  $rabbit_notification_topic    = 'notifications',
+  $kombu_ssl_ca_certs           = undef,
+  $kombu_ssl_certfile           = undef,
+  $kombu_ssl_keyfile            = undef,
+  $kombu_ssl_version            = 'SSLv3',
+  $amqp_durable_queues          = false,
+  $database_connection          = 'sqlite:////var/lib/trove/trove.sqlite',
+  $database_idle_timeout        = 3600,
+  $mysql_module                 = '0.9',
+  $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
+  $nova_proxy_admin_user        = 'admin',
+  $nova_proxy_admin_tenant_name = 'admin',
 ){
   include trove::params
 

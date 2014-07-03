@@ -119,21 +119,8 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
-# [*nova_proxy_admin_user*]
-#   (optional) Admin username used to connect to nova.
-#   Defaults to 'admin'
-#
-# [*nova_proxy_admin_pass*]
-#   (required) Admin password used to connect to nova.
-#
-# [*nova_proxy_admin_tenant_name*]
-#   (optional) Admin tenant name used to connect to nova.
-#   Defaults to 'admin'
-#
-
 class trove::api(
   $keystone_password,
-  $nova_proxy_admin_pass,
   $verbose                      = false,
   $debug                        = false,
   $bind_host                    = '0.0.0.0',
@@ -157,8 +144,6 @@ class trove::api(
   $ca_file                      = false,
   $manage_service               = true,
   $ensure_package               = 'present',
-  $nova_proxy_admin_user        = 'admin',
-  $nova_proxy_admin_tenant_name = 'admin',
 ) inherits trove {
 
   require keystone::python
@@ -199,9 +184,9 @@ class trove::api(
     'DEFAULT/bind_port':                    value => $bind_port;
     'DEFAULT/backlog':                      value => $backlog;
     'DEFAULT/trove_api_workers':            value => $workers;
-    'DEFAULT/nova_proxy_admin_user':        value => $nova_proxy_admin_user;
-    'DEFAULT/nova_proxy_admin_pass':        value => $nova_proxy_admin_pass;
-    'DEFAULT/nova_proxy_admin_tenant_name': value => $nova_proxy_admin_tenant_name;
+    'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
+    'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
+    'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
   }
 
   if $auth_url {
