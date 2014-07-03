@@ -22,7 +22,14 @@ require 'spec_helper'
 describe 'trove::api' do
 
   let :params do
-    { :keystone_password     => 'passw0rd' }
+    { :keystone_password     => 'passw0rd',
+      :auth_host             => '10.0.0.10',
+      :auth_url              => 'http://10.0.0.10:5000/v2.0',
+      :auth_port             => '35357',
+      :auth_protocol         => 'https',
+      :keystone_tenant       => '_services_',
+      :keystone_user         => 'trove',
+    }
   end
 
   shared_examples 'trove-api' do

@@ -119,7 +119,6 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
-
 class trove::api(
   $keystone_password,
   $verbose                      = false,
@@ -185,7 +184,6 @@ class trove::api(
     'DEFAULT/bind_port':                    value => $bind_port;
     'DEFAULT/backlog':                      value => $backlog;
     'DEFAULT/trove_api_workers':            value => $workers;
-    'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
