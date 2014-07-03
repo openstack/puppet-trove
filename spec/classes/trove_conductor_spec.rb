@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'trove::conductor' do
 
   let :pre_condition do
-    'include trove'
+    "class { 'trove':
+     nova_proxy_admin_pass => 'verysecrete'}"
   end
 
   context 'on Debian platforms' do
