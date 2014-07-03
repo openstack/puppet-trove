@@ -75,7 +75,7 @@ class trove::taskmanager(
   $log_facility   = 'LOG_USER',
   $auth_url       = 'http://localhost:5000/v2.0',
   $ensure_package = 'present'
-) {
+) inherits trove {
 
   include trove::params
 
@@ -160,6 +160,7 @@ class trove::taskmanager(
     if is_array($::trove::qpid_sasl_mechanisms) {
       trove_taskmanager_config {
         'DEFAULT/qpid_sasl_mechanisms': value => join($::trove::qpid_sasl_mechanisms, ' ');
+      }
     }
   }
 
