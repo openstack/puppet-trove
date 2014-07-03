@@ -66,10 +66,6 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to '/var/log/trove'
 #
-# [*auth_type*]
-#   (optional) Type is authorization being used.
-#   Defaults to 'keystone'
-#
 # [* auth_host*]
 #   (optional) Host running auth service.
 #   Defaults to '127.0.0.1'.
@@ -81,16 +77,6 @@
 # [* auth_port*]
 #   (optional) Port to use for auth service on auth_host.
 #   Defaults to '35357'.
-#
-# [* auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Defaults to false.
-#
-# [*auth_admin_prefix*]
-#   (optional) Path part of the auth url.
-#   This allow admin auth URIs like http://auth_host:35357/keystone/admin.
-#   (where '/keystone/admin' is auth_admin_prefix)
-#   Defaults to false for empty. If defined, should be a string with a leading '/' and no trailing '/'.
 #
 # [* auth_protocol*]
 #   (optional) Protocol to use for auth.
@@ -156,12 +142,9 @@ class trove::api(
   $workers                      = $::processorcount,
   $log_file                     = '/var/log/trove/trove-api.log',
   $log_dir                      = '/var/log/trove',
-  $auth_type                    = 'keystone',
   $auth_host                    = '127.0.0.1',
-  $auth_url                     = 'http://localhost:5000/v2.0',
+  $auth_url                     = false,
   $auth_port                    = '35357',
-  $auth_uri                     = false,
-  $auth_admin_prefix            = false,
   $auth_protocol                = 'http',
   $keystone_tenant              = 'services',
   $keystone_user                = 'trove',
@@ -181,9 +164,11 @@ class trove::api(
   require keystone::python
   include trove::params
 
-  Package[$::trove::params::api_package_name] -> Trove_config<||>
   Trove_config<||> ~> Exec['post-trove_config']
   Trove_config<||> ~> Service['trove-api']
+  Package['trove-api'] -> Trove_config<||>
+  Package['trove-api'] -> Trove_api_paste_ini<||>
+  Trove_api_paste_ini<||> ~> Service['trove-api']
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
@@ -214,43 +199,25 @@ class trove::api(
     'DEFAULT/bind_port':                    value => $bind_port;
     'DEFAULT/backlog':                      value => $backlog;
     'DEFAULT/trove_api_workers':            value => $workers;
-    'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $nova_proxy_admin_tenant_name;
   }
 
-  if $auth_uri {
-    trove_api_paste_ini { 'keystone_authtoken/auth_uri': value => $auth_uri; }
+  if $auth_url {
+    trove_config { 'DEFAULT/trove_auth_url': value => $auth_url; }
   } else {
-    trove_api_paste_ini { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
+    trove_config { 'DEFAULT/trove_auth_url': value => "${auth_protocol}://${auth_host}:5000/v2.0"; }
   }
 
   # auth config
-  trove_config {
-    'keystone_authtoken/auth_host':     value => $auth_host;
-    'keystone_authtoken/auth_port':     value => $auth_port;
-    'keystone_authtoken/auth_protocol': value => $auth_protocol;
-  }
-
-  if $auth_admin_prefix {
-    validate_re($auth_admin_prefix, '^(/.+[^/])?$')
-    trove_config {
-      'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
-    }
-  } else {
-    trove_config {
-      'keystone_authtoken/auth_admin_prefix': ensure => absent;
-    }
-  }
-
-  # keystone config
-  if $auth_type == 'keystone' {
-    trove_config {
-      'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-      'keystone_authtoken/admin_user'       : value => $keystone_user;
-      'keystone_authtoken/admin_password'   : value => $keystone_password;
-    }
+  trove_api_paste_ini {
+    'filter:authtoken/auth_host':         value => $auth_host;
+    'filter:authtoken/auth_port':         value => $auth_port;
+    'filter:authtoken/auth_protocol':     value => $auth_protocol;
+    'filter:authtoken/admin_tenant_name': value => $keystone_tenant;
+    'filter:authtoken/admin_user'       : value => $keystone_user;
+    'filter:authtoken/admin_password'   : value => $keystone_password;
   }
 
   # SSL Options

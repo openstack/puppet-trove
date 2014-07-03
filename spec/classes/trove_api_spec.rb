@@ -23,7 +23,14 @@ describe 'trove::api' do
 
   let :params do
     { :keystone_password     => 'passw0rd',
-      :nova_proxy_admin_pass => 'verysecrete' }
+      :nova_proxy_admin_pass => 'verysecrete',
+      :auth_host             => '10.0.0.10',
+      :auth_url              => 'http://10.0.0.10:5000/v2.0',
+      :auth_port             => '35357',
+      :auth_protocol         => 'https',
+      :keystone_tenant       => '_services_',
+      :keystone_user         => 'trove',
+}
   end
 
   shared_examples 'trove-api' do
@@ -51,10 +58,16 @@ describe 'trove::api' do
         should contain_trove_config('DEFAULT/bind_port').with_value('8779')
         should contain_trove_config('DEFAULT/backlog').with_value('4096')
         should contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
-        should contain_trove_config('DEFAULT/trove_auth_url').with_value('http://localhost:5000/v2.0')
+        should contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0')
         should contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         should contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         should contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        should contain_trove_api_paste_ini('filter:authtoken/auth_host').with_value('10.0.0.10')
+        should contain_trove_api_paste_ini('filter:authtoken/auth_port').with_value('35357')
+        should contain_trove_api_paste_ini('filter:authtoken/auth_protocol').with_value('https')
+        should contain_trove_api_paste_ini('filter:authtoken/admin_tenant_name').with_value('_services_')
+        should contain_trove_api_paste_ini('filter:authtoken/admin_user').with_value('trove')
+        should contain_trove_api_paste_ini('filter:authtoken/admin_password').with_value('passw0rd')
       end
 
       context 'when using a single RabbitMQ server' do
