@@ -6,7 +6,7 @@
 #
 # [*enabled*]
 #   (optional) Whether to enable the trove-conductor service
-#   Defaults to false
+#   Defaults to true
 #
 # [*manage_service*]
 #   (optional) Whether to start/stop the service
@@ -54,12 +54,8 @@
 #   (optional) Trove conductor manager.
 #   Defaults to 'trove.conductor.manager.Manager'.
 #
-# [*rabbit_notification_topic*]
-#   (optional) Notification topic.
-#   Defaults to false.
-#
 class trove::conductor(
-  $enabled                   = false,
+  $enabled                   = true,
   $manage_service            = true,
   $ensure_package            = 'present',
   $verbose                   = false,
@@ -71,7 +67,6 @@ class trove::conductor(
   $auth_url                  = 'http://localhost:5000/v2.0',
   $control_exchange          = 'trove',
   $conductor_manager         = 'trove.conductor.manager.Manager',
-  $rabbit_notification_topic = 'notifications',
 ) inherits trove {
 
   include trove::params
@@ -114,11 +109,12 @@ class trove::conductor(
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
     # I may want to support exporting and collecting these
     trove_conductor_config {
-      'DEFAULT/rabbit_password':     value => $::trove::rabbit_password, secret => true;
-      'DEFAULT/rabbit_userid':       value => $::trove::rabbit_userid;
-      'DEFAULT/rabbit_virtual_host': value => $::trove::rabbit_virtual_host;
-      'DEFAULT/rabbit_use_ssl':      value => $::trove::rabbit_use_ssl;
-      'DEFAULT/amqp_durable_queues': value => $::trove::amqp_durable_queues;
+      'DEFAULT/rabbit_password':           value => $::trove::rabbit_password, secret => true;
+      'DEFAULT/rabbit_userid':             value => $::trove::rabbit_userid;
+      'DEFAULT/rabbit_virtual_host':       value => $::trove::rabbit_virtual_host;
+      'DEFAULT/rabbit_use_ssl':            value => $::trove::rabbit_use_ssl;
+      'DEFAULT/amqp_durable_queues':       value => $::trove::amqp_durable_queues;
+      'DEFAULT/rabbit_notification_topic': value => $::trove::rabbit_notification_topic;
     }
 
     if $::trove::rabbit_use_ssl {

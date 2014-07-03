@@ -49,6 +49,10 @@
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to false
 #
+# [*rabbit_notification_topic*]
+#   (optional) Notification topic.
+#   Defaults to false.
+#
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
 #   Defaults to undef
@@ -143,6 +147,7 @@ class trove(
   $rabbit_userid                = 'guest',
   $rabbit_virtual_host          = '/',
   $rabbit_use_ssl               = false,
+  $rabbit_notification_topic    = 'notifications',
   $kombu_ssl_ca_certs           = undef,
   $kombu_ssl_certfile           = undef,
   $kombu_ssl_keyfile            = undef,
