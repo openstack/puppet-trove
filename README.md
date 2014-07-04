@@ -1,9 +1,6 @@
 puppet-trove
 =============
 
-This is a work in progress. The repository aims to move in Stackforge, the place
-to be for Puppet OpenStack modules.
-
 #### Table of Contents
 
 1. [Overview - What is the trove module?](#overview)
