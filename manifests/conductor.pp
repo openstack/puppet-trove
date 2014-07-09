@@ -46,10 +46,6 @@
 #   (optional) Authentication URL.
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
-# [*control_exchange*]
-#   (optional) Control exchange.
-#   Defaults to 'trove'.
-#
 # [*conductor_manager*]
 #   (optional) Trove conductor manager.
 #   Defaults to 'trove.conductor.manager.Manager'.
@@ -65,7 +61,6 @@ class trove::conductor(
   $use_syslog                = false,
   $log_facility              = 'LOG_USER',
   $auth_url                  = 'http://localhost:5000/v2.0',
-  $control_exchange          = 'trove',
   $conductor_manager         = 'trove.conductor.manager.Manager',
 ) inherits trove {
 
@@ -103,7 +98,7 @@ class trove::conductor(
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
-    'DEFAULT/control_exchange':             value => $control_exchange;
+    'DEFAULT/control_exchange':             value => $::trove::control_exchange;
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {

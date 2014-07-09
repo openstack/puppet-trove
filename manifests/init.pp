@@ -137,6 +137,10 @@
 #   (optional) Admin tenant name used to connect to nova.
 #   Defaults to 'admin'
 #
+# [*control_exchange*]
+#   (optional) Control exchange.
+#   Defaults to 'trove'.
+#
 
 class trove(
   $nova_proxy_admin_pass,
@@ -159,6 +163,7 @@ class trove(
   $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',
+  $control_exchange             = 'trove',
 ){
   include trove::params
 
