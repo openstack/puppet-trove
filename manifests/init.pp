@@ -166,4 +166,6 @@ class trove(
     command     => '/bin/echo "Trove config has changed"',
     refreshonly => true,
   }
+
+  Trove_datastore<||> -> Trove_datastore_version<||>
 }

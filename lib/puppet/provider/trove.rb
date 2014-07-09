@@ -1,4 +1,4 @@
-require 'csv'
+require 'json'
 require 'puppet/util/inifile'
 
 class Puppet::Provider::Trove < Puppet::Provider
@@ -89,62 +89,25 @@ correctly configured.")
     self.class.auth_trove(args)
   end
 
+  def trove_manage(*args)
+    cmd = args.join(" ")
+    output = `#{cmd}`
+    $?.exitstatus
+  end
+
   def self.reset
     @trove_conf        = nil
     @trove_credentials = nil
   end
 
-  def self.list_trove_resources(type)
-    ids = []
-    list = auth_trove("#{type}-list", '--format=csv',
-                        '--column=id', '--quote=none')
-    (list.split("\n")[1..-1] || []).compact.collect do |line|
-      ids << line.strip
-    end
-    return ids
+  def self.list_trove_resources(type, *args)
+    json = auth_trove("--json", "#{type}-list", *args)
+    return JSON.parse(json)
   end
 
   def self.get_trove_resource_attrs(type, id)
-    attrs = {}
-    net = auth_trove("#{type}-show", '--format=shell', id)
-    last_key = nil
-    (net.split("\n") || []).compact.collect do |line|
-      if line.include? '='
-        k, v = line.split('=', 2)
-        attrs[k] = v.gsub(/\A"|"\Z/, '')
-        last_key = k
-      else
-        # Handle the case of a list of values
-        v = line.gsub(/\A"|"\Z/, '')
-        attrs[last_key] = [attrs[last_key], v].flatten
-      end
-    end
-    return attrs
-  end
-
-  def self.get_tenant_id(catalog, name)
-    instance_type = 'keystone_tenant'
-    instance = catalog.resource("#{instance_type.capitalize!}[#{name}]")
-    if ! instance
-      instance = Puppet::Type.type(instance_type).instances.find do |i|
-        i.provider.name == name
-      end
-    end
-    if instance
-      return instance.provider.id
-    else
-      fail("Unable to find #{instance_type} for name #{name}")
-    end
-  end
-
-  def self.parse_creation_output(data)
-    hash = {}
-    data.split("\n").compact.each do |line|
-      if line.include? '='
-        hash[line.split('=').first] = line.split('=', 2)[1].gsub(/\A"|"\Z/, '')
-      end
-    end
-    hash
+    json = auth_trove("--json", "#{type}-show", id)
+    return JSON.parse(json)
   end
 
 end
