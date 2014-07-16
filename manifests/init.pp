@@ -116,7 +116,7 @@
 # [*mysql_module*]
 #   (optional) Mysql puppet module version to use
 #   Tested versions include 0.9 and 2.2
-#   Defaults to '0.9'.
+#   Defaults to '2.2'.
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
@@ -155,7 +155,7 @@ class trove(
   $amqp_durable_queues          = false,
   $database_connection          = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_idle_timeout        = 3600,
-  $mysql_module                 = '0.9',
+  $mysql_module                 = '2.2',
   $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',

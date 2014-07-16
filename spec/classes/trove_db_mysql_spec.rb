@@ -47,14 +47,12 @@ describe 'trove::db::mysql' do
       default_params.merge(params)
     end
 
-    it { should contain_class('mysql::python') }
-
     it { should contain_mysql__db(p['dbname']).with(
       'user'     => p['user'],
       'password' => 'passw0rd',
       'host'     => p['host'],
       'charset'  => p['charset'],
-      'require'  => 'Class[Mysql::Config]'
+      'require'  => 'Service[mysqld]'
     )}
 
     context 'overriding allowed_hosts param to array' do

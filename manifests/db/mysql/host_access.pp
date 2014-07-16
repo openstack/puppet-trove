@@ -19,7 +19,7 @@ define trove::db::mysql::host_access(
   $user,
   $password,
   $database,
-  $mysql_module = '0.9'
+  $mysql_module = '2.2'
 ) {
   if ($mysql_module >= 2.2) {
     mysql_user { "${user}@${name}":
