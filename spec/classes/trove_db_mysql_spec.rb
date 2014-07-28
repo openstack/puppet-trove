@@ -52,7 +52,7 @@ describe 'trove::db::mysql' do
       'password' => 'passw0rd',
       'host'     => p['host'],
       'charset'  => p['charset'],
-      'require'  => 'Service[mysqld]'
+      'require'  => 'Class[Mysql::Server]'
     )}
 
     context 'overriding allowed_hosts param to array' do
