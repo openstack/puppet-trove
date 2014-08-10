@@ -23,11 +23,19 @@ require 'spec_helper'
 describe 'trove' do
 
   let :params do
-    { :nova_proxy_admin_pass => 'passw0rd' }
+    { :nova_proxy_admin_pass => 'passw0rd',
+      :nova_compute_url => 'http://localhost:8774/v2',
+      :cinder_url => 'http://localhost:8776/v1',
+      :swift_url => 'http://localhost:8080/v1/AUTH_' }
   end
 
   shared_examples_for 'trove' do
-    it { should contain_class('trove::params') }
+    it {
+      should contain_class('trove::params')
+      should contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
+      should contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
+      should contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
+    }
   end
 
   context 'on Debian platforms' do

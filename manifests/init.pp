@@ -161,10 +161,13 @@ class trove(
   $database_idle_timeout        = 3600,
   $mysql_module                 = '2.2',
   $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
+  $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',
   $control_exchange             = 'trove',
-){
+  $cinder_url                   = false,
+  $swift_url                    = false
+) {
   include trove::params
 
   exec { 'post-trove_config':
@@ -173,4 +176,25 @@ class trove(
   }
 
   Trove_datastore<||> -> Trove_datastore_version<||>
+
+  if $nova_compute_url {
+    trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
+  }
+  else {
+    trove_config { 'DEFAULT/nova_compute_url': ensure => absent }
+  }
+
+  if $cinder_url {
+    trove_config { 'DEFAULT/cinder_url': value => $cinder_url }
+  }
+  else {
+    trove_config { 'DEFAULT/cinder_url': ensure => absent }
+  }
+
+  if $swift_url {
+    trove_config { 'DEFAULT/swift_url': value => $swift_url }
+  }
+  else {
+    trove_config { 'DEFAULT/swift_url': ensure => absent }
+  }
 }
