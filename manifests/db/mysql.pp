@@ -77,7 +77,7 @@ class trove::db::mysql(
       host     => $host,
       charset  => $charset,
       collate  => $collate,
-      require  => Service['mysqld'],
+      require  => Class['mysql::server'],
     }
   } else {
     require mysql::python
