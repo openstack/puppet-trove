@@ -63,18 +63,24 @@
 #   (optional) Authentication URL.
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
+# [**guestagent_config_file*]
+#   (optional) Trove guest agent configuration file.
+#   Defaults to '/etc/trove/trove-guestmanager.conf'.
+#
 
 class trove::taskmanager(
-  $enabled        = true,
-  $manage_service = true,
-  $debug          = false,
-  $verbose        = false,
-  $log_file       = '/var/log/trove/trove-taskmanager.log',
-  $log_dir        = '/var/log/trove',
-  $use_syslog     = false,
-  $log_facility   = 'LOG_USER',
-  $auth_url       = 'http://localhost:5000/v2.0',
-  $ensure_package = 'present'
+  $enabled                = true,
+  $manage_service         = true,
+  $debug                  = false,
+  $verbose                = false,
+  $log_file               = '/var/log/trove/trove-taskmanager.log',
+  $log_dir                = '/var/log/trove',
+  $use_syslog             = false,
+  $log_facility           = 'LOG_USER',
+  $auth_url               = 'http://localhost:5000/v2.0',
+  $heat_url               = false,
+  $ensure_package         = 'present',
+  $guestagent_config_file = '/etc/trove/trove-guestmanager.conf'
 ) inherits trove {
 
   include trove::params
@@ -208,4 +214,15 @@ class trove::taskmanager(
     service_name   => $::trove::params::taskmanager_service_name,
     ensure_package => $ensure_package,
   }
+
+  if $guestagent_config_file {
+    file { $guestagent_config_file:
+      content => template('trove/trove-guestagent.conf.erb')
+    }
+
+    trove_taskmanager_config {
+      'DEFAULT/guest_config': value => $guestagent_config_file
+    }
+  }
+
 }
