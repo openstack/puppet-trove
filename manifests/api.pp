@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 etrovence SAS <licensing@enovance.com>
+# Copyright (C) 2014 eNovance SAS <licensing@enovance.com>
 #
 # Author: Emilien Macchi <emilien.macchi@enovance.com>
 #
