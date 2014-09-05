@@ -72,12 +72,8 @@ class trove::conductor(
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      if ($::trove::mysql_module >= 2.2) {
-        require 'mysql::bindings'
-        require 'mysql::bindings::python'
-      } else {
-        require 'mysql::python'
-      }
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
     } elsif($::trove::database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
     } elsif($::trove::database_connection =~ /sqlite:\/\//) {

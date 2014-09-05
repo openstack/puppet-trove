@@ -114,9 +114,8 @@
 #   Defaults to 'trove.openstack.common.rpc.impl_kombu'
 #
 # [*mysql_module*]
-#   (optional) Mysql puppet module version to use
-#   Tested versions include 0.9 and 2.2
-#   Defaults to '2.2'.
+#   (optional) Deprecated. Does nothing.
+#   Defaults to undef.
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
@@ -141,7 +140,6 @@
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
 #
-
 class trove(
   $nova_proxy_admin_pass,
   $rabbit_host                  = 'localhost',
@@ -159,16 +157,21 @@ class trove(
   $amqp_durable_queues          = false,
   $database_connection          = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_idle_timeout        = 3600,
-  $mysql_module                 = '2.2',
   $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
   $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',
   $control_exchange             = 'trove',
   $cinder_url                   = false,
-  $swift_url                    = false
+  $swift_url                    = false,
+  # DEPRECATED PARAMETERS
+  $mysql_module                 = undef,
 ) {
   include trove::params
+
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
+  }
 
   exec { 'post-trove_config':
     command     => '/bin/echo "Trove config has changed"',
