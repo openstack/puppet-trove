@@ -22,19 +22,19 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for Neutron user.
+#   (required) Password for Trove user.
 #
 # [*auth_name*]
-#   Username for Neutron service. Defaults to 'trove'.
+#   Username for Trove service. Defaults to 'trove'.
 #
 # [*email*]
-#   Email for Neutron user. Defaults to 'trove@localhost'.
+#   Email for Trove user. Defaults to 'trove@localhost'.
 #
 # [*tenant*]
-#   Tenant for Neutron user. Defaults to 'services'.
+#   Tenant for Trove user. Defaults to 'services'.
 #
 # [*configure_endpoint*]
-#   Should Neutron endpoint be configured? Defaults to 'true'.
+#   Should Trove endpoint be configured? Defaults to 'true'.
 #
 # [*service_type*]
 #   Type of service. Defaults to 'database'.
