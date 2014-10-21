@@ -15,99 +15,69 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# trove::db::mysql
+# == Class: trove::db::mysql
 #
-# Manages the trove MySQL database
+# The trove::db::mysql class creates a MySQL database for trove.
+# It must be used on the MySQL server
 #
-# === Parameters:
+# === Parameters
 #
 # [*password*]
 #   (required) Password that will be used for the trove db user.
 #
 # [*dbname*]
-#   (optionnal) Name of trove database.
+#   (optional) Name of trove database.
 #   Defaults to trove
 #
 # [*user*]
-#   (optionnal) Name of trove user.
+#   (optional) Name of trove user.
 #   Defaults to trove
 #
 # [*host*]
-#   (optionnal) Host where user should be allowed all priveleges for database.
+#   (optional) Host where user should be allowed all privileges for database.
 #   Defaults to 127.0.0.1
 #
+# [*allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to undef.
+#
 # [*charset*]
-#   (optionnal) Charset of trove database
-#   Defaults 'utf8'
+#   (optional) Charset of trove database
+#   Defaults 'utf8'.
 #
 # [*collate*]
-#   (optionnal) Charset collate of trove database
-#   Defaults 'utf8_unicode_ci'
-#
-# [*allowed_hosts*]
-#   Hosts allowed to use the database
+#   (optional) Charset collate of trove database
+#   Defaults 'utf8_unicode_ci'.
 #
 # [*mysql_module*]
-#   (optional) The mysql puppet module version to use
-#   Tested versions include 0.9 and 2.2
-#   Default to '2.2'
-#
-# == Dependencies
-#   Class['mysql::server']
+#   (optional) Deprecated. Does nothing
 #
 class trove::db::mysql(
   $password,
   $dbname        = 'trove',
   $user          = 'trove',
   $host          = '127.0.0.1',
+  $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_unicode_ci',
-  $mysql_module  = '2.2',
-  $allowed_hosts = undef
+  $mysql_module  = undef,
 ) {
 
-  Class['trove::db::mysql'] -> Exec<| title == 'trove-db-sync' |>
-  Mysql::Db[$dbname] -> Anchor<| title == 'trove-start' |>
-  Mysql::Db[$dbname] ~> Exec<| title == 'trove-db-sync' |>
-
-  if ($mysql_module >= 2.2) {
-    mysql::db { $dbname:
-      user     => $user,
-      password => $password,
-      host     => $host,
-      charset  => $charset,
-      collate  => $collate,
-      require  => Class['mysql::server'],
-    }
-  } else {
-    require mysql::python
-
-    mysql::db { $dbname:
-      user     => $user,
-      password => $password,
-      host     => $host,
-      charset  => $charset,
-      require  => Class['mysql::config'],
-    }
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
-  # Check allowed_hosts to avoid duplicate resource declarations
-  if is_array($allowed_hosts) and delete($allowed_hosts,$host) != [] {
-    $real_allowed_hosts = delete($allowed_hosts,$host)
-  } elsif is_string($allowed_hosts) and ($allowed_hosts != $host) {
-    $real_allowed_hosts = $allowed_hosts
+  validate_string($password)
+
+  ::openstacklib::db::mysql { 'trove':
+    user          => $user,
+    password_hash => mysql_password($password),
+    dbname        => $dbname,
+    host          => $host,
+    charset       => $charset,
+    collate       => $collate,
+    allowed_hosts => $allowed_hosts,
   }
 
-  if $real_allowed_hosts {
-    trove::db::mysql::host_access { $real_allowed_hosts:
-      user          => $user,
-      password      => $password,
-      database      => $dbname,
-      mysql_module  => $mysql_module,
-    }
-
-    Trove::Db::Mysql::Host_access[$real_allowed_hosts] -> Exec<| title == 'trove-db-sync' |>
-
-  }
-
+  ::Openstacklib::Db::Mysql['trove'] ~> Exec<| title == 'trove-db-sync' |>
 }

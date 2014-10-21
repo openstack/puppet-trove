@@ -26,84 +26,69 @@ describe 'trove::db::mysql' do
     ]
   end
 
-  let :default_params do
-    {
-      'dbname'        => 'trove',
-      'user'          => 'trove',
-      'charset'       => 'utf8',
-      'collate'       => 'utf8_unicode_ci',
-      'host'          => '127.0.0.1',
-      'allowed_hosts' => ['127.0.0.%', '192.168.1.%']
+  let :params do
+    { :dbname        => 'trove',
+      :password      => 's3cr3t',
+      :user          => 'trove',
+      :charset       => 'utf8',
+      :collate       => 'utf8_unicode_ci',
+      :host          => '127.0.0.1',
     }
   end
 
-  let :params do
-    { :password => 'passw0rd' }
-  end
+  shared_examples_for 'trove mysql database' do
 
-  shared_examples_for 'trove db mysql' do
-
-    let :p do
-      default_params.merge(params)
+    context 'when omiting the required parameter password' do
+      before { params.delete(:password) }
+      it { expect { should raise_error(Puppet::Error) } }
     end
 
-    it { should contain_mysql__db(p['dbname']).with(
-      'user'     => p['user'],
-      'password' => 'passw0rd',
-      'host'     => p['host'],
-      'charset'  => p['charset'],
-      'require'  => 'Class[Mysql::Server]'
-    )}
+    it 'creates a mysql database' do
+      should contain_openstacklib__db__mysql('trove').with(
+        :user          => params[:user],
+        :dbname        => params[:dbname],
+        :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+        :host          => params[:host],
+        :charset       => params[:charset]
+      )
+    end
 
     context 'overriding allowed_hosts param to array' do
       before :each do
         params.merge!(
-          :password       => 'trovepass',
           :allowed_hosts  => ['127.0.0.1','%']
         )
       end
 
-      it {should_not contain_trove__db__mysql__host_access("127.0.0.1").with(
-        :user     => 'trove',
-        :password => 'trovepass',
-        :database => 'trove'
-      )}
-      it {should contain_trove__db__mysql__host_access("%").with(
-        :user     => 'trove',
-        :password => 'trovepass',
-        :database => 'trove'
+      it {
+        should contain_openstacklib__db__mysql('trove').with(
+          :user          => params[:user],
+          :dbname        => params[:dbname],
+          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :host          => params[:host],
+          :charset       => params[:charset],
+          :allowed_hosts => ['127.0.0.1','%']
       )}
     end
 
     context 'overriding allowed_hosts param to string' do
       before :each do
         params.merge!(
-          :password       => 'trovepass2',
           :allowed_hosts  => '192.168.1.1'
         )
       end
 
-      it {should contain_trove__db__mysql__host_access("192.168.1.1").with(
-        :user     => 'trove',
-        :password => 'trovepass2',
-        :database => 'trove'
+      it {
+        should contain_openstacklib__db__mysql('trove').with(
+          :user          => params[:user],
+          :dbname        => params[:dbname],
+          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :host          => params[:host],
+          :charset       => params[:charset],
+          :allowed_hosts => '192.168.1.1'
       )}
     end
 
-    context 'overriding allowed_hosts param equals to host param ' do
-      before :each do
-        params.merge!(
-          :password       => 'trovepass2',
-          :allowed_hosts  => '127.0.0.1'
-        )
-      end
-
-      it {should_not contain_trove__db__mysql__host_access("127.0.0.1").with(
-        :user     => 'trove',
-        :password => 'trovepass2',
-        :database => 'trove'
-      )}
-    end
   end
 
   context 'on Debian platforms' do
@@ -111,7 +96,7 @@ describe 'trove::db::mysql' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'trove db mysql'
+    it_configures 'trove mysql database'
   end
 
   context 'on RedHat platforms' do
@@ -119,6 +104,6 @@ describe 'trove::db::mysql' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'trove db mysql'
+    it_configures 'trove mysql database'
   end
 end

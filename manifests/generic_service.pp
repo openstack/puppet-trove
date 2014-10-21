@@ -36,6 +36,7 @@ define trove::generic_service(
 ) {
 
   include trove::params
+  include trove::db::sync
 
   $trove_title = "trove-${name}"
   Exec['post-trove_config'] ~> Service<| title == $trove_title |>
