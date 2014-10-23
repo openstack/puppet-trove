@@ -22,7 +22,6 @@ class trove::db::sync {
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => [Package['trove'], Keystone_config['DEFAULT/sql_connection']],
-    require     => User['trove'],
+    subscribe   => [Package['python-troveclient'], Trove_config['DEFAULT/sql_connection']],
   }
 }
