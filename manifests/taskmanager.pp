@@ -170,6 +170,32 @@ class trove::taskmanager(
     }
   }
 
+  if $::trove::use_neutron {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '.*';
+      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+    }
+
+    trove_taskmanager_config {
+      'DEFAULT/network_label_regex':         value => '.*';
+      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+    }
+  } else {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '^private$';
+      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+    }
+
+    trove_taskmanager_config {
+      'DEFAULT/network_label_regex':         value => '^private$';
+      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+    }
+  }
+
+  trove_config {
+    'DEFAULT/taskmanager_queue':             value => 'taskmanager';
+  }
+
   # Logging
   if $log_file {
     trove_taskmanager_config {

@@ -84,6 +84,46 @@ describe 'trove::taskmanager' do
           should contain_trove_taskmanager_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
         end
       end
+
+      context 'when using Neutron' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             use_neutron           => true}"
+
+        end
+
+        it 'configures trove to use the Neutron network driver' do
+          should contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+          should contain_trove_taskmanager_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+
+        end
+
+        it 'configures trove to use any network label' do
+          should contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
+          should contain_trove_taskmanager_config('DEFAULT/network_label_regex').with_value('.*')
+        end
+      end
+
+      context 'when using Nova Network' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             use_neutron           => false}"
+
+        end
+
+        it 'configures trove to use the Nova Network network driver' do
+          should contain_trove_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
+          should contain_trove_taskmanager_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
+
+        end
+
+        it 'configures trove to use the "private" network label' do
+          should contain_trove_config('DEFAULT/network_label_regex').with_value('^private$')
+          should contain_trove_taskmanager_config('DEFAULT/network_label_regex').with_value('^private$')
+        end
+      end
     end
   end
 

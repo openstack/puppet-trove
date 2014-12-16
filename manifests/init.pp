@@ -140,6 +140,10 @@
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
 #
+# [*use_neutron*]
+#   (optional) Use Neutron
+#   Defaults to true
+#
 class trove(
   $nova_proxy_admin_pass,
   $rabbit_host                  = 'localhost',
@@ -164,6 +168,7 @@ class trove(
   $control_exchange             = 'trove',
   $cinder_url                   = false,
   $swift_url                    = false,
+  $use_neutron                  = true,
   # DEPRECATED PARAMETERS
   $mysql_module                 = undef,
 ) {
