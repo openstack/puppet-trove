@@ -66,12 +66,12 @@ describe 'trove::api' do
         should contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         should contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         should contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        should contain_trove_api_paste_ini('filter:authtoken/auth_host').with_value('10.0.0.10')
-        should contain_trove_api_paste_ini('filter:authtoken/auth_port').with_value('35357')
-        should contain_trove_api_paste_ini('filter:authtoken/auth_protocol').with_value('https')
-        should contain_trove_api_paste_ini('filter:authtoken/admin_tenant_name').with_value('_services_')
-        should contain_trove_api_paste_ini('filter:authtoken/admin_user').with_value('trove')
-        should contain_trove_api_paste_ini('filter:authtoken/admin_password').with_value('passw0rd')
+        should contain_trove_config('keystone_authtoken/auth_host').with_value('10.0.0.10')
+        should contain_trove_config('keystone_authtoken/auth_port').with_value('35357')
+        should contain_trove_config('keystone_authtoken/auth_protocol').with_value('https')
+        should contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
+        should contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
+        should contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
       end
 
       context 'when using a single RabbitMQ server' do
