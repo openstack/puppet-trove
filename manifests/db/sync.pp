@@ -18,10 +18,10 @@
 # Class to execute "trove-manage db_sync
 #
 class trove::db::sync {
-  exec { 'trove-db-sync':
+  exec { 'trove-manage db_sync':
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => [Package['python-troveclient'], Trove_config['DEFAULT/sql_connection']],
+    subscribe   => Trove_config['DEFAULT/sql_connection'],
   }
 }
