@@ -31,10 +31,10 @@ describe 'trove' do
 
   shared_examples_for 'trove' do
     it {
-      should contain_class('trove::params')
-      should contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
-      should contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
-      should contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
+      is_expected.to contain_class('trove::params')
+      is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
+      is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
+      is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
     }
   end
 

@@ -42,13 +42,13 @@ describe 'trove::api' do
       end
 
       it 'installs trove-api package and service' do
-        should contain_service('trove-api').with(
+        is_expected.to contain_service('trove-api').with(
           :name      => platform_params[:api_service_name],
           :ensure    => 'running',
           :hasstatus => true,
           :enable    => true
         )
-        should contain_package('trove-api').with(
+        is_expected.to contain_package('trove-api').with(
           :name   => platform_params[:api_package_name],
           :ensure => 'present',
           :notify => 'Service[trove-api]'
@@ -56,22 +56,22 @@ describe 'trove::api' do
       end
 
       it 'configures trove-api with default parameters' do
-        should contain_trove_config('DEFAULT/verbose').with_value(false)
-        should contain_trove_config('DEFAULT/debug').with_value(false)
-        should contain_trove_config('DEFAULT/bind_host').with_value('0.0.0.0')
-        should contain_trove_config('DEFAULT/bind_port').with_value('8779')
-        should contain_trove_config('DEFAULT/backlog').with_value('4096')
-        should contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
-        should contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0')
-        should contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        should contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        should contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        should contain_trove_config('keystone_authtoken/auth_host').with_value('10.0.0.10')
-        should contain_trove_config('keystone_authtoken/auth_port').with_value('35357')
-        should contain_trove_config('keystone_authtoken/auth_protocol').with_value('https')
-        should contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
-        should contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
-        should contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
+        is_expected.to contain_trove_config('DEFAULT/verbose').with_value(false)
+        is_expected.to contain_trove_config('DEFAULT/debug').with_value(false)
+        is_expected.to contain_trove_config('DEFAULT/bind_host').with_value('0.0.0.0')
+        is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
+        is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
+        is_expected.to contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
+        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0')
+        is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
+        is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
+        is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_config('keystone_authtoken/auth_host').with_value('10.0.0.10')
+        is_expected.to contain_trove_config('keystone_authtoken/auth_port').with_value('35357')
+        is_expected.to contain_trove_config('keystone_authtoken/auth_protocol').with_value('https')
+        is_expected.to contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
+        is_expected.to contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
+        is_expected.to contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
       end
 
       context 'when using a single RabbitMQ server' do
@@ -81,7 +81,7 @@ describe 'trove::api' do
              rabbit_host           => '10.0.0.1'}"
         end
         it 'configures trove-api with RabbitMQ' do
-          should contain_trove_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
         end
       end
 
@@ -92,7 +92,7 @@ describe 'trove::api' do
              rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
         end
         it 'configures trove-api with RabbitMQ' do
-          should contain_trove_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+          is_expected.to contain_trove_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
         end
       end
 
@@ -103,7 +103,7 @@ describe 'trove::api' do
              database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
         end
         it 'configures trove-api with RabbitMQ' do
-          should contain_trove_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
+          is_expected.to contain_trove_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
         end
       end
     end

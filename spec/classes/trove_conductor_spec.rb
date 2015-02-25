@@ -12,13 +12,13 @@ describe 'trove::conductor' do
       end
 
       it 'installs trove-conductor package and service' do
-        should contain_service('trove-conductor').with(
+        is_expected.to contain_service('trove-conductor').with(
           :name      => platform_params[:conductor_service_name],
           :ensure    => 'running',
           :hasstatus => true,
           :enable    => true
         )
-        should contain_package('trove-conductor').with(
+        is_expected.to contain_package('trove-conductor').with(
           :name   => platform_params[:conductor_package_name],
           :ensure => 'present',
           :notify => 'Service[trove-conductor]'
@@ -26,11 +26,11 @@ describe 'trove::conductor' do
       end
 
       it 'configures trove-conductor with default parameters' do
-        should contain_trove_conductor_config('DEFAULT/verbose').with_value(false)
-        should contain_trove_conductor_config('DEFAULT/debug').with_value(false)
-        should contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        should contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        should contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_conductor_config('DEFAULT/verbose').with_value(false)
+        is_expected.to contain_trove_conductor_config('DEFAULT/debug').with_value(false)
+        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
+        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
+        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
       end
 
       context 'when using a single RabbitMQ server' do
@@ -40,7 +40,7 @@ describe 'trove::conductor' do
              rabbit_host           => '10.0.0.1'}"
         end
         it 'configures trove-conductor with RabbitMQ' do
-          should contain_trove_conductor_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_conductor_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
         end
       end
 
@@ -51,7 +51,7 @@ describe 'trove::conductor' do
              rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
         end
         it 'configures trove-conductor with RabbitMQ' do
-          should contain_trove_conductor_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+          is_expected.to contain_trove_conductor_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
         end
       end
 
@@ -62,7 +62,7 @@ describe 'trove::conductor' do
              database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
         end
         it 'configures trove-conductor with RabbitMQ' do
-          should contain_trove_conductor_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
+          is_expected.to contain_trove_conductor_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
         end
       end
     end

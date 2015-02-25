@@ -2,10 +2,11 @@ source 'https://rubygems.org'
 
 group :development, :test do
   gem 'puppetlabs_spec_helper', :require => false
+  gem 'rspec-puppet', '~> 2.0.0', :require => false
+
   gem 'metadata-json-lint'
   gem 'puppet-lint-param-docs'
 
-  gem 'rspec-puppet', '~> 1.0.1'
   gem 'json'
   gem 'webmock'
 end

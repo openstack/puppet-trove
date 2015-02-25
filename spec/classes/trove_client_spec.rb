@@ -25,14 +25,14 @@ describe 'trove::client' do
   shared_examples_for 'trove client' do
 
     context 'with default parameters' do
-      it { should contain_package('python-troveclient').with_ensure('present') }
+      it { is_expected.to contain_package('python-troveclient').with_ensure('present') }
     end
 
     context 'with package_ensure parameter provided' do
       let :params do
         { :package_ensure => false }
       end
-      it { should contain_package('python-troveclient').with_ensure('false') }
+      it { is_expected.to contain_package('python-troveclient').with_ensure('false') }
     end
 
   end

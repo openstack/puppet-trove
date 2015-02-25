@@ -12,13 +12,13 @@ describe 'trove::guestagent' do
       end
 
       it 'installs trove-guestagent package and service' do
-        should contain_service('trove-guestagent').with(
+        is_expected.to contain_service('trove-guestagent').with(
           :name      => platform_params[:guestagent_service_name],
           :ensure    => 'running',
           :hasstatus => true,
           :enable    => true
         )
-        should contain_package('trove-guestagent').with(
+        is_expected.to contain_package('trove-guestagent').with(
           :name   => platform_params[:guestagent_package_name],
           :ensure => 'present',
           :notify => 'Service[trove-guestagent]'
@@ -26,11 +26,11 @@ describe 'trove::guestagent' do
       end
 
       it 'configures trove-guestagent with default parameters' do
-        should contain_trove_guestagent_config('DEFAULT/verbose').with_value(false)
-        should contain_trove_guestagent_config('DEFAULT/debug').with_value(false)
-        should contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        should contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        should contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/verbose').with_value(false)
+        is_expected.to contain_trove_guestagent_config('DEFAULT/debug').with_value(false)
+        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
       end
 
       context 'when using a single RabbitMQ server' do
@@ -40,7 +40,7 @@ describe 'trove::guestagent' do
              rabbit_host           => '10.0.0.1'}"
         end
         it 'configures trove-guestagent with RabbitMQ' do
-          should contain_trove_guestagent_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_guestagent_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
         end
       end
 
@@ -51,7 +51,7 @@ describe 'trove::guestagent' do
              rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
         end
         it 'configures trove-guestagent with RabbitMQ' do
-          should contain_trove_guestagent_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+          is_expected.to contain_trove_guestagent_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
         end
       end
     end
@@ -67,8 +67,8 @@ describe 'trove::guestagent' do
           :swift_url => "http://10.0.0.1:8080/v1/AUTH_" }
       end
       it 'configures trove-guestagent with custom parameters' do
-        should contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v2.0')
-        should contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v2.0')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
       end
     end
 

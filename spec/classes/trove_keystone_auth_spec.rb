@@ -32,24 +32,24 @@ describe 'trove::keystone::auth' do
         :tenant   => 'foobar' }
     end
 
-    it { should contain_keystone_user('trove').with(
+    it { is_expected.to contain_keystone_user('trove').with(
       :ensure   => 'present',
       :password => 'trove_password',
       :tenant   => 'foobar'
     ) }
 
-    it { should contain_keystone_user_role('trove@foobar').with(
+    it { is_expected.to contain_keystone_user_role('trove@foobar').with(
       :ensure  => 'present',
       :roles   => 'admin'
     )}
 
-    it { should contain_keystone_service('trove').with(
+    it { is_expected.to contain_keystone_service('trove').with(
       :ensure      => 'present',
       :type        => 'database',
       :description => 'Trove Database Service'
     ) }
 
-    it { should contain_keystone_endpoint('RegionOne/trove').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:8779/v1.0/\$(tenant_id)s",
       :admin_url    => "http://127.0.0.1:8779/v1.0/\$(tenant_id)s",
@@ -79,7 +79,7 @@ describe 'trove::keystone::auth' do
         :admin_address    => '10.10.10.12' }
     end
 
-    it { should contain_keystone_endpoint('RegionOne/trove').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
       :ensure       => 'present',
       :public_url   => "https://10.10.10.10:80/v1.0/\$(tenant_id)s",
       :internal_url => "http://10.10.10.11:81/v1.0/\$(tenant_id)s",
@@ -93,9 +93,9 @@ describe 'trove::keystone::auth' do
         :auth_name => 'trovey' }
     end
 
-    it { should contain_keystone_user('trovey') }
-    it { should contain_keystone_user_role('trovey@services') }
-    it { should contain_keystone_service('trovey') }
-    it { should contain_keystone_endpoint('RegionOne/trovey') }
+    it { is_expected.to contain_keystone_user('trovey') }
+    it { is_expected.to contain_keystone_user_role('trovey@services') }
+    it { is_expected.to contain_keystone_service('trovey') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trovey') }
   end
 end

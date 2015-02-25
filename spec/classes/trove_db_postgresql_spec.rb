@@ -17,7 +17,7 @@ describe 'trove::db::postgresql' do
     let :params do
       req_params
     end
-    it { should contain_postgresql__db('trove').with(
+    it { is_expected.to contain_postgresql__db('trove').with(
       :user         => 'trove',
       :password     => 'pw'
      ) }
