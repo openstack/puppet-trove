@@ -125,6 +125,10 @@
 #   (optional) Timeout before idle db connections are reaped.
 #   Defaults to 3600
 #
+# [*nova_compute_url*]
+#   (optional) URL without the tenant segment.
+#   Defaults to false.
+#
 # [*nova_proxy_admin_user*]
 #   (optional) Admin username used to connect to nova.
 #   Defaults to 'admin'
@@ -139,6 +143,14 @@
 # [*control_exchange*]
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
+#
+# [*cinder_url*]
+#   (optional) URL without the tenant segment.
+#   Defaults to false.
+#
+# [*swift_url*]
+#   (optional) Swift URL ending in AUTH_.
+#   Defaults to false.
 #
 # [*use_neutron*]
 #   (optional) Use Neutron

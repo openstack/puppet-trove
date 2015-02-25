@@ -61,12 +61,12 @@
 #   If set to boolean false, it will not log to any file.
 #   Default: /var/log/trove/trove-api.log
 #
-#  [*log_dir*]
-#    (optional) directory to which trove logs are sent.
-#    If set to boolean false, it will not log to any directory.
-#    Defaults to '/var/log/trove'
+# [*log_dir*]
+#   (optional) directory to which trove logs are sent.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to '/var/log/trove'
 #
-# [* auth_host*]
+# [*auth_host*]
 #   (optional) Host running auth service.
 #   Defaults to '127.0.0.1'.
 #
@@ -74,11 +74,11 @@
 #   (optional) Authentication URL.
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
-# [* auth_port*]
+# [*auth_port*]
 #   (optional) Port to use for auth service on auth_host.
 #   Defaults to '35357'.
 #
-# [* auth_protocol*]
+# [*auth_protocol*]
 #   (optional) Protocol to use for auth.
 #   Defaults to 'http'.
 #

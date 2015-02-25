@@ -47,9 +47,9 @@
 #   Default: /var/log/trove/trove-taskmanager.log
 #
 # [*log_dir*]
-#    (optional) directory to which trove logs are sent.
-#    If set to boolean false, it will not log to any directory.
-#    Defaults to '/var/log/trove'
+#   (optional) directory to which trove logs are sent.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to '/var/log/trove'
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging.
@@ -63,11 +63,14 @@
 #   (optional) Authentication URL.
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
-# [**guestagent_config_file*]
+# [*heat_url*]
+#   (optional) URL without the tenant segment.
+#   Defaults to false
+#
+# [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestmanager.conf'.
 #
-
 class trove::taskmanager(
   $enabled                = true,
   $manage_service         = true,
