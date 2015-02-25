@@ -30,7 +30,7 @@ class trove::client (
   $package_ensure = present
 ) {
 
-  include trove::params
+  include ::trove::params
 
   package { 'python-troveclient':
     ensure => $package_ensure,

@@ -69,7 +69,7 @@ class trove::guestagent(
   $control_exchange          = 'trove'
 ) inherits trove {
 
-  include trove::params
+  include ::trove::params
 
   Package[$::trove::params::guestagent_package_name] -> Trove_guestagent_config<||>
   Trove_guestagent_config<||> ~> Exec['post-trove_config']

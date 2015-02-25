@@ -35,8 +35,8 @@ define trove::generic_service(
   $ensure_package = 'present'
 ) {
 
-  include trove::params
-  include trove::db::sync
+  include ::trove::params
+  include ::trove::db::sync
 
   $trove_title = "trove-${name}"
   Exec['post-trove_config'] ~> Service<| title == $trove_title |>

@@ -184,7 +184,7 @@ class trove(
   # DEPRECATED PARAMETERS
   $mysql_module                 = undef,
 ) {
-  include trove::params
+  include ::trove::params
 
   if $mysql_module {
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')

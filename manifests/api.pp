@@ -146,8 +146,8 @@ class trove::api(
   $ensure_package               = 'present',
 ) inherits trove {
 
-  require keystone::python
-  include trove::params
+  require ::keystone::python
+  include ::trove::params
 
   Trove_config<||> ~> Exec['post-trove_config']
   Trove_config<||> ~> Service['trove-api']

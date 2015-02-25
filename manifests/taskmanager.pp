@@ -86,7 +86,7 @@ class trove::taskmanager(
   $guestagent_config_file = '/etc/trove/trove-guestmanager.conf'
 ) inherits trove {
 
-  include trove::params
+  include ::trove::params
 
   Package[$::trove::params::taskmanager_package_name] -> Trove_taskmanager_config<||>
   Trove_taskmanager_config<||> ~> Exec['post-trove_config']

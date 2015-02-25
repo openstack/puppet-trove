@@ -64,7 +64,7 @@ class trove::conductor(
   $conductor_manager         = 'trove.conductor.manager.Manager',
 ) inherits trove {
 
-  include trove::params
+  include ::trove::params
 
   Package[$::trove::params::conductor_package_name] -> Trove_conductor_config<||>
   Trove_conductor_config<||> ~> Exec['post-trove_config']
