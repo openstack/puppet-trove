@@ -98,4 +98,18 @@ describe 'trove::keystone::auth' do
     it { is_expected.to contain_keystone_service('trovey') }
     it { is_expected.to contain_keystone_endpoint('RegionOne/trovey') }
   end
+
+  describe 'when overriding service name' do
+    let :params do
+      { :service_name => 'trove_service',
+        :auth_name    => 'trove',
+        :password     => 'trove_password' }
+    end
+
+    it { is_expected.to contain_keystone_user('trove') }
+    it { is_expected.to contain_keystone_user_role('trove@services') }
+    it { is_expected.to contain_keystone_service('trove_service') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service') }
+  end
+
 end
