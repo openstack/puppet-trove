@@ -1,36 +1,47 @@
 # == Class: trove::db::postgresql
 #
-# Manage the trove postgresql database
+# Class that configures postgresql for trove
+# Requires the Puppetlabs postgresql module.
 #
-# === Parameters:
+# === Parameters
 #
 # [*password*]
-#   (required) Password that will be used for the trove db user.
+#   (Required) Password to connect to the database.
 #
 # [*dbname*]
-#   (optionnal) Name of trove database.
-#   Defaults to trove
+#   (Optional) Name of the database.
+#   Defaults to 'trove'.
 #
 # [*user*]
-#   (optionnal) Name of trove user.
-#   Defaults to trove
+#   (Optional) User to connect to the database.
+#   Defaults to 'trove'.
+#
+# [*encoding*]
+#   (Optional) The charset to use for the database.
+#   Default to undef.
+#
+# [*privileges*]
+#   (Optional) Privileges given to the database user.
+#   Default to 'ALL'
 #
 class trove::db::postgresql(
   $password,
-  $dbname    = 'trove',
-  $user      = 'trove'
+  $dbname     = 'trove',
+  $user       = 'trove',
+  $encoding   = undef,
+  $privileges = 'ALL',
 ) {
 
-  require postgresql::python
-
   Class['trove::db::postgresql'] -> Service<| title == 'trove' |>
-  Postgresql::Db[$dbname] ~> Exec<| title == 'trove-manage db_sync' |>
-  Package['python-psycopg2'] -> Exec<| title == 'trove-manage db_sync' |>
 
-
-  postgresql::db { $dbname:
-    user     => $user,
-    password => $password,
+  ::openstacklib::db::postgresql { 'trove':
+    password_hash => postgresql_password($user, $password),
+    dbname        => $dbname,
+    user          => $user,
+    encoding      => $encoding,
+    privileges    => $privileges,
   }
+
+  ::Openstacklib::Db::Postgresql['trove']    ~> Exec<| title == 'trove-manage db_sync' |>
 
 }
