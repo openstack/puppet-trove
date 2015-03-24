@@ -104,8 +104,8 @@ class trove::taskmanager(
       fail("Invalid db connection ${::trove::database_connection}")
     }
     trove_taskmanager_config {
-      'DEFAULT/sql_connection':   value => $::trove::database_connection;
-      'DEFAULT/sql_idle_timeout': value => $::trove::database_idle_timeoutl;
+      'database/connection':   value => $::trove::database_connection;
+      'database/idle_timeout': value => $::trove::database_idle_timeoutl;
     }
   }
 

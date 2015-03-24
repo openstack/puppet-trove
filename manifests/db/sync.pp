@@ -22,6 +22,6 @@ class trove::db::sync {
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => Trove_config['DEFAULT/sql_connection'],
+    subscribe   => Trove_config['database/connection'],
   }
 }
