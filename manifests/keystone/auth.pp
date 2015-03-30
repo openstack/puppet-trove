@@ -66,6 +66,10 @@
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
 #
+# [*service_name*]
+#   (optional) Name of the service.
+#   Defaults to the value of auth_name.
+#
 #
 class trove::keystone::auth (
   $password,
@@ -73,6 +77,7 @@ class trove::keystone::auth (
   $email              = 'trove@localhost',
   $tenant             = 'services',
   $configure_endpoint = true,
+  $service_name       = undef,
   $service_type       = 'database',
   $public_protocol    = 'http',
   $public_address     = '127.0.0.1',
@@ -85,8 +90,10 @@ class trove::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
+  $real_service_name    = pick($service_name, $auth_name)
+
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'trove-server' |>
-  Keystone_endpoint["${region}/${auth_name}"]  ~> Service <| name == 'trove-server' |>
+  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'trove-server' |>
 
   if ! $public_port {
     $real_public_port = $port
@@ -94,13 +101,15 @@ class trove::keystone::auth (
     $real_public_port = $public_port
   }
 
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'trove':
     configure_user      => true,
     configure_user_role => true,
     configure_endpoint  => $configure_endpoint,
+    service_name        => $real_service_name,
     service_type        => $service_type,
     service_description => 'Trove Database Service',
     region              => $region,
+    auth_name           => $auth_name,
     password            => $password,
     email               => $email,
     tenant              => $tenant,
