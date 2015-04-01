@@ -59,7 +59,7 @@ describe 'trove::taskmanager' do
              rabbit_host           => '10.0.0.1'}"
         end
         it 'configures trove-taskmanager with RabbitMQ' do
-          is_expected.to contain_trove_taskmanager_config('DEFAULT/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
         end
       end
 
@@ -70,7 +70,7 @@ describe 'trove::taskmanager' do
              rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
         end
         it 'configures trove-taskmanager with RabbitMQ' do
-          is_expected.to contain_trove_taskmanager_config('DEFAULT/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
         end
       end
 
@@ -125,6 +125,59 @@ describe 'trove::taskmanager' do
         end
       end
     end
+    context 'with SSL enabled with kombu' do
+      let :pre_condition do
+        "class { 'trove':
+           nova_proxy_admin_pass => 'verysecrete',
+           rabbit_use_ssl     => true,
+           kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
+           kombu_ssl_certfile => '/path/to/ssl/cert/file',
+           kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
+           kombu_ssl_version  => 'TLSv1'}"
+      end
+
+      it do
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+      end
+    end
+
+    context 'with SSL enabled without kombu' do
+      let :pre_condition do
+        "class { 'trove':
+           nova_proxy_admin_pass => 'verysecrete',
+           rabbit_use_ssl     => true}"
+      end
+
+      it do
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+      end
+    end
+
+    context 'with SSL disabled' do
+      let :pre_condition do
+        "class { 'trove':
+           nova_proxy_admin_pass => 'verysecrete',
+           rabbit_use_ssl     => false,
+           kombu_ssl_version  => 'TLSv1'}"
+      end
+
+      it do
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

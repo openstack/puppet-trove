@@ -95,43 +95,59 @@ class trove::guestagent(
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
-    # I may want to support exporting and collecting these
+      if ! $::trove::rabbit_password {
+      fail('When rpc_backend is rabbitmq, you must set rabbit password')
+    }
+    if $::trove::rabbit_hosts {
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($::trove::rabbit_hosts, ',') }
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
+    } else  {
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_host':      value => $::trove::rabbit_host }
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_port':      value => $::trove::rabbit_port }
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${::trove::rabbit_host}:${::trove::rabbit_port}" }
+      trove_guestagent_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+    }
+
     trove_guestagent_config {
-      'DEFAULT/rabbit_password':           value => $::trove::rabbit_password, secret => true;
-      'DEFAULT/rabbit_userid':             value => $::trove::rabbit_userid;
-      'DEFAULT/rabbit_virtual_host':       value => $::trove::rabbit_virtual_host;
-      'DEFAULT/rabbit_use_ssl':            value => $::trove::rabbit_use_ssl;
-      'DEFAULT/amqp_durable_queues':       value => $::trove::amqp_durable_queues;
-      'DEFAULT/rabbit_notification_topic': value => $::trove::rabbit_notification_topic;
+      'oslo_messaging_rabbit/rabbit_userid':         value => $::trove::rabbit_user;
+      'oslo_messaging_rabbit/rabbit_password':       value => $::trove::rabbit_password, secret => true;
+      'oslo_messaging_rabbit/rabbit_virtual_host':   value => $::trove::rabbit_virtual_host;
+      'oslo_messaging_rabbit/rabbit_use_ssl':        value => $::trove::rabbit_use_ssl;
+      'oslo_messaging_rabbit/kombu_reconnect_delay': value => $::trove::kombu_reconnect_delay;
     }
 
     if $::trove::rabbit_use_ssl {
-      trove_guestagent_config {
-        'DEFAULT/kombu_ssl_ca_certs': value => $::trove::kombu_ssl_ca_certs;
-        'DEFAULT/kombu_ssl_certfile': value => $::trove::kombu_ssl_certfile;
-        'DEFAULT/kombu_ssl_keyfile':  value => $::trove::kombu_ssl_keyfile;
-        'DEFAULT/kombu_ssl_version':  value => $::trove::kombu_ssl_version;
-      }
-    } else {
-      trove_guestagent_config {
-        'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
-        'DEFAULT/kombu_ssl_certfile': ensure => absent;
-        'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
-        'DEFAULT/kombu_ssl_version':  ensure => absent;
-      }
-    }
 
-    if $::trove::rabbit_hosts {
-      trove_guestagent_config {
-        'DEFAULT/rabbit_hosts':     value => join($::trove::rabbit_hosts, ',');
-        'DEFAULT/rabbit_ha_queues': value => true
+      if $::trove::kombu_ssl_ca_certs {
+        trove_guestagent_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $::trove::kombu_ssl_ca_certs; }
+      } else {
+        trove_guestagent_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
       }
+
+      if $::trove::kombu_ssl_certfile or $::trove::kombu_ssl_keyfile {
+        trove_guestagent_config {
+          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $::trove::kombu_ssl_certfile;
+          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $::trove::kombu_ssl_keyfile;
+        }
+      } else {
+        trove_guestagent_config {
+          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
+        }
+      }
+
+      if $::trove::kombu_ssl_version {
+        trove_guestagent_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $::trove::kombu_ssl_version; }
+      } else {
+        trove_guestagent_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
+      }
+
     } else {
       trove_guestagent_config {
-        'DEFAULT/rabbit_host':      value => $::trove::rabbit_host;
-        'DEFAULT/rabbit_port':      value => $::trove::rabbit_port;
-        'DEFAULT/rabbit_hosts':     value => "${::trove::rabbit_host}:${::trove::rabbit_port}";
-        'DEFAULT/rabbit_ha_queues': value => false
+        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
       }
     }
   }
