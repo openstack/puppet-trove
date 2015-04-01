@@ -103,7 +103,7 @@ describe 'trove::api' do
              database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_config('DEFAULT/sql_connection').with_value('mysql://trove:pass@10.0.0.1/trove')
+          is_expected.to contain_trove_config('database/connection').with_value('mysql://trove:pass@10.0.0.1/trove')
         end
       end
     end
