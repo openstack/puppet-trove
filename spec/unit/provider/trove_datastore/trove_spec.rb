@@ -30,12 +30,12 @@ describe provider_class do
 
   describe "self.instances" do
     it "should have an instances method" do
-      provider.class.should respond_to(:instances)
+      expect(provider.class).to respond_to(:instances)
     end
 
     it "should list instances" do
       datastores = described_class.instances
-      datastores.size.should == 1
+      expect(datastores.size).to eq(1)
       datastores.map {|provider| provider.name} == datastore_name
     end
   end

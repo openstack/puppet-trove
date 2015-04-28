@@ -40,7 +40,7 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('trove@foobar').with(
       :ensure  => 'present',
-      :roles   => 'admin'
+      :roles   => ['admin']
     )}
 
     it { is_expected.to contain_keystone_service('trove').with(

@@ -29,19 +29,19 @@ describe 'Puppet::Type.type(:trove_config)' do
 
   it 'should accept a valid value' do
     @trove_config[:value] = 'bar'
-    @trove_config[:value].should == 'bar'
+    expect(@trove_config[:value]).to eq('bar')
   end
 
   it 'should not accept a value with whitespace' do
     @trove_config[:value] = 'b ar'
-    @trove_config[:value].should == 'b ar'
+    expect(@trove_config[:value]).to eq('b ar')
   end
 
   it 'should accept valid ensure values' do
     @trove_config[:ensure] = :present
-    @trove_config[:ensure].should == :present
+    expect(@trove_config[:ensure]).to eq(:present)
     @trove_config[:ensure] = :absent
-    @trove_config[:ensure].should == :absent
+    expect(@trove_config[:ensure]).to eq(:absent)
   end
 
   it 'should not accept invalid ensure values' do

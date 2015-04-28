@@ -32,7 +32,7 @@ describe provider_class do
 
   describe "self.instances" do
     it "should have an instances method" do
-      provider.class.should respond_to(:instances)
+      expect(provider.class).to respond_to(:instances)
     end
   end
 
