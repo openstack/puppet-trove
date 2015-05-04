@@ -66,9 +66,16 @@ class trove::conductor(
 
   include ::trove::params
 
-  Package[$::trove::params::conductor_package_name] -> Trove_conductor_config<||>
   Trove_conductor_config<||> ~> Exec['post-trove_config']
   Trove_conductor_config<||> ~> Service['trove-conductor']
+  # Trove db sync is broken in Ubuntu packaging
+  # This is a temporary fix until it's fixed in packaging.
+  # https://bugs.launchpad.net/ubuntu/+source/openstack-trove/+bug/1451134
+  file { '/etc/trove/trove-conductor.conf':
+    require => File['/etc/trove'],
+  }
+  File['/etc/trove/trove-conductor.conf'] -> Trove_conductor_config<||>
+  Trove_conductor_config<||> -> Package[$::trove::params::conductor_package_name]
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {

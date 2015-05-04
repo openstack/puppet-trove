@@ -23,5 +23,6 @@ class trove::db::sync {
     user        => 'trove',
     refreshonly => true,
     subscribe   => Trove_config['database/connection'],
+    require     => Package['trove-api'],
   }
 }

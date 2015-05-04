@@ -71,9 +71,16 @@ class trove::guestagent(
 
   include ::trove::params
 
-  Package[$::trove::params::guestagent_package_name] -> Trove_guestagent_config<||>
   Trove_guestagent_config<||> ~> Exec['post-trove_config']
   Trove_guestagent_config<||> ~> Service['trove-guestagent']
+  # Trove db sync is broken in Ubuntu packaging
+  # This is a temporary fix until it's fixed in packaging.
+  # https://bugs.launchpad.net/ubuntu/+source/openstack-trove/+bug/1451134
+  file { '/etc/trove/trove-guestagent.conf':
+    require => File['/etc/trove'],
+  }
+  File['/etc/trove/trove-guestagent.conf'] -> Trove_guestagent_config<||>
+  Trove_guestagent_config<||> -> Package[$::trove::params::guestagent_package_name]
 
   # basic service config
   trove_guestagent_config {

@@ -217,4 +217,17 @@ class trove(
   else {
     trove_config { 'DEFAULT/swift_url': ensure => absent }
   }
+
+  group { 'trove':
+    ensure => 'present',
+    name   => 'trove',
+    system => true,
+  }
+
+  file { '/etc/trove/':
+    ensure  => directory,
+    group   => 'trove',
+    require => Group['trove']
+  }
+
 }
