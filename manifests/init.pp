@@ -23,10 +23,16 @@
 #
 # [*rabbit_host*]
 #   (optional) Location of rabbitmq installation.
+#   Note that, for security reasons, this rabbitmq host should not be the
+#   same that the core openstack services are using for communication. See
+#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
 #   Defaults to 'localhost'
 #
 # [*rabbit_hosts*]
 #   (optional) List of clustered rabbit servers.
+#   Note that, for security reasons, these rabbitmq hosts should not be the
+#   same that the core openstack services are using for communication. See
+#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
 #   Defaults to false
 #
 # [*rabbit_port*]
