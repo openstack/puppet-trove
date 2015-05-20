@@ -162,6 +162,10 @@
 #   (optional) Use Neutron
 #   Defaults to true
 #
+# [*package_ensure*]
+#   (optional) The state of the package.
+#   Defaults to 'present'
+#
 class trove(
   $nova_proxy_admin_pass,
   $rabbit_host                  = 'localhost',
@@ -187,6 +191,7 @@ class trove(
   $cinder_url                   = false,
   $swift_url                    = false,
   $use_neutron                  = true,
+  $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
   $mysql_module                 = undef,
 ) {
@@ -224,10 +229,25 @@ class trove(
     trove_config { 'DEFAULT/swift_url': ensure => absent }
   }
 
+  if $::osfamily == 'RedHat' {
+    # TO-DO(mmagr): Conditional should be removed as soon as following bug
+    # is really fixed. On Ubuntu trove-common is not installable without already
+    # running database and correctly filled trove.conf:
+    # https://bugs.launchpad.net/ubuntu/+source/openstack-trove/+bug/1365561
+    package { 'trove':
+      ensure => $package_ensure,
+      name   => $::trove::params::common_package_name
+    }
+    $group_require = Package['trove']
+  } else {
+    $group_require = undef
+  }
+
   group { 'trove':
-    ensure => 'present',
-    name   => 'trove',
-    system => true,
+    ensure  => 'present',
+    name    => 'trove',
+    system  => true,
+    require => $group_require
   }
 
   file { '/etc/trove/':

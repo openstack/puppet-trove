@@ -250,4 +250,11 @@ class trove::taskmanager(
     }
   }
 
+  # TO-DO(mmagr): Disabling transformer workarounds bug #1402055.
+  #               Remove this hack as soon as bug is fixed.
+  if $::osfamily == 'RedHat' {
+    trove_taskmanager_config {
+      'DEFAULT/exists_notification_transformer': ensure => absent,
+    }
+  }
 }

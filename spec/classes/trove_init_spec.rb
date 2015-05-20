@@ -30,12 +30,15 @@ describe 'trove' do
   end
 
   shared_examples_for 'trove' do
-    it {
-      is_expected.to contain_class('trove::params')
-      is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
-      is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
-      is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
-    }
+
+    context 'with default parameters' do
+      it {
+        is_expected.to contain_class('trove::params')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
+        is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
+        is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
+      }
+    end
   end
 
   context 'on Debian platforms' do
@@ -49,6 +52,13 @@ describe 'trove' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+    it 'installs common package' do
+      should contain_package('trove').with(
+        :name   => 'openstack-trove',
+        :ensure => 'present',
+      )
     end
 
     it_configures 'trove'
