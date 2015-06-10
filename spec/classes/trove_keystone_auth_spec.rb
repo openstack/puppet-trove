@@ -130,4 +130,12 @@ describe 'trove::keystone::auth' do
     it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service') }
   end
 
+  describe 'when disabling endpoint configuration' do
+    let :params do
+      { :configure_endpoint => false,
+        :password           => 'trove_password' }
+    end
+
+    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron') }
+  end
 end
