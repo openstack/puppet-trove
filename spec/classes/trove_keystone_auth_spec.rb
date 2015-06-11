@@ -51,9 +51,9 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
       :ensure       => 'present',
-      :public_url   => "http://127.0.0.1:8779/v1.0/\$(tenant_id)s",
-      :admin_url    => "http://127.0.0.1:8779/v1.0/\$(tenant_id)s",
-      :internal_url => "http://127.0.0.1:8779/v1.0/\$(tenant_id)s"
+      :public_url   => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
+      :admin_url    => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
+      :internal_url => "http://127.0.0.1:8779/v1.0/%(tenant_id)s"
     ) }
   end
 
@@ -68,22 +68,40 @@ describe 'trove::keystone::auth' do
     end
   end
 
-  describe 'when overriding public_protocol, public_port and public address' do
+  describe 'when overriding endpoint URLs' do
     let :params do
-      { :password         => 'trove_password',
-        :public_protocol  => 'https',
-        :public_port      => '80',
-        :public_address   => '10.10.10.10',
-        :port             => '81',
-        :internal_address => '10.10.10.11',
-        :admin_address    => '10.10.10.12' }
+      { :password     => 'passw0rd',
+        :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
+        :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
+        :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s' }
     end
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
       :ensure       => 'present',
-      :public_url   => "https://10.10.10.10:80/v1.0/\$(tenant_id)s",
-      :internal_url => "http://10.10.10.11:81/v1.0/\$(tenant_id)s",
-      :admin_url    => "http://10.10.10.12:81/v1.0/\$(tenant_id)s"
+      :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
+      :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
+      :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s'
+    ) }
+  end
+
+  describe 'with deprecated endpoint parameters' do
+    let :params do
+      { :password          => 'trove_password',
+        :public_protocol   => 'https',
+        :public_port       => '80',
+        :public_address    => '10.10.10.10',
+        :port              => '81',
+        :internal_protocol => 'https',
+        :internal_address  => '10.10.10.11',
+        :admin_protocol    => 'https',
+        :admin_address     => '10.10.10.12' }
+    end
+
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
+      :ensure       => 'present',
+      :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
+      :internal_url => 'https://10.10.10.11:81/v1.0/%(tenant_id)s',
+      :admin_url    => 'https://10.10.10.12:81/v1.0/%(tenant_id)s'
     ) }
   end
 
