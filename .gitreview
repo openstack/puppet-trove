@@ -1,4 +1,4 @@
 [gerrit]
 host=review.openstack.org
 port=29418
-project=stackforge/puppet-trove.git
+project=openstack/puppet-trove.git
