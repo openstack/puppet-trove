@@ -39,37 +39,77 @@
 # [*service_type*]
 #   Type of service. Defaults to 'database'.
 #
-# [*public_protocol*]
-#   Protocol for public endpoint. Defaults to 'http'.
-#
-# [*public_address*]
-#   Public address for endpoint. Defaults to '127.0.0.1'.
-#
-# [*admin_protocol*]
-#   Protocol for admin endpoint. Defaults to 'http'.
-#
-# [*admin_address*]
-#   Admin address for endpoint. Defaults to '127.0.0.1'.
-#
-# [*internal_protocol*]
-#   Protocol for internal endpoint. Defaults to 'http'.
-#
-# [*internal_address*]
-#   Internal address for endpoint. Defaults to '127.0.0.1'.
-#
-# [*port*]
-#   Port for endpoint. Defaults to '8779'.
-#
-# [*public_port*]
-#   Port for public endpoint. Defaults to $port.
-#
-# [*region*]
-#   Region for endpoint. Defaults to 'RegionOne'.
-#
 # [*service_name*]
 #   (optional) Name of the service.
 #   Defaults to the value of auth_name.
 #
+# [*region*]
+#   Region for endpoint. Defaults to 'RegionOne'.
+#
+# [*public_url*]
+#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   This url should *not* contain any trailing '/'.
+#
+# [*admin_url*]
+#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   This url should *not* contain any trailing '/'.
+#
+# [*internal_url*]
+#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   This url should *not* contain any trailing '/'.
+#
+# [*port*]
+#   (optional) DEPRECATED: Use public_url, internal_url and admin_url instead.
+#   Default port for endpoints. (Defaults to 9001)
+#   Setting this parameter overrides public_url, internal_url and admin_url parameters.
+#
+# [*public_port*]
+#   (optional) DEPRECATED: Use public_url instead.
+#   Default port for endpoints. (Defaults to $port)
+#   Setting this parameter overrides public_url parameter.
+#
+# [*public_protocol*]
+#   (optional) DEPRECATED: Use public_url instead.
+#   Protocol for public endpoint. (Defaults to 'http')
+#   Setting this parameter overrides public_url parameter.
+#
+# [*public_address*]
+#   (optional) DEPRECATED: Use public_url instead.
+#   Public address for endpoint. (Defaults to '127.0.0.1')
+#   Setting this parameter overrides public_url parameter.
+#
+# [*internal_protocol*]
+#   (optional) DEPRECATED: Use internal_url instead.
+#   Protocol for internal endpoint. (Defaults to 'http')
+#   Setting this parameter overrides internal_url parameter.
+#
+# [*internal_address*]
+#   (optional) DEPRECATED: Use internal_url instead.
+#   Internal address for endpoint. (Defaults to '127.0.0.1')
+#   Setting this parameter overrides internal_url parameter.
+#
+# [*admin_protocol*]
+#   (optional) DEPRECATED: Use admin_url instead.
+#   Protocol for admin endpoint. (Defaults to 'http')
+#   Setting this parameter overrides admin_url parameter.
+#
+# [*admin_address*]
+#   (optional) DEPRECATED: Use admin_url instead.
+#   Admin address for endpoint. (Defaults to '127.0.0.1')
+#   Setting this parameter overrides admin_url parameter.
+#
+# === Deprecation notes
+#
+# If any value is provided for public_protocol, public_address or port parameters,
+# public_url will be completely ignored. The same applies for internal and admin parameters.
+#
+# === Examples
+#
+#  class { 'trove::keystone::auth':
+#    public_url   => 'https://10.0.0.10:8779/v1.0/%(tenant_id)s',
+#    internal_url => 'https://10.0.0.11:8779/v1.0/%(tenant_id)s',
+#    admin_url    => 'https://10.0.0.11:8779/v1.0/%(tenant_id)s',
+#  }
 #
 class trove::keystone::auth (
   $password,
@@ -79,27 +119,84 @@ class trove::keystone::auth (
   $configure_endpoint = true,
   $service_name       = undef,
   $service_type       = 'database',
-  $public_protocol    = 'http',
-  $public_address     = '127.0.0.1',
-  $admin_protocol     = 'http',
-  $admin_address      = '127.0.0.1',
-  $internal_protocol  = 'http',
-  $internal_address   = '127.0.0.1',
-  $port               = '8779',
+  $region             = 'RegionOne',
+  $public_url         = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  $admin_url          = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  $internal_url       = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  # DEPRECATED PARAMETERS
+  $port               = undef,
   $public_port        = undef,
-  $region             = 'RegionOne'
+  $public_protocol    = undef,
+  $public_address     = undef,
+  $internal_protocol  = undef,
+  $internal_address   = undef,
+  $admin_protocol     = undef,
+  $admin_address      = undef,
 ) {
 
-  $real_service_name    = pick($service_name, $auth_name)
-
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'trove-server' |>
-  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'trove-server' |>
-
-  if ! $public_port {
-    $real_public_port = $port
-  } else {
-    $real_public_port = $public_port
+  if $port {
+    warning('The port parameter is deprecated, use public_url, internal_url and admin_url instead.')
   }
+
+  if $public_port {
+    warning('The public_port parameter is deprecated, use public_url instead.')
+  }
+
+  if $public_protocol {
+    warning('The public_protocol parameter is deprecated, use public_url instead.')
+  }
+
+  if $internal_protocol {
+    warning('The internal_protocol parameter is deprecated, use internal_url instead.')
+  }
+
+  if $admin_protocol {
+    warning('The admin_protocol parameter is deprecated, use admin_url instead.')
+  }
+
+  if $public_address {
+    warning('The public_address parameter is deprecated, use public_url instead.')
+  }
+
+  if $internal_address {
+    warning('The internal_address parameter is deprecated, use internal_url instead.')
+  }
+
+  if $admin_address {
+    warning('The admin_address parameter is deprecated, use admin_url instead.')
+  }
+
+  if ($public_protocol or $public_address or $port or $public_port) {
+    $public_url_real = sprintf('%s://%s:%s/v1.0/%%(tenant_id)s',
+      pick($public_protocol, 'http'),
+      pick($public_address, '127.0.0.1'),
+      pick($public_port, $port, '8779'))
+  } else {
+    $public_url_real = $public_url
+  }
+
+  if ($admin_protocol or $admin_address or $port) {
+    $admin_url_real = sprintf('%s://%s:%s/v1.0/%%(tenant_id)s',
+      pick($admin_protocol, 'http'),
+      pick($admin_address, '127.0.0.1'),
+      pick($port, '8779'))
+  } else {
+    $admin_url_real = $admin_url
+  }
+
+  if ($internal_protocol or $internal_address or $port) {
+    $internal_url_real = sprintf('%s://%s:%s/v1.0/%%(tenant_id)s',
+      pick($internal_protocol, 'http'),
+      pick($internal_address, '127.0.0.1'),
+      pick($port, '8779'))
+  } else {
+    $internal_url_real = $internal_url
+  }
+
+  $real_service_name = pick($service_name, $auth_name)
+
+  Keystone_user_role["${auth_name}@${tenant}"]        ~> Service <| name == 'trove-server' |>
+  Keystone_endpoint["${region}/${real_service_name}"] ~> Service <| name == 'trove-server' |>
 
   keystone::resource::service_identity { 'trove':
     configure_user      => true,
@@ -113,9 +210,9 @@ class trove::keystone::auth (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
-    public_url          => "${public_protocol}://${public_address}:${real_public_port}/v1.0/\$(tenant_id)s",
-    internal_url        => "${internal_protocol}://${internal_address}:${port}/v1.0/\$(tenant_id)s",
-    admin_url           => "${admin_protocol}://${admin_address}:${port}/v1.0/\$(tenant_id)s",
+    public_url          => $public_url_real,
+    internal_url        => $internal_url_real,
+    admin_url           => $admin_url_real,
   }
 
 }
