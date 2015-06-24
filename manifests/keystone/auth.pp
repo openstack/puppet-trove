@@ -43,6 +43,10 @@
 #   (optional) Name of the service.
 #   Defaults to the value of auth_name.
 #
+# [*service_description*]
+#   (optional) Description for keystone service.
+#   Defaults to 'Trove Database Service'.
+#
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
 #
@@ -113,25 +117,26 @@
 #
 class trove::keystone::auth (
   $password,
-  $auth_name          = 'trove',
-  $email              = 'trove@localhost',
-  $tenant             = 'services',
-  $configure_endpoint = true,
-  $service_name       = undef,
-  $service_type       = 'database',
-  $region             = 'RegionOne',
-  $public_url         = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
-  $admin_url          = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
-  $internal_url       = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  $auth_name           = 'trove',
+  $email               = 'trove@localhost',
+  $tenant              = 'services',
+  $configure_endpoint  = true,
+  $service_name        = undef,
+  $service_type        = 'database',
+  $service_description = 'Trove Database Service',
+  $region              = 'RegionOne',
+  $public_url          = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  $admin_url           = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
+  $internal_url        = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
   # DEPRECATED PARAMETERS
-  $port               = undef,
-  $public_port        = undef,
-  $public_protocol    = undef,
-  $public_address     = undef,
-  $internal_protocol  = undef,
-  $internal_address   = undef,
-  $admin_protocol     = undef,
-  $admin_address      = undef,
+  $port                = undef,
+  $public_port         = undef,
+  $public_protocol     = undef,
+  $public_address      = undef,
+  $internal_protocol   = undef,
+  $internal_address    = undef,
+  $admin_protocol      = undef,
+  $admin_address       = undef,
 ) {
 
   if $port {
@@ -204,7 +209,7 @@ class trove::keystone::auth (
     configure_endpoint  => $configure_endpoint,
     service_name        => $real_service_name,
     service_type        => $service_type,
-    service_description => 'Trove Database Service',
+    service_description => $service_description,
     region              => $region,
     auth_name           => $auth_name,
     password            => $password,
