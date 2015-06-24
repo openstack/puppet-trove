@@ -54,6 +54,43 @@ describe 'trove::guestagent' do
           is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
         end
       end
+
+      context 'when using qpid' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             rpc_backend           => 'trove.openstack.common.rpc.impl_qpid',
+             qpid_hostname         => '10.0.0.1',
+             qpid_username         => 'guest',
+             qpid_password         => 'password'}"
+        end
+        it 'configures trove-guestagent with qpid' do
+          is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_backend').with_value('trove.openstack.common.rpc.impl_qpid')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_hostname').with_value('10.0.0.1')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_username').with_value('guest')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_password').with_value('password')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_protocol').with_value('tcp')
+        end
+      end
+
+      context 'when using qpid with SSL enabled' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             rpc_backend           => 'trove.openstack.common.rpc.impl_qpid',
+             qpid_hostname         => '10.0.0.1',
+             qpid_username         => 'guest',
+             qpid_password         => 'password',
+             qpid_protocol         => 'ssl'}"
+        end
+        it 'configures trove-guestagent with qpid' do
+          is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_backend').with_value('trove.openstack.common.rpc.impl_qpid')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_hostname').with_value('10.0.0.1')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_username').with_value('guest')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_password').with_value('password')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_qpid/qpid_protocol').with_value('ssl')
+        end
+      end
     end
 
     context 'with custom parameters' do
