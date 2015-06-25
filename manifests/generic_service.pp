@@ -27,6 +27,26 @@
 # This define creates a service resource with title trove-${name} and
 # conditionally creates a package resource with title trove-${name}
 #
+# === Parameters:
+#
+# [*package_name*]
+#   (mandatory) The package name (for the generic_service)
+#
+# [*service_name*]
+#   (mandatory) The service name (for the generic_service)
+#
+# [*enabled*]
+#   (optional) Define if the service must be enabled or not
+#   Defaults to false.
+#
+# [*manage_service*]
+#   (optional) Manage or not the service (if a service_name is provided).
+#   Defaults to true.
+#
+# [*ensure_package*]
+#   (optional) Control the ensure parameter for the package ressource.
+#   Defaults to 'present'.
+#
 define trove::generic_service(
   $package_name,
   $service_name,
