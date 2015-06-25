@@ -120,7 +120,7 @@ class trove::conductor(
     }
 
     trove_conductor_config {
-      'oslo_messaging_rabbit/rabbit_userid':         value => $::trove::rabbit_user;
+      'oslo_messaging_rabbit/rabbit_userid':         value => $::trove::rabbit_userid;
       'oslo_messaging_rabbit/rabbit_password':       value => $::trove::rabbit_password, secret => true;
       'oslo_messaging_rabbit/rabbit_virtual_host':   value => $::trove::rabbit_virtual_host;
       'oslo_messaging_rabbit/rabbit_use_ssl':        value => $::trove::rabbit_use_ssl;
