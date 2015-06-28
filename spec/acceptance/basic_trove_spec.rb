@@ -97,6 +97,7 @@ describe 'basic trove' do
       class { '::trove::client': }
       class { '::trove::conductor': }
       class { '::trove::taskmanager': }
+      class { '::trove::quota': }
       EOS
 
 
