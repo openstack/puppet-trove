@@ -119,6 +119,26 @@
 #   (optional) CA certificate file to use to verify connecting clients
 #   Defaults to false, not set
 #
+# [*http_get_rate*]
+#   (optional) Default rate limit of GET request.
+#   Defaults to 200.
+#
+# [*http_post_rate*]
+#   (optional) Default rate limit of POST request.
+#   Defaults to 200.
+#
+# [*http_put_rate*]
+#   (optional) Default rate limit of PUT request.
+#   Defaults to 200.
+#
+# [*http_delete_rate*]
+#   (optional) Default rate limit of DELETE request.
+#   Defaults to 200.
+#
+# [*http_mgmt_post_rate*]
+#   (optional) Default rate limit of mgmt post request.
+#   Defaults to 200.
+#
 class trove::api(
   $keystone_password,
   $verbose                      = false,
@@ -142,6 +162,11 @@ class trove::api(
   $cert_file                    = false,
   $key_file                     = false,
   $ca_file                      = false,
+  $http_get_rate                = 200,
+  $http_post_rate               = 200,
+  $http_put_rate                = 200,
+  $http_delete_rate             = 200,
+  $http_mgmt_post_rate          = 200,
   $manage_service               = true,
   $ensure_package               = 'present',
 ) inherits trove {
@@ -270,6 +295,15 @@ class trove::api(
     trove_config {
       'DEFAULT/use_syslog': value => false;
     }
+  }
+
+  # rate limits
+  trove_config {
+    'DEFAULT/http_get_rate':       value => $http_get_rate;
+    'DEFAULT/http_post_rate':      value => $http_post_rate;
+    'DEFAULT/http_put_rate':       value => $http_put_rate;
+    'DEFAULT/http_delete_rate':    value => $http_delete_rate;
+    'DEFAULT/http_mgmt_post_rate': value => $http_mgmt_post_rate;
   }
 
   resources { 'trove_config':
