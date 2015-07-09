@@ -158,6 +158,37 @@
 #   (optional) Swift URL ending in AUTH_.
 #   Defaults to false.
 #
+# [*neutron_url*]
+#   (optional) Cinder URL without the tenant segment.
+#   Defaults to false.
+#
+# [*os_region_name*]
+#   (optional) Sets the os_region_name flag. For environments with
+#   more than one endpoint per service. If you don't set this and
+#   you have multiple endpoints, you will get Ambiguous Endpoint
+#   exceptions in the trove API service.
+#   Defaults to undef.
+#
+# [*nova_compute_service_type*]
+#   (optional) Nova service type to use when searching catalog.
+#   Defaults to 'compute'.
+#
+# [*cinder_service_type*]
+#   (optional) Cinder service type to use when searching catalog.
+#   Defaults to 'volumev2'.
+#
+# [*swift_service_type*]
+#   (optional) Swift service type to use when searching catalog.
+#   Defaults to 'object-store'.
+#
+# [*heat_service_type*]
+#   (optional) Heat service type to use when searching catalog.
+#   Defaults to 'orchestration'.
+#
+# [*neutron_service_type*]
+#   (optional) Neutron service type to use when searching catalog.
+#   Defaults to 'network'.
+#
 # [*use_neutron*]
 #   (optional) Use Neutron
 #   Defaults to true
@@ -198,6 +229,13 @@ class trove(
   $control_exchange             = 'trove',
   $cinder_url                   = false,
   $swift_url                    = false,
+  $neutron_url                  = false,
+  $os_region_name               = undef,
+  $nova_compute_service_type    = 'compute',
+  $cinder_service_type          = 'volumev2',
+  $swift_service_type           = 'object-store',
+  $heat_service_type            = 'orchestration',
+  $neutron_service_type         = 'network',
   $use_neutron                  = true,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
@@ -235,6 +273,13 @@ class trove(
   }
   else {
     trove_config { 'DEFAULT/swift_url': ensure => absent }
+  }
+
+  if $neutron_url {
+    trove_config { 'DEFAULT/neutron_url': value => $neutron_url }
+  }
+  else {
+    trove_config { 'DEFAULT/neutron_url': ensure => absent }
   }
 
   if $::osfamily == 'RedHat' {

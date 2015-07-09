@@ -95,6 +95,14 @@ class trove::guestagent(
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
   }
 
+  # region name
+  if $::trove::os_region_name {
+    trove_guestagent_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
+  }
+  else {
+    trove_guestagent_config {'DEFAULT/os_region_name': ensure => absent }
+  }
+
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
       if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')

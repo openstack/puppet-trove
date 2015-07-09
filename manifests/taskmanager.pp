@@ -124,6 +124,23 @@ class trove::taskmanager(
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
   }
 
+  # region name
+  if $::trove::os_region_name {
+    trove_taskmanager_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
+  }
+  else {
+    trove_taskmanager_config {'DEFAULT/os_region_name': ensure => absent }
+  }
+
+  # services type
+  trove_taskmanager_config {
+    'DEFAULT/nova_compute_service_type': value => $::trove::nova_compute_service_type;
+    'DEFAULT/cinder_service_type':       value => $::trove::cinder_service_type;
+    'DEFAULT/neutron_service_type':      value => $::trove::neutron_service_type;
+    'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
+    'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
+  }
+
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
     if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')

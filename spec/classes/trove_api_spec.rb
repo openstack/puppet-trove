@@ -38,7 +38,13 @@ describe 'trove::api' do
 
       let :pre_condition do
         "class { 'trove':
-         nova_proxy_admin_pass => 'verysecrete'}"
+         nova_proxy_admin_pass     => 'verysecrete',
+         os_region_name            => 'RegionOne',
+         nova_compute_service_type => 'compute',
+         cinder_service_type       => 'volume',
+         swift_service_type        => 'object-store',
+         heat_service_type         => 'orchestration',
+         neutron_service_type      => 'network'}"
       end
 
       it 'installs trove-api package and service' do
@@ -72,6 +78,12 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
         is_expected.to contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
         is_expected.to contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
+        is_expected.to contain_trove_config('DEFAULT/os_region_name').with_value('RegionOne')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
+        is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volume')
+        is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
+        is_expected.to contain_trove_config('DEFAULT/heat_service_type').with_value('orchestration')
+        is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
       end
 
       context 'when using a single RabbitMQ server' do

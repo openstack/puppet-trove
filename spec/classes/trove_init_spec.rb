@@ -23,10 +23,12 @@ require 'spec_helper'
 describe 'trove' do
 
   let :params do
-    { :nova_proxy_admin_pass => 'passw0rd',
-      :nova_compute_url => 'http://localhost:8774/v2',
-      :cinder_url => 'http://localhost:8776/v1',
-      :swift_url => 'http://localhost:8080/v1/AUTH_' }
+    { :nova_proxy_admin_pass     => 'passw0rd',
+      :nova_compute_url          => 'http://localhost:8774/v2',
+      :cinder_url                => 'http://localhost:8776/v1',
+      :swift_url                 => 'http://localhost:8080/v1/AUTH_',
+      :neutron_url               => 'http://localhost:9696/',
+    }
   end
 
   shared_examples_for 'trove' do
@@ -37,6 +39,7 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
         is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
         is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
+        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
       }
     end
   end
