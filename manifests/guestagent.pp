@@ -103,6 +103,11 @@ class trove::guestagent(
     trove_guestagent_config {'DEFAULT/os_region_name': ensure => absent }
   }
 
+  trove_guestagent_config {
+    'DEFAULT/notification_driver': value => join(any2array($::trove::notification_driver, ','));
+    'DEFAULT/notification_topics': value => $::trove::notification_topics;
+  }
+
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
       if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')

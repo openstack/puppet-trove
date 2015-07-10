@@ -89,6 +89,8 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/notification_driver').with_value('noop,')
+        is_expected.to contain_trove_config('DEFAULT/notification_topics').with_value('notifications')
       end
 
 

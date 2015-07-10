@@ -20,6 +20,14 @@
 # Trove base config
 #
 # == Parameters
+# [*notification_driver*]
+#   (optional) Driver or drivers to handle sending notifications.
+#   Value can be a string or a list.
+#   Defaults to noop
+#
+# [*notification_topics*]
+#   (optional) AMQP topic used for OpenStack notifications
+#   Defaults to 'notifications'
 #
 # [*rabbit_host*]
 #   (optional) Location of rabbitmq installation.
@@ -220,6 +228,8 @@
 #
 class trove(
   $nova_proxy_admin_pass,
+  $notification_driver          = 'noop',
+  $notification_topics          = 'notifications',
   $rabbit_host                  = 'localhost',
   $rabbit_hosts                 = false,
   $rabbit_password              = 'guest',

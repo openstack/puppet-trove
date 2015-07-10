@@ -311,6 +311,11 @@ class trove::api(
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
+  trove_config {
+    'DEFAULT/notification_driver': value => join(any2array($::trove::notification_driver, ','));
+    'DEFAULT/notification_topics': value => $::trove::notification_topics;
+  }
+
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
     if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
