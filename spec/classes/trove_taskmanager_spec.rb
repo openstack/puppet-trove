@@ -50,6 +50,8 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value(nil)
+        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value(nil)
       end
 
       context 'when using a single RabbitMQ server' do
@@ -125,12 +127,18 @@ describe 'trove::taskmanager' do
       context 'when using Neutron' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             use_neutron           => true}"
+             nova_proxy_admin_pass    => 'verysecrete',
+             use_neutron              => true}
+           class { 'trove::taskmanager':
+             default_neutron_networks => 'trove_service',
+           }
+          "
 
         end
 
         it 'configures trove to use the Neutron network driver' do
+          is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
+          is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value('trove_service')
           is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
 

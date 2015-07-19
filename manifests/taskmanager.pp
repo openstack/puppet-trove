@@ -70,20 +70,24 @@
 # [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestmanager.conf'.
+# [*default_neutron_networks*]
+#   (optional) The network that trove will attach by default.
+#   Defaults to undef.
 #
 class trove::taskmanager(
-  $enabled                = true,
-  $manage_service         = true,
-  $debug                  = false,
-  $verbose                = false,
-  $log_file               = '/var/log/trove/trove-taskmanager.log',
-  $log_dir                = '/var/log/trove',
-  $use_syslog             = false,
-  $log_facility           = 'LOG_USER',
-  $auth_url               = 'http://localhost:5000/v2.0',
-  $heat_url               = false,
-  $ensure_package         = 'present',
-  $guestagent_config_file = '/etc/trove/trove-guestmanager.conf'
+  $enabled                  = true,
+  $manage_service           = true,
+  $debug                    = false,
+  $verbose                  = false,
+  $log_file                 = '/var/log/trove/trove-taskmanager.log',
+  $log_dir                  = '/var/log/trove',
+  $use_syslog               = false,
+  $log_facility             = 'LOG_USER',
+  $auth_url                 = 'http://localhost:5000/v2.0',
+  $heat_url                 = false,
+  $ensure_package           = 'present',
+  $guestagent_config_file   = '/etc/trove/trove-guestmanager.conf',
+  $default_neutron_networks = undef
 ) inherits trove {
 
   include ::trove::params
@@ -199,21 +203,25 @@ class trove::taskmanager(
     trove_config {
       'DEFAULT/network_label_regex':         value => '.*';
       'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
     }
 
     trove_taskmanager_config {
       'DEFAULT/network_label_regex':         value => '.*';
       'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
     }
   } else {
     trove_config {
       'DEFAULT/network_label_regex':         value => '^private$';
       'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+      'DEFAULT/default_neutron_networks':    ensure => absent;
     }
 
     trove_taskmanager_config {
       'DEFAULT/network_label_regex':         value => '^private$';
       'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+      'DEFAULT/default_neutron_networks':    ensure => absent;
     }
   }
 
