@@ -68,6 +68,7 @@ define trove::generic_service(
         ensure => $ensure_package,
         name   => $package_name,
         notify => Service[$trove_title],
+        tag    => ['openstack', 'trove-package'],
       }
     }
   }
@@ -86,6 +87,7 @@ define trove::generic_service(
       name      => $service_name,
       enable    => $enabled,
       hasstatus => true,
+      tag       => 'trove-service',
     }
   }
 }

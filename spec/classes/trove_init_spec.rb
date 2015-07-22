@@ -58,6 +58,7 @@ describe 'trove' do
       should contain_package('trove').with(
         :name   => 'openstack-trove',
         :ensure => 'present',
+        :tag    => ['openstack', 'trove-package'],
       )
     end
 
