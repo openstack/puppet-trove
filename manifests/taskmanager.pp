@@ -69,7 +69,7 @@
 #
 # [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
-#   Defaults to '/etc/trove/trove-guestmanager.conf'.
+#   Defaults to '/etc/trove/trove-guestagent.conf'.
 #
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
@@ -91,7 +91,7 @@ class trove::taskmanager(
   $auth_url                 = 'http://localhost:5000/v2.0',
   $heat_url                 = false,
   $ensure_package           = 'present',
-  $guestagent_config_file   = '/etc/trove/trove-guestmanager.conf',
+  $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $default_neutron_networks = undef,
   $taskmanager_queue        = 'taskmanager',
 ) inherits trove {
