@@ -35,6 +35,120 @@ Implementation
 
 trove is a combination of Puppet manifest and ruby code to delivery configuration and extra functionality through types and providers.
 
+### Types
+
+#### trove_config
+
+The `trove_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove.conf` file.
+
+```puppet
+trove_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `trove.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
+#### trove_conductor_config
+
+The `trove_conductor_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-conductor.conf` file.
+
+```puppet
+trove_conductor_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `trove.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
+#### trove_guestagent_config
+
+The `trove_guestagent_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-guestagent.conf` file.
+
+```puppet
+trove_guestagent_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `trove.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
+#### trove_taskmanager_config
+
+The `trove_taskmanager_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-taskmanager.conf` file.
+
+```puppet
+trove_taskmanager_config { 'DEFAULT/verbose' :
+  value => true,
+}
+```
+
+This will write `verbose=true` in the `[DEFAULT]` section.
+
+##### name
+
+Section/setting name to manage from `trove.conf`
+
+##### value
+
+The value of the setting to be defined.
+
+##### secret
+
+Whether to hide the value from Puppet logs. Defaults to `false`.
+
+##### ensure_absent_val
+
+If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
+
 Limitations
 -----------
 
