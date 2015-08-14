@@ -70,9 +70,14 @@
 # [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestmanager.conf'.
+#
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
 #   Defaults to undef.
+#
+# [*taskmanager_queue*]
+#   (optional) Message queue name the Taskmanager will listen to.
+#   Defaults to 'taskmanager'.
 #
 class trove::taskmanager(
   $enabled                  = true,
@@ -87,7 +92,8 @@ class trove::taskmanager(
   $heat_url                 = false,
   $ensure_package           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestmanager.conf',
-  $default_neutron_networks = undef
+  $default_neutron_networks = undef,
+  $taskmanager_queue        = 'taskmanager',
 ) inherits trove {
 
   include ::trove::params
@@ -122,6 +128,10 @@ class trove::taskmanager(
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
+  }
+
+  trove_config {
+    'DEFAULT/taskmanager_queue':   value => $taskmanager_queue;
   }
 
   # region name
@@ -240,10 +250,6 @@ class trove::taskmanager(
       'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
       'DEFAULT/default_neutron_networks':    ensure => absent;
     }
-  }
-
-  trove_config {
-    'DEFAULT/taskmanager_queue':             value => 'taskmanager';
   }
 
   # Logging

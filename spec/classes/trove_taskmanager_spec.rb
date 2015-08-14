@@ -64,6 +64,7 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/neutron_service_type').with_value('network')
+        is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
       end
 
       context 'when using a single RabbitMQ server' do
