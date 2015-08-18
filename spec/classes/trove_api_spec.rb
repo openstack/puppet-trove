@@ -84,6 +84,32 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
+        is_expected.to contain_trove_config('DEFAULT/http_get_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/http_post_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('200')
+      end
+
+
+      context 'with overridden rate limit parameters' do
+      before :each do
+        params.merge!(
+          :http_get_rate       => '1000',
+          :http_post_rate      => '1000',
+          :http_put_rate       => '1000',
+          :http_delete_rate    => '1000',
+          :http_mgmt_post_rate => '2000',
+        )
+        end
+
+        it 'contains overrided rate limit values' do
+          is_expected.to contain_trove_config('DEFAULT/http_get_rate').with_value('1000')
+          is_expected.to contain_trove_config('DEFAULT/http_post_rate').with_value('1000')
+          is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('1000')
+          is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('1000')
+          is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('2000')
+        end
       end
 
       context 'when using a single RabbitMQ server' do
