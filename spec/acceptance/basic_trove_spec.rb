@@ -108,10 +108,18 @@ describe 'basic trove' do
       class { '::trove::api':
         keystone_password => 'a_big_secret',
         auth_url          => 'http://127.0.0.1:35357/',
+        debug             => true,
+        verbose           => true,
       }
       class { '::trove::client': }
-      class { '::trove::conductor': }
-      class { '::trove::taskmanager': }
+      class { '::trove::conductor':
+        debug   => true,
+        verbose => true,
+      }
+      class { '::trove::taskmanager':
+        debug   => true,
+        verbose => true,
+      }
       class { '::trove::quota': }
       EOS
 
