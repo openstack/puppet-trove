@@ -104,12 +104,20 @@ class trove::conductor(
     }
     if $::trove::rabbit_hosts {
       trove_conductor_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($::trove::rabbit_hosts, ',') }
-      trove_conductor_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
     } else  {
       trove_conductor_config { 'oslo_messaging_rabbit/rabbit_host':      value => $::trove::rabbit_host }
       trove_conductor_config { 'oslo_messaging_rabbit/rabbit_port':      value => $::trove::rabbit_port }
       trove_conductor_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${::trove::rabbit_host}:${::trove::rabbit_port}" }
-      trove_conductor_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+    }
+
+    if $::trove::rabbit_ha_queues == undef {
+      if size($::trove::rabbit_hosts) > 1 {
+        trove_conductor_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
+      } else {
+        trove_conductor_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+      }
+    } else {
+      trove_conductor_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $::trove::rabbit_ha_queues }
     }
 
     trove_conductor_config {
