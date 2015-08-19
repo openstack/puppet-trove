@@ -77,6 +77,10 @@
 #   available on some distributions.
 #   Defaults to 'TLSv1'
 #
+# [*rabbit_ha_queues*]
+#   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
+#   Defaults to undef
+#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to false
@@ -221,12 +225,13 @@
 class trove(
   $nova_proxy_admin_pass,
   $rabbit_host                  = 'localhost',
-  $rabbit_hosts                 = false,
+  $rabbit_hosts                 = undef,
   $rabbit_password              = 'guest',
   $rabbit_port                  = '5672',
   $rabbit_userid                = 'guest',
   $rabbit_virtual_host          = '/',
   $rabbit_use_ssl               = false,
+  $rabbit_ha_queues             = undef,
   $rabbit_notification_topic    = 'notifications',
   $kombu_ssl_ca_certs           = undef,
   $kombu_ssl_certfile           = undef,

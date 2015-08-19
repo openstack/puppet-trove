@@ -91,6 +91,20 @@ describe 'trove::taskmanager' do
         end
         it 'configures trove-taskmanager with RabbitMQ' do
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false')
+        end
+      end
+
+      context 'when using a single RabbitMQ server with enable rabbbit_ha_queues' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             rabbit_ha_queues      => 'true',
+             rabbit_host           => '10.0.0.1'}"
+        end
+        it 'configures trove-api with RabbitMQ' do
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
         end
       end
 
@@ -102,6 +116,7 @@ describe 'trove::taskmanager' do
         end
         it 'configures trove-taskmanager with RabbitMQ' do
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
+          is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
         end
       end
 
