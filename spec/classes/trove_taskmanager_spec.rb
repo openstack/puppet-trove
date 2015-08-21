@@ -65,6 +65,22 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/neutron_service_type').with_value('network')
         is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
+        is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
+      end
+
+      context 'when set use_guestagent_template to false' do
+        let :pre_condition do
+           "class { 'trove':
+              nova_proxy_admin_pass => 'verysecrete',}
+            class { 'trove::taskmanager':
+              use_guestagent_template => false,}"
+        end
+        it 'configures trove-taskmanager with trove::guestagent' do
+          is_expected.to contain_class('trove::guestagent').with(
+            :enabled         => false,
+            :manage_service  => false,
+          )
+        end
       end
 
       context 'when using a single RabbitMQ server' do
