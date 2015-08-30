@@ -71,6 +71,10 @@
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestagent.conf'.
 #
+# [*use_guestagent_template*]
+#   (optional) Use template to provision trove guest agent configuration file.
+#   Defaults to true.
+#
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
 #   Defaults to undef.
@@ -92,6 +96,7 @@ class trove::taskmanager(
   $heat_url                 = false,
   $ensure_package           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
+  $use_guestagent_template  = true,
   $default_neutron_networks = undef,
   $taskmanager_queue        = 'taskmanager',
 ) inherits trove {
@@ -294,8 +299,15 @@ class trove::taskmanager(
   }
 
   if $guestagent_config_file {
-    file { $guestagent_config_file:
-      content => template('trove/trove-guestagent.conf.erb')
+    if $use_guestagent_template {
+      file { $guestagent_config_file:
+        content => template('trove/trove-guestagent.conf.erb')
+      }
+    } else {
+      class {'::trove::guestagent':
+        enabled        => false,
+        manage_service => false,
+      }
     }
 
     trove_taskmanager_config {

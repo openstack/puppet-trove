@@ -1,19 +1,51 @@
 [DEFAULT]
+
+#=========== RPC Configuration ======================
+
+# URL representing the messaging driver to use and its full configuration.
+# If not set, we fall back to the 'rpc_backend' option and driver specific
+# configuration.
+#transport_url=<None>
+
+# The messaging driver to use. Options include rabbit, qpid and zmq.
+# Default is rabbit. (string value)
+rpc_backend= <%= @rpc_backend %>
+
+# The default exchange under which topics are scoped. May be
+# overridden by an exchange name specified in the 'transport_url option.
+control_exchange = <%= @control_exchange %>
+
+# ========== Sample Logging Configuration ==========
+
 # Show more verbose log output (sets INFO log level output)
 verbose = <%= @verbose %>
 
 # Show debugging output in logs (sets DEBUG log level output)
 debug = <%= @debug %>
 
-# Address to bind the API server
-bind_host = 0.0.0.0
+# Directory and path for log files
+log_dir = <%= @log_dir %>
+log_file = <%= @log_file %>
 
-# Port the bind the API server to
-bind_port = 8778
+# ============ RabbitMQ connection options ========================
 
-# AMQP Connection info
-rabbit_user=<%= @rabbit_userid %>
+# The RabbitMQ broker address where a single node is used.
+# (string value)
+rabbit_host=<%= @rabbit_host %>
+
+# The RabbitMQ broker port where a single node is used.
+# (integer value)
+rabbit_port=<%= @rabbit_port %>
+
+# The RabbitMQ userid. (string value)
+rabbit_userid=<%= @rabbit_userid %>
+
+# The RabbitMQ password. (string value)
 rabbit_password=<%= @rabbit_password %>
+
+# The RabbitMQ virtual host. (string value)
+rabbit_virtual_host=<%= @rabbit_virtual_host %>
+
 
 # Path to the extensions
 api_extensions_path = trove/extensions/routes
@@ -31,7 +63,7 @@ swift_url = http://localhost:8080/v1/AUTH_
 # Datastore management implementations. Format datastore:manager.impl
 # datastore_registry_ext = mysql:trove.guestagent.datastore.mysql.manager.Manager, percona:trove.guestagent.datastore.mysql.manager.Manager
 
-# Root configuration
+# Permissions to grant "root" user by default
 root_grant = ALL
 root_grant_option = True
 
@@ -41,21 +73,16 @@ root_grant_option = True
 # used by passlib to generate root password
 #default_password_length = 36
 
-# For communicating with trove-conductor
-control_exchange = <%= @control_exchange %>
-
-# ============ kombu connection options ========================
-
-rabbit_host=<%= @rabbit_host %>
-
-# ============ Logging information =============================
-log_dir = /tmp/
-log_file = logfile.txt
-
 # Users to ignore for user create/list/delete operations
 ignore_users = os_admin
+
+# Databases to ignore for db create/list/delete operations
 ignore_dbs = lost+found, mysql, information_schema
 
+# ========== Default Storage Options for backup ==========
+
+# Default configuration for storage strategy and storage options
+# for backups
 # Strategy information for backups
 backup_namespace = trove.guestagent.strategies.backup.mysql_impl
 # Additional commandline options to be passed to the backup runner (by strategy). For example:
@@ -71,3 +98,23 @@ backup_use_snet = False
 backup_chunk_size = 65536
 backup_segment_max_size = 2147483648
 
+# ========== Datastore Specific Configuration Options ==========
+
+[mysql]
+
+# For mysql, the following are the defaults for backup, and restore:
+# backup_strategy = InnoBackupEx
+# backup_namespace = trove.guestagent.strategies.backup.mysql_impl
+# restore_namespace = trove.guestagent.strategies.restore.mysql_impl
+
+# Default configuration for mysql replication
+# replication_strategy = MysqlBinlogReplication
+# replication_namespace = trove.guestagent.strategies.replication.mysql_binlog
+# replication_user = slave_user
+# replication_password = slave_password
+
+[vertica]
+# For vertica, following are the defaults needed:
+# mount_point = /var/lib/vertica
+# readahead_size = 2048
+# guestagent_strategy = trove.common.strategies.cluster.experimental.vertica.guestagent.VerticaGuestAgentStrategy
