@@ -177,16 +177,7 @@ class trove::api(
 
   Trove_config<||> ~> Exec['post-trove_config']
   Trove_config<||> ~> Service['trove-api']
-  Package['trove-api'] -> Trove_api_paste_ini<||>
   Trove_api_paste_ini<||> ~> Service['trove-api']
-  # Trove db sync is broken in Ubuntu packaging
-  # This is a temporary fix until it's fixed in packaging.
-  # https://bugs.launchpad.net/ubuntu/+source/openstack-trove/+bug/1451134
-  file { '/etc/trove/trove.conf':
-    require => File['/etc/trove'],
-  }
-  File['/etc/trove/trove.conf'] -> Trove_config<||>
-  Trove_config<||> -> Package[$::trove::params::api_package_name]
 
   # basic service config
   trove_config {

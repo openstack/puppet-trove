@@ -49,4 +49,14 @@ describe 'Puppet::Type.type(:trove_config)' do
       @trove_config[:ensure] = :latest
     }.to raise_error(Puppet::Error, /Invalid value/)
   end
+
+  it 'should autorequire the package that installs the file' do
+    catalog = Puppet::Resource::Catalog.new
+    package = Puppet::Type.type(:package).new(:name => 'trove-api')
+    catalog.add_resource package, @trove_config
+    dependency = @trove_config.autorequire
+    expect(dependency.size).to eq(1)
+    expect(dependency[0].target).to eq(@trove_config)
+    expect(dependency[0].source).to eq(package)
+  end
 end
