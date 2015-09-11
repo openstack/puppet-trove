@@ -58,7 +58,7 @@ describe 'trove' do
     end
 
     it 'installs common package' do
-      should contain_package('trove').with(
+      is_expected.to contain_package('trove').with(
         :name   => 'openstack-trove',
         :ensure => 'present',
         :tag    => ['openstack', 'trove-package'],
