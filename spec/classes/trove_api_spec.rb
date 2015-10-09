@@ -23,10 +23,8 @@ describe 'trove::api' do
 
   let :params do
     { :keystone_password     => 'passw0rd',
-      :auth_host             => '10.0.0.10',
-      :auth_url              => 'http://10.0.0.10:5000/v2.0',
-      :auth_port             => '35357',
-      :auth_protocol         => 'https',
+      :identity_uri          => 'http://10.0.0.10:35357/',
+      :auth_uri              => 'http://10.0.0.10:5000/v2.0/',
       :keystone_tenant       => '_services_',
       :keystone_user         => 'trove',
     }
@@ -66,13 +64,12 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
         is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
         is_expected.to contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
-        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0')
+        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0/')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        is_expected.to contain_trove_config('keystone_authtoken/auth_host').with_value('10.0.0.10')
-        is_expected.to contain_trove_config('keystone_authtoken/auth_port').with_value('35357')
-        is_expected.to contain_trove_config('keystone_authtoken/auth_protocol').with_value('https')
+        is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value('http://10.0.0.10:5000/v2.0/')
+        is_expected.to contain_trove_config('keystone_authtoken/identity_uri').with_value('http://10.0.0.10:35357/')
         is_expected.to contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
         is_expected.to contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
         is_expected.to contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
@@ -89,6 +86,26 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('200')
       end
 
+      context 'with deprecated parameters' do
+        let :deprecated_params do
+          {
+            :auth_host             => '10.0.0.10',
+            :auth_url              => 'http://10.0.0.10:5000/v2.0/',
+            :auth_port             => '35357',
+            :auth_protocol         => 'http',
+          }
+        end
+
+        let :expected_params do
+          params.merge(deprecated_params)
+        end
+
+        it 'should work with deprecated parameters' do
+          is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value(expected_params[:auth_url])
+          is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value(expected_params[:auth_url])
+          is_expected.to contain_trove_config('keystone_authtoken/identity_uri').with_value(expected_params[:auth_protocol] + "://" + expected_params[:auth_host] + ":" + expected_params[:auth_port] + "/")
+        end
+      end
 
       context 'with overridden rate limit parameters' do
       before :each do

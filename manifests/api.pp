@@ -78,21 +78,14 @@
 #   (optional) Number of trove API worker processes to start
 #   Default: $::processorcount
 #
-# [*auth_host*]
-#   (optional) Host running auth service.
-#   Defaults to '127.0.0.1'.
+# [*auth_uri*]
+#   (Optional) Complete public Identity API endpoint.
+#   Defaults to false.
 #
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v2.0'.
-#
-# [*auth_port*]
-#   (optional) Port to use for auth service on auth_host.
-#   Defaults to '35357'.
-#
-# [*auth_protocol*]
-#   (optional) Protocol to use for auth.
-#   Defaults to 'http'.
+# [*identity_uri*]
+#   (Optional) Complete admin Identity API endpoint.
+#   This should specify the unversioned root endpoint.
+#   Defaults to false.
 #
 # [*keystone_tenant*]
 #   (optional) Tenant to authenticate to.
@@ -143,6 +136,28 @@
 #   (optional) Default rate limit of mgmt post request.
 #   Defaults to 200.
 #
+# == DEPRECATED PARAMETERS
+#
+# [*auth_host*]
+#   (optional) DEPRECATED: Use identity_uri instead.
+#   Host running auth service.
+#   Defaults to '127.0.0.1.
+#
+# [*auth_port*]
+#   (optional) DEPRECATED: Use identity_uri instead.
+#   Port to use for auth service on auth_host.
+#   Defaults to '35357'.
+#
+# [*auth_protocol*]
+#   (optional) DEPRECATED: Use identity_uri instead.
+#   Protocol to use for auth.
+#   Defaults to 'http'.
+#
+# [*auth_url*]
+#   (optional) DEPRECATED: Use auth_uri instead.
+#   Authentication URL.
+#   Defaults to 'http://localhost:5000/v2.0'.
+#
 class trove::api(
   $keystone_password,
   $verbose                      = undef,
@@ -156,10 +171,8 @@ class trove::api(
   $bind_port                    = '8779',
   $backlog                      = '4096',
   $workers                      = $::processorcount,
-  $auth_host                    = '127.0.0.1',
-  $auth_url                     = false,
-  $auth_port                    = '35357',
-  $auth_protocol                = 'http',
+  $auth_uri                     = false,
+  $identity_uri                 = false,
   $keystone_tenant              = 'services',
   $keystone_user                = 'trove',
   $enabled                      = true,
@@ -174,6 +187,11 @@ class trove::api(
   $http_mgmt_post_rate          = 200,
   $manage_service               = true,
   $ensure_package               = 'present',
+  # DEPRECATED PARAMETERS
+  $auth_host                    = '127.0.0.1',
+  $auth_url                     = 'http://localhost:5000/v2.0',
+  $auth_port                    = '35357',
+  $auth_protocol                = 'http',
 ) inherits trove {
 
   require ::keystone::python
@@ -198,17 +216,68 @@ class trove::api(
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
   }
 
-  if $auth_url {
-    trove_config { 'DEFAULT/trove_auth_url': value => $auth_url; }
+  if $identity_uri {
+    trove_config { 'keystone_authtoken/identity_uri': value => $identity_uri; }
   } else {
-    trove_config { 'DEFAULT/trove_auth_url': value => "${auth_protocol}://${auth_host}:5000/v2.0"; }
+    trove_config { 'keystone_authtoken/identity_uri': ensure => absent; }
   }
 
-  # auth config
+  if $auth_uri {
+    trove_config {
+      'DEFAULT/trove_auth_url'      : value => $auth_uri;
+      'keystone_authtoken/auth_uri' : value => $auth_uri;
+    }
+  } else {
+    if $auth_url {
+      warning('The auth_url parameter is deprecated. Please use auth_uri instead.')
+      trove_config {
+        'DEFAULT/trove_auth_url'      : value => $auth_url;
+        'keystone_authtoken/auth_uri' : value => $auth_url;
+      }
+    } else {
+      $auth_uri_real = "${auth_protocol}://${auth_host}:5000/v2.0"
+      warning('In a next release, auth_uri will be default to version-less keystone endpoint.')
+      trove_config {
+        'DEFAULT/trove_auth_url'      : value => $auth_uri_real;
+        'keystone_authtoken/auth_uri' : value => $auth_uri_real;
+      }
+    }
+  }
+
+
+  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
+  if !$auth_uri or !$identity_uri {
+
+    if $auth_host {
+      warning('The auth_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      trove_config { 'keystone_authtoken/auth_host': value => $auth_host; }
+    } else {
+      trove_config { 'keystone_authtoken/auth_host': ensure => absent; }
+    }
+
+    if $auth_port {
+      warning('The auth_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      trove_config { 'keystone_authtoken/auth_port': value => $auth_port; }
+    } else {
+      trove_config { 'keystone_authtoken/auth_port': ensure => absent; }
+    }
+
+    if $auth_protocol {
+      warning('The auth_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      trove_config { 'keystone_authtoken/auth_protocol': value => $auth_protocol; }
+    } else {
+      trove_config { 'keystone_authtoken/auth_protocol': ensure => absent; }
+    }
+
+  } else {
+    trove_config {
+      'keystone_authtoken/auth_host'         : ensure => absent;
+      'keystone_authtoken/auth_port'         : ensure => absent;
+      'keystone_authtoken/auth_protocol'     : ensure => absent;
+    }
+  }
+
   trove_config {
-    'keystone_authtoken/auth_host':         value => $auth_host;
-    'keystone_authtoken/auth_port':         value => $auth_port;
-    'keystone_authtoken/auth_protocol':     value => $auth_protocol;
     'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
     'keystone_authtoken/admin_user':        value => $keystone_user;
     'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
