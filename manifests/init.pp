@@ -115,9 +115,9 @@
 #
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
-#     trove.openstack.common.rpc.impl_kombu (for rabbitmq)
-#     trove.openstack.common.rpc.impl_qpid  (for qpid)
-#   Defaults to 'trove.openstack.common.rpc.impl_kombu'
+#     rabbit (for rabbitmq)
+#     qpid  (for qpid)
+#   Defaults to 'rabbit'
 #
 # [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
@@ -222,7 +222,7 @@ class trove(
   $qpid_tcp_nodelay             = true,
   $database_connection          = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_idle_timeout        = 3600,
-  $rpc_backend                  = 'trove.openstack.common.rpc.impl_kombu',
+  $rpc_backend                  = 'rabbit',
   $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',

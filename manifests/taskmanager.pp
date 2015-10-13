@@ -156,7 +156,7 @@ class trove::taskmanager(
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit'{
     if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
@@ -214,7 +214,7 @@ class trove::taskmanager(
     }
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' or $::trove::rpc_backend == 'qpid'{
     trove_taskmanager_config {
       'oslo_messaging_qpid/qpid_hostname':    value => $::trove::qpid_hostname;
       'oslo_messaging_qpid/qpid_port':        value => $::trove::qpid_port;

@@ -59,13 +59,13 @@ describe 'trove::conductor' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rpc_backend           => 'trove.openstack.common.rpc.impl_qpid',
+             rpc_backend           => 'qpid',
              qpid_hostname         => '10.0.0.1',
              qpid_username         => 'guest',
              qpid_password         => 'password'}"
         end
         it 'configures trove-conductor with qpid' do
-          is_expected.to contain_trove_conductor_config('DEFAULT/rpc_backend').with_value('trove.openstack.common.rpc.impl_qpid')
+          is_expected.to contain_trove_conductor_config('DEFAULT/rpc_backend').with_value('qpid')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_hostname').with_value('10.0.0.1')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_username').with_value('guest')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_password').with_value('password')
@@ -77,14 +77,14 @@ describe 'trove::conductor' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rpc_backend           => 'trove.openstack.common.rpc.impl_qpid',
+             rpc_backend           => 'qpid',
              qpid_hostname         => '10.0.0.1',
              qpid_username         => 'guest',
              qpid_password         => 'password',
              qpid_protocol         => 'ssl'}"
         end
         it 'configures trove-conductor with qpid' do
-          is_expected.to contain_trove_conductor_config('DEFAULT/rpc_backend').with_value('trove.openstack.common.rpc.impl_qpid')
+          is_expected.to contain_trove_conductor_config('DEFAULT/rpc_backend').with_value('qpid')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_hostname').with_value('10.0.0.1')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_username').with_value('guest')
           is_expected.to contain_trove_conductor_config('oslo_messaging_qpid/qpid_password').with_value('password')

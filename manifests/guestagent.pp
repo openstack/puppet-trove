@@ -103,7 +103,7 @@ class trove::guestagent(
     trove_guestagent_config {'DEFAULT/os_region_name': ensure => absent }
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
       if ! $::trove::rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
@@ -161,7 +161,7 @@ class trove::guestagent(
     }
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' {
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' or $::trove::rpc_backend == 'qpid'{
     trove_guestagent_config {
       'oslo_messaging_qpid/qpid_hostname':    value => $::trove::qpid_hostname;
       'oslo_messaging_qpid/qpid_port':        value => $::trove::qpid_port;
