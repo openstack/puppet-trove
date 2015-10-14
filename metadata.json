@@ -1,6 +1,6 @@
 {
   "name": "openstack-trove",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Trove",
   "license": "Apache-2.0",
