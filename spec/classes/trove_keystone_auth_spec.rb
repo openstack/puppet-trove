@@ -35,7 +35,6 @@ describe 'trove::keystone::auth' do
     it { is_expected.to contain_keystone_user('trove').with(
       :ensure   => 'present',
       :password => 'trove_password',
-      :tenant   => 'foobar'
     ) }
 
     it { is_expected.to contain_keystone_user_role('trove@foobar').with(
