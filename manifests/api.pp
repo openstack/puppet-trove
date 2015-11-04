@@ -172,6 +172,7 @@ class trove::api(
 ) inherits trove {
 
   require ::keystone::python
+  include ::trove::db
   include ::trove::params
 
   Trove_config<||> ~> Exec['post-trove_config']
@@ -186,23 +187,6 @@ class trove::api(
   }
   File['/etc/trove/trove.conf'] -> Trove_config<||>
   Trove_config<||> -> Package[$::trove::params::api_package_name]
-
-  if $::trove::database_connection {
-    if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-    } elsif($::trove::database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-
-    } elsif($::trove::database_connection =~ /sqlite:\/\//) {
-
-    } else {
-      fail("Invalid db connection ${::trove::database_connection}")
-    }
-    trove_config {
-      'database/connection':   value => $::trove::database_connection;
-      'database/idle_timeout': value => $::trove::database_idle_timeoutl;
-    }
-  }
 
   # basic service config
   trove_config {
