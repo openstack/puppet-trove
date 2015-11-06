@@ -34,11 +34,33 @@
 #
 # [*verbose*]
 #   (optional) Rather to log the trove api service at verbose level.
-#   Default: false
+#   Defaults to undef
 #
 # [*debug*]
 #   (optional) Rather to log the trove api service at debug level.
-#   Default: false
+#   Defaults to undef
+#
+# [*log_file*]
+#   (optional) The path of file used for logging
+#   If set to boolean false, it will not log to any file.
+#   Defaults to undef
+#
+# [*log_dir*]
+#   (optional) directory to which trove logs are sent.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to undef
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to undef
+#
+# [*use_stderr*]
+#   (optional) Use stderr for logging
+#   Defaults to undef
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines.
+#   Defaults to undef.
 #
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
@@ -55,16 +77,6 @@
 # [*workers*]
 #   (optional) Number of trove API worker processes to start
 #   Default: $::processorcount
-#
-# [*log_file*]
-#   (optional) The path of file used for logging
-#   If set to boolean false, it will not log to any file.
-#   Default: /var/log/trove/trove-api.log
-#
-# [*log_dir*]
-#   (optional) directory to which trove logs are sent.
-#   If set to boolean false, it will not log to any directory.
-#   Defaults to '/var/log/trove'
 #
 # [*auth_host*]
 #   (optional) Host running auth service.
@@ -93,14 +105,6 @@
 # [*enabled*]
 #   (optional) Whether to enable services.
 #   Defaults to true.
-#
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to false.
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines.
-#   Defaults to 'LOG_USER'.
 #
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
@@ -141,14 +145,17 @@
 #
 class trove::api(
   $keystone_password,
-  $verbose                      = false,
-  $debug                        = false,
+  $verbose                      = undef,
+  $debug                        = undef,
+  $log_file                     = undef,
+  $log_dir                      = undef,
+  $use_syslog                   = undef,
+  $use_stderr                   = undef,
+  $log_facility                 = undef,
   $bind_host                    = '0.0.0.0',
   $bind_port                    = '8779',
   $backlog                      = '4096',
   $workers                      = $::processorcount,
-  $log_file                     = '/var/log/trove/trove-api.log',
-  $log_dir                      = '/var/log/trove',
   $auth_host                    = '127.0.0.1',
   $auth_url                     = false,
   $auth_port                    = '35357',
@@ -156,8 +163,6 @@ class trove::api(
   $keystone_tenant              = 'services',
   $keystone_user                = 'trove',
   $enabled                      = true,
-  $use_syslog                   = false,
-  $log_facility                 = 'LOG_USER',
   $purge_config                 = false,
   $cert_file                    = false,
   $key_file                     = false,
@@ -173,6 +178,7 @@ class trove::api(
 
   require ::keystone::python
   include ::trove::db
+  include ::trove::logging
   include ::trove::params
 
   Trove_config<||> ~> Exec['post-trove_config']
@@ -181,8 +187,6 @@ class trove::api(
 
   # basic service config
   trove_config {
-    'DEFAULT/verbose':                      value => $verbose;
-    'DEFAULT/debug':                        value => $debug;
     'DEFAULT/bind_host':                    value => $bind_host;
     'DEFAULT/bind_port':                    value => $bind_port;
     'DEFAULT/backlog':                      value => $backlog;
@@ -236,39 +240,6 @@ class trove::api(
   } else {
     trove_config {
       'DEFAULT/ca_file': ensure => absent;
-    }
-  }
-
-  # Logging
-  if $log_file {
-    trove_config {
-      'DEFAULT/log_file': value  => $log_file;
-    }
-  } else {
-    trove_config {
-      'DEFAULT/log_file': ensure => absent;
-    }
-  }
-
-  if $log_dir {
-    trove_config {
-      'DEFAULT/log_dir': value  => $log_dir;
-    }
-  } else {
-    trove_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  # Syslog
-  if $use_syslog {
-    trove_config {
-      'DEFAULT/use_syslog'          : value => true;
-      'DEFAULT/syslog_log_facility' : value => $log_facility;
-    }
-  } else {
-    trove_config {
-      'DEFAULT/use_syslog': value => false;
     }
   }
 
