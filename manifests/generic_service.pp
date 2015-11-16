@@ -60,7 +60,7 @@ define trove::generic_service(
 
   $trove_title = "trove-${name}"
   Exec['post-trove_config'] ~> Service<| title == $trove_title |>
-  Exec<| title == 'trove-db-sync' |> ~> Service<| title == $trove_title |>
+  Exec<| title == 'trove-manage db_sync' |> ~> Service<| title == $trove_title |>
 
   if ($package_name) {
     if !defined(Package[$package_name]) {

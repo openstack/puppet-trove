@@ -79,5 +79,5 @@ class trove::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['trove'] ~> Exec<| title == 'trove-db-sync' |>
+  ::Openstacklib::Db::Mysql['trove'] ~> Exec<| title == 'trove-manage db_sync' |>
 }
