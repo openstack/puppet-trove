@@ -43,6 +43,8 @@ class trove::db (
   $database_max_overflow   = 20,
 ) {
 
+  include ::trove::params
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use trove::<myparam> if trove::db::<myparam> isn't specified.
   $database_connection_real     = pick($::trove::database_connection, $database_connection)
@@ -54,14 +56,18 @@ class trove::db (
   $database_max_overflow_real   = pick($::trove::database_max_overflow, $database_max_overflow)
 
   validate_re($database_connection_real,
-    '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   if $database_connection_real {
     case $database_connection_real {
-      /^mysql:\/\//: {
-        $backend_package = false
+      /^mysql(\+pymysql)?:\/\//: {
         require 'mysql::bindings'
         require 'mysql::bindings::python'
+        if $database_connection_real =~ /^mysql\+pymysql/ {
+          $backend_package = $::trove::params::pymysql_package_name
+        } else {
+          $backend_package = false
+        }
       }
       /^postgresql:\/\//: {
         $backend_package = false
