@@ -29,7 +29,7 @@ describe 'basic trove' do
 
       # Trove resources
       class { '::trove':
-        database_connection   => 'mysql://trove:a_big_secret@127.0.0.1/trove?charset=utf8',
+        database_connection   => 'mysql+pymysql://trove:a_big_secret@127.0.0.1/trove?charset=utf8',
         rabbit_userid         => 'trove',
         rabbit_password       => 'an_even_bigger_secret',
         rabbit_host           => '127.0.0.1',
