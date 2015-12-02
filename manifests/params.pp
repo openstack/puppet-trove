@@ -15,7 +15,7 @@ class trove::params {
       $taskmanager_package_name = 'openstack-trove-taskmanager'
       $taskmanager_service_name = 'openstack-trove-taskmanager'
       $sqlite_package_name      = undef
-      $pymysql_package_name     = 'python2-PyMySQL'
+      $pymysql_package_name     = undef
     }
     'Debian': {
       $client_package_name      = 'python-troveclient'
