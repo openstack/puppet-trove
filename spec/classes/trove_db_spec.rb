@@ -34,14 +34,12 @@ describe 'trove::db' do
       it { is_expected.to contain_trove_config('database/max_pool_size').with_value('21') }
       it { is_expected.to contain_trove_config('database/max_overflow').with_value('21') }
       it { is_expected.to contain_trove_config('database/retry_interval').with_value('11') }
-      it { is_expected.to contain_package('trove-backend-package').with({ :ensure => 'present', :name => platform_params[:pymysql_package_name] }) }
-
     end
 
     context 'with MySQL-python library as backend package' do
       let :params do
         { :database_connection     => 'mysql://trove:trove@localhost/trove', }
-			      end
+    end
 
       it { is_expected.to contain_package('python-mysqldb').with(:ensure => 'present') }
     end
@@ -83,11 +81,21 @@ describe 'trove::db' do
       }
     end
 
-    let :platform_params do
-      { :pymysql_package_name => 'python-pymysql' }
-    end
-
     it_configures 'trove::db'
+
+    context 'using pymysql driver' do
+      let :params do
+        { :database_connection     => 'mysql+pymysql://trove:trove@localhost/trove', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('trove-backend-package').with(
+          :ensure => 'present',
+          :name   => 'python-pymysql',
+          :tag    => 'openstack'
+        )
+      end
+    end
   end
 
   context 'on Redhat platforms' do
@@ -97,11 +105,15 @@ describe 'trove::db' do
       }
     end
 
-    let :platform_params do
-      { :pymysql_package_name => 'python2-PyMySQL' }
-    end
-
     it_configures 'trove::db'
+
+    context 'using pymysql driver' do
+      let :params do
+        { :database_connection     => 'mysql+pymysql://trove:trove@localhost/trove', }
+      end
+
+      it { is_expected.not_to contain_package('trove-backend-package') }
+    end
   end
 
 end
