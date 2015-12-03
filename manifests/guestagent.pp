@@ -162,20 +162,7 @@ class trove::guestagent(
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' or $::trove::rpc_backend == 'qpid'{
-    trove_guestagent_config {
-      'oslo_messaging_qpid/qpid_hostname':    value => $::trove::qpid_hostname;
-      'oslo_messaging_qpid/qpid_port':        value => $::trove::qpid_port;
-      'oslo_messaging_qpid/qpid_username':    value => $::trove::qpid_username;
-      'oslo_messaging_qpid/qpid_password':    value => $::trove::qpid_password, secret => true;
-      'oslo_messaging_qpid/qpid_heartbeat':   value => $::trove::qpid_heartbeat;
-      'oslo_messaging_qpid/qpid_protocol':    value => $::trove::qpid_protocol;
-      'oslo_messaging_qpid/qpid_tcp_nodelay': value => $::trove::qpid_tcp_nodelay;
-    }
-    if is_array($::trove::qpid_sasl_mechanisms) {
-      trove_guestagent_config {
-        'oslo_messaging_qpid/qpid_sasl_mechanisms': value => join($::trove::qpid_sasl_mechanisms, ' ');
-      }
-    }
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   # Logging
