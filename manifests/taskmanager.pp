@@ -215,6 +215,9 @@ class trove::taskmanager(
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' or $::trove::rpc_backend == 'qpid'{
+
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
     trove_taskmanager_config {
       'oslo_messaging_qpid/qpid_hostname':    value => $::trove::qpid_hostname;
       'oslo_messaging_qpid/qpid_port':        value => $::trove::qpid_port;
