@@ -310,32 +310,9 @@ class trove(
     trove_config { 'DEFAULT/neutron_url': ensure => absent }
   }
 
-  if $::osfamily == 'RedHat' {
-    # TO-DO(mmagr): Conditional should be removed as soon as following bug
-    # is really fixed. On Ubuntu trove-common is not installable without already
-    # running database and correctly filled trove.conf:
-    # https://bugs.launchpad.net/ubuntu/+source/openstack-trove/+bug/1365561
-    package { 'trove':
-      ensure => $package_ensure,
-      name   => $::trove::params::common_package_name,
-      tag    => ['openstack', 'trove-package'],
-    }
-    $group_require = Package['trove']
-  } else {
-    $group_require = undef
+  package { 'trove':
+    ensure => $package_ensure,
+    name   => $::trove::params::common_package_name,
+    tag    => ['openstack', 'trove-package'],
   }
-
-  group { 'trove':
-    ensure  => 'present',
-    name    => 'trove',
-    system  => true,
-    require => $group_require
-  }
-
-  file { '/etc/trove/':
-    ensure  => directory,
-    group   => 'trove',
-    require => Group['trove']
-  }
-
 }
