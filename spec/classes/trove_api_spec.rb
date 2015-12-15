@@ -62,8 +62,6 @@ describe 'trove::api' do
       end
 
       it 'configures trove-api with default parameters' do
-        is_expected.to contain_trove_config('DEFAULT/verbose').with_value(false)
-        is_expected.to contain_trove_config('DEFAULT/debug').with_value(false)
         is_expected.to contain_trove_config('DEFAULT/bind_host').with_value('0.0.0.0')
         is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
         is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
@@ -193,8 +191,10 @@ describe 'trove::api' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :processorcount => 8 }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+        :processorcount => 8,
+      })
     end
 
     let :platform_params do
@@ -207,8 +207,10 @@ describe 'trove::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily       => 'RedHat',
-        :processorcount => 8 }
+      @default_facts.merge({
+        :osfamily       => 'RedHat',
+        :processorcount => 8,
+      })
     end
 
     let :platform_params do

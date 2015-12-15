@@ -75,10 +75,11 @@ describe 'trove::db' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian',
-        :operatingsystem => 'Debian',
+      @default_facts.merge({
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
         :operatingsystemrelease => 'jessie',
-      }
+      })
     end
 
     it_configures 'trove::db'
@@ -100,9 +101,10 @@ describe 'trove::db' do
 
   context 'on Redhat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
+      @default_facts.merge({
+        :osfamily               => 'RedHat',
         :operatingsystemrelease => '7.1',
-      }
+      })
     end
 
     it_configures 'trove::db'

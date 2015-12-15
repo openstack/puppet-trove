@@ -124,8 +124,10 @@ describe 'trove::conductor' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :processorcount => 8 }
+      @default_facts.merge({
+        :osfamily       => 'Debian',
+        :processorcount => 8,
+      })
     end
 
     let :platform_params do
@@ -138,8 +140,10 @@ describe 'trove::conductor' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily       => 'RedHat',
-        :processorcount => 8 }
+      @default_facts.merge({
+        :osfamily       => 'RedHat',
+        :processorcount => 8,
+      })
     end
 
     let :platform_params do
