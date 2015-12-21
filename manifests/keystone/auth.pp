@@ -202,7 +202,7 @@ class trove::keystone::auth (
 
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'trove-server' |>
 
-  Keystone_endpoint<| title == "${region}/${real_service_name}" |>
+  Keystone_endpoint<| title == "${region}/${real_service_name}::${service_type}" |>
         ~> Service <| name == 'trove-server' |>
 
   keystone::resource::service_identity { 'trove':
