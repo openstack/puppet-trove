@@ -288,7 +288,8 @@ class trove::taskmanager(
   if $guestagent_config_file {
     if $use_guestagent_template {
       file { $guestagent_config_file:
-        content => template('trove/trove-guestagent.conf.erb')
+        content => template('trove/trove-guestagent.conf.erb'),
+        require => Package[$::trove::params::taskmanager_package_name]
       }
     } else {
       class {'::trove::guestagent':

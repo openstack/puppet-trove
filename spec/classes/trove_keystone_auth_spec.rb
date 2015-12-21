@@ -42,13 +42,12 @@ describe 'trove::keystone::auth' do
       :roles   => ['admin']
     )}
 
-    it { is_expected.to contain_keystone_service('trove').with(
+    it { is_expected.to contain_keystone_service('trove::database').with(
       :ensure      => 'present',
-      :type        => 'database',
       :description => 'Trove Database Service'
     ) }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
       :admin_url    => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
@@ -75,7 +74,7 @@ describe 'trove::keystone::auth' do
         :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s' }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
       :ensure       => 'present',
       :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
       :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
@@ -96,7 +95,7 @@ describe 'trove::keystone::auth' do
         :admin_address     => '10.10.10.12' }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
       :ensure       => 'present',
       :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
       :internal_url => 'https://10.10.10.11:81/v1.0/%(tenant_id)s',
@@ -112,8 +111,8 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('trovey') }
     it { is_expected.to contain_keystone_user_role('trovey@services') }
-    it { is_expected.to contain_keystone_service('trovey') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trovey') }
+    it { is_expected.to contain_keystone_service('trovey::database') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trovey::database') }
   end
 
   describe 'when overriding service name' do
@@ -125,8 +124,8 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('trove') }
     it { is_expected.to contain_keystone_user_role('trove@services') }
-    it { is_expected.to contain_keystone_service('trove_service') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service') }
+    it { is_expected.to contain_keystone_service('trove_service::database') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service::database') }
   end
 
   describe 'when disabling endpoint configuration' do
@@ -135,6 +134,6 @@ describe 'trove::keystone::auth' do
         :password           => 'trove_password' }
     end
 
-    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron') }
+    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron::database') }
   end
 end
