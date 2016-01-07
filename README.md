@@ -43,7 +43,7 @@ trove is a combination of Puppet manifest and ruby code to delivery configuratio
 
 #### trove_config
 
-The `trove_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove.conf` file.
+The `trove_config` provider is a child of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove.conf` file.
 
 ```puppet
 trove_config { 'DEFAULT/verbose' :
