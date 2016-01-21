@@ -43,7 +43,8 @@ describe 'basic trove' do
       }
       class { '::trove::api':
         keystone_password => 'a_big_secret',
-        auth_url          => 'http://127.0.0.1:35357/',
+        identity_uri      => 'http://127.0.0.1:35357/',
+        auth_uri          => 'http://127.0.0.1:5000/',
         debug             => true,
         verbose           => true,
       }
