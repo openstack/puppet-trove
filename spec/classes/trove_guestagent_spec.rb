@@ -33,6 +33,8 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/notification_driver').with_value('noop,')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/notification_topics').with_value('notifications')
       end
 
       context 'when using a single RabbitMQ server' do
