@@ -89,6 +89,11 @@
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
 #   Defaults to undef
 #
+# [*kombu_reconnect_delay*]
+#   (optional) How long to wait before reconnecting in response to an AMQP
+#   consumer cancel notification.
+#   Defaults to $::os_service_default
+#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to false
@@ -249,6 +254,7 @@ class trove(
   $kombu_ssl_certfile           = undef,
   $kombu_ssl_keyfile            = undef,
   $kombu_ssl_version            = 'TLSv1',
+  $kombu_reconnect_delay        = $::os_service_default,
   $amqp_durable_queues          = false,
   $database_connection          = undef,
   $database_idle_timeout        = undef,

@@ -68,6 +68,11 @@ describe 'trove::taskmanager' do
         is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/notification_driver').with_value('noop,')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/notification_topics').with_value('notifications')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_password').with_value('guest')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
       end
 
       context 'when set use_guestagent_template to false' do

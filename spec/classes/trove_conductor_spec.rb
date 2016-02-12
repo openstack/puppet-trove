@@ -31,6 +31,11 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('guest')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
       end
 
       context 'when using a single RabbitMQ server' do
