@@ -49,9 +49,6 @@
 #   (optional) Charset collate of trove database
 #   Defaults 'utf8_general_ci'.
 #
-# [*mysql_module*]
-#   (optional) Deprecated. Does nothing
-#
 class trove::db::mysql(
   $password,
   $dbname        = 'trove',
@@ -60,12 +57,7 @@ class trove::db::mysql(
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  $mysql_module  = undef,
 ) {
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   validate_string($password)
 
