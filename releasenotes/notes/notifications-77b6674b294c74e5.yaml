@@ -1,0 +1,4 @@
+---
+features:
+  - Add notification system options in trove.
+  - Add rabbit_ha_queues and amqp_durable_queues options.
