@@ -104,10 +104,6 @@
 #     qpid  (for qpid)
 #   Defaults to 'rabbit'
 #
-# [*mysql_module*]
-#   (optional) Deprecated. Does nothing.
-#   Defaults to undef.
-#
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
 #   Defaults to undef.
@@ -280,7 +276,6 @@ class trove(
   $use_neutron                  = true,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
-  $mysql_module                 = undef,
   $qpid_hostname                = undef,
   $qpid_port                    = undef,
   $qpid_username                = undef,
@@ -291,10 +286,6 @@ class trove(
   $qpid_tcp_nodelay             = undef,
 ) {
   include ::trove::params
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   exec { 'post-trove_config':
     command     => '/bin/echo "Trove config has changed"',
