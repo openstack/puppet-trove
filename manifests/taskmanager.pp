@@ -101,11 +101,8 @@ class trove::taskmanager(
   $taskmanager_queue        = 'taskmanager',
 ) inherits trove {
 
+  include ::trove::deps
   include ::trove::params
-
-  Package[$::trove::params::taskmanager_package_name] -> Trove_taskmanager_config<||>
-  Trove_taskmanager_config<||> ~> Exec['post-trove_config']
-  Trove_taskmanager_config<||> ~> Service['trove-taskmanager']
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
@@ -303,7 +300,7 @@ class trove::taskmanager(
     if $use_guestagent_template {
       file { $guestagent_config_file:
         content => template('trove/trove-guestagent.conf.erb'),
-        require => Package[$::trove::params::taskmanager_package_name]
+        require => Anchor['trove::install::end'],
       }
     } else {
       class {'::trove::guestagent':

@@ -64,10 +64,8 @@ class trove::conductor(
   $conductor_manager         = 'trove.conductor.manager.Manager',
 ) inherits trove {
 
+  include ::trove::deps
   include ::trove::params
-
-  Trove_conductor_config<||> ~> Exec['post-trove_config']
-  Trove_conductor_config<||> ~> Service['trove-conductor']
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {

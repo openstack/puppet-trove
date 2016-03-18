@@ -46,7 +46,7 @@ describe 'trove::taskmanager' do
         is_expected.to contain_package('trove-taskmanager').with(
           :name   => platform_params[:taskmanager_package_name],
           :ensure => 'present',
-          :notify => 'Service[trove-taskmanager]'
+          :tag    => ['openstack', 'trove-package']
         )
       end
 

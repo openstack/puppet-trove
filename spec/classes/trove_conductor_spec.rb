@@ -21,7 +21,7 @@ describe 'trove::conductor' do
         is_expected.to contain_package('trove-conductor').with(
           :name   => platform_params[:conductor_package_name],
           :ensure => 'present',
-          :notify => 'Service[trove-conductor]'
+          :tag    => ['openstack', 'trove-package'],
         )
       end
 

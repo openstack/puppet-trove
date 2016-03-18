@@ -18,10 +18,18 @@
 # Class to execute "trove-manage db_sync
 #
 class trove::db::sync {
+
+  include ::trove::deps
+
   exec { 'trove-manage db_sync':
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
-    subscribe   => Trove_config['database/connection'],
+    subscribe   => [
+      Anchor['trove::install::end'],
+      Anchor['trove::config::end'],
+      Anchor['trove::dbsync::begin']
+    ],
+    notify      => Anchor['trove::dbsync::end'],
   }
 }

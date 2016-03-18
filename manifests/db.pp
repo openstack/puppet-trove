@@ -43,6 +43,7 @@ class trove::db (
   $database_max_overflow   = 20,
 ) {
 
+  include ::trove::deps
   include ::trove::params
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
@@ -85,7 +86,7 @@ class trove::db (
       package {'trove-backend-package':
         ensure => present,
         name   => $backend_package,
-        tag    => 'openstack',
+        tag    => ['openstack', 'trove-package'],
       }
     }
 

@@ -194,14 +194,11 @@ class trove::api(
   $auth_protocol                = 'http',
 ) inherits trove {
 
-  require ::keystone::python
+  include ::trove::deps
   include ::trove::db
+  include ::trove::db::sync
   include ::trove::logging
   include ::trove::params
-
-  Trove_config<||> ~> Exec['post-trove_config']
-  Trove_config<||> ~> Service['trove-api']
-  Trove_api_paste_ini<||> ~> Service['trove-api']
 
   # basic service config
   trove_config {

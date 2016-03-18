@@ -285,14 +285,8 @@ class trove(
   $qpid_protocol                = undef,
   $qpid_tcp_nodelay             = undef,
 ) {
+  include ::trove::deps
   include ::trove::params
-
-  exec { 'post-trove_config':
-    command     => '/bin/echo "Trove config has changed"',
-    refreshonly => true,
-  }
-
-  Trove_datastore<||> -> Trove_datastore_version<||>
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }

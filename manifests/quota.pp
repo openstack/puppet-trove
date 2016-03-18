@@ -33,6 +33,8 @@ class trove::quota (
   $quota_driver             = 'trove.quota.quota.DbQuotaDriver',
 ) {
 
+  include ::trove::deps
+
   trove_config {
     'DEFAULT/max_instances_per_user':   value => $max_instances_per_user;
     'DEFAULT/max_accepted_volume_size': value => $max_accepted_volume_size;
