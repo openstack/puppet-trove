@@ -32,7 +32,9 @@ class trove::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  Class['trove::db::postgresql'] -> Service<| title == 'trove' |>
+  include ::trove::deps
+
+  validate_string($password)
 
   ::openstacklib::db::postgresql { 'trove':
     password_hash => postgresql_password($user, $password),
@@ -42,6 +44,7 @@ class trove::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['trove']    ~> Exec<| title == 'trove-manage db_sync' |>
-
+  Anchor['trove::db::begin']
+  ~> Class['trove::db::postgresql']
+  ~> Anchor['trove::db::end']
 }

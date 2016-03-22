@@ -59,6 +59,8 @@ class trove::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ::trove::deps
+
   validate_string($password)
 
   ::openstacklib::db::mysql { 'trove':
@@ -71,5 +73,7 @@ class trove::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['trove'] ~> Exec<| title == 'trove-manage db_sync' |>
+  Anchor['trove::db::begin']
+  ~> Class['trove::db::mysql']
+  ~> Anchor['trove::db::end']
 }

@@ -22,7 +22,7 @@ describe 'trove::guestagent' do
         is_expected.to contain_package('trove-guestagent').with(
           :name   => platform_params[:guestagent_package_name],
           :ensure => 'present',
-          :notify => 'Service[trove-guestagent]'
+          :tag    => ['openstack', 'trove-package']
         )
       end
 

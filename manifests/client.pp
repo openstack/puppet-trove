@@ -21,20 +21,26 @@
 #
 # === Parameters:
 #
+# [*client_package_name*]
+#   (optional) The name of python trove client package
+#   Defaults to $trove::params::client_package_name
+#
 # [*package_ensure*]
 #   (optional) The state of the package
 #   Defaults to present
 #
 #
 class trove::client (
-  $package_ensure = present
-) {
+  $client_package_name = $trove::params::client_package_name,
+  $package_ensure = present,
+) inherits trove::params {
 
-  include ::trove::params
+  include ::trove::deps
 
   package { 'python-troveclient':
     ensure => $package_ensure,
-    name   => $::trove::params::client_package_name,
+    name   => $client_package_name,
+    tag    => 'openstack',
   }
 
 }

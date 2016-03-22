@@ -93,7 +93,7 @@ describe 'trove::db' do
         is_expected.to contain_package('trove-backend-package').with(
           :ensure => 'present',
           :name   => 'python-pymysql',
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'trove-package'],
         )
       end
     end

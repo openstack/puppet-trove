@@ -116,6 +116,8 @@ class trove::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
+  include ::trove::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use trove::<myparam> first then trove::logging::<myparam>.
   $use_syslog_real   = pick($::trove::api::use_syslog, $use_syslog)
@@ -153,4 +155,3 @@ class trove::logging(
     'DEFAULT/log_date_format'               : value => $log_date_format;
   }
 }
-

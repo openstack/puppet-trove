@@ -1,0 +1,5 @@
+---
+features:
+  - Dependencies are now managed in an external class.
+    This allows installing Trove via other methods besides
+    packages.

@@ -69,10 +69,8 @@ class trove::guestagent(
   $control_exchange          = 'trove'
 ) inherits trove {
 
+  include ::trove::deps
   include ::trove::params
-
-  Trove_guestagent_config<||> ~> Exec['post-trove_config']
-  Trove_guestagent_config<||> ~> Service['trove-guestagent']
 
   # basic service config
   trove_guestagent_config {
@@ -92,7 +90,7 @@ class trove::guestagent(
     trove_guestagent_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
   }
   else {
-    trove_guestagent_config {'DEFAULT/os_region_name': ensure => absent }
+    trove_guestagent_config { 'DEFAULT/os_region_name': ensure => absent }
   }
 
   trove_guestagent_config {

@@ -55,19 +55,16 @@ define trove::generic_service(
   $ensure_package = 'present'
 ) {
 
+  include ::trove::deps
   include ::trove::params
-  include ::trove::db::sync
 
   $trove_title = "trove-${name}"
-  Exec['post-trove_config'] ~> Service<| title == $trove_title |>
-  Exec<| title == 'trove-manage db_sync' |> ~> Service<| title == $trove_title |>
 
   if ($package_name) {
     if !defined(Package[$package_name]) {
       package { $trove_title:
         ensure => $ensure_package,
         name   => $package_name,
-        notify => Service[$trove_title],
         tag    => ['openstack', 'trove-package'],
       }
     }
