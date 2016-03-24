@@ -172,12 +172,12 @@ class trove::taskmanager(
 
     if $::trove::rabbit_ha_queues == undef {
       if size($::trove::rabbit_hosts) > 1 {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
+        $rabbit_ha_queues_real = true
       } else {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+        $rabbit_ha_queues_real = false
       }
     } else {
-      trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $::trove::rabbit_ha_queues }
+      $rabbit_ha_queues_real = $::trove::rabbit_ha_queues
     }
 
     trove_taskmanager_config {
@@ -187,6 +187,7 @@ class trove::taskmanager(
       'oslo_messaging_rabbit/rabbit_use_ssl':        value => $::trove::rabbit_use_ssl;
       'oslo_messaging_rabbit/kombu_reconnect_delay': value => $::trove::kombu_reconnect_delay;
       'oslo_messaging_rabbit/amqp_durable_queues':   value => $::trove::amqp_durable_queues;
+      'oslo_messaging_rabbit/rabbit_ha_queues':      value => $rabbit_ha_queues_real
     }
 
     if $::trove::rabbit_use_ssl {

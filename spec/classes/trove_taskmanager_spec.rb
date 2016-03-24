@@ -100,6 +100,11 @@ describe 'trove::taskmanager' do
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false')
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false')
+
+          # trove taskmanager also configures trove_guestagent.conf by default, ensure rabbit is right there
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_host=10.0.0.1$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_port=5672$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_ha_queues=false$/)
         end
       end
 
@@ -115,6 +120,11 @@ describe 'trove::taskmanager' do
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true')
+
+          # trove taskmanager also configures trove_guestagent.conf by default, ensure rabbit is right there
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_host=10.0.0.1$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_port=5672$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_ha_queues=true$/)
         end
       end
 
@@ -127,6 +137,10 @@ describe 'trove::taskmanager' do
         it 'configures trove-taskmanager with RabbitMQ' do
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
           is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+
+          # trove taskmanager also configures trove_guestagent.conf by default, ensure rabbit is right there
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_hosts=10.0.0.1,10.0.0.2$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_ha_queues=true$/)
         end
       end
 

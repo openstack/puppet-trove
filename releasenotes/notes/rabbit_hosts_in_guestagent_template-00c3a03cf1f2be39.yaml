@@ -1,0 +1,8 @@
+---
+fixes:
+  - when guestagent.conf is configured via template,
+    it did not use the rabbit_hosts settings. This is
+    now enabled. This change also moves the templated
+    guestagent.conf rabbit config into the correct
+    section. Finally this properly sets the ha_queues
+    setting when the template is used.

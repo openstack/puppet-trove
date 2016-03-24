@@ -27,25 +27,6 @@ debug = <%= @debug %>
 log_dir = <%= @log_dir %>
 log_file = <%= @log_file %>
 
-# ============ RabbitMQ connection options ========================
-
-# The RabbitMQ broker address where a single node is used.
-# (string value)
-rabbit_host=<%= @rabbit_host %>
-
-# The RabbitMQ broker port where a single node is used.
-# (integer value)
-rabbit_port=<%= @rabbit_port %>
-
-# The RabbitMQ userid. (string value)
-rabbit_userid=<%= @rabbit_userid %>
-
-# The RabbitMQ password. (string value)
-rabbit_password=<%= @rabbit_password %>
-
-# The RabbitMQ virtual host. (string value)
-rabbit_virtual_host=<%= @rabbit_virtual_host %>
-
 
 # Path to the extensions
 api_extensions_path = trove/extensions/routes
@@ -97,6 +78,41 @@ backup_aes_cbc_key = "default_aes_cbc_key"
 backup_use_snet = False
 backup_chunk_size = 65536
 backup_segment_max_size = 2147483648
+
+[oslo_messaging_rabbit]
+# ============ RabbitMQ connection options ========================
+<%- if @rabbit_hosts -%>
+# RabbitMQ HA cluster host:port pairs. (list value)
+rabbit_hosts=<%= @rabbit_hosts.join(',') %>
+
+# The RabbitMQ broker address where a single node is used.
+# (string value)
+#rabbit_host=localhost
+
+# The RabbitMQ broker port where a single node is used.
+# (integer value)
+#rabbit_port=5672
+<%- else -%>
+# The RabbitMQ broker address where a single node is used.
+# (string value)
+rabbit_host=<%= @rabbit_host %>
+
+# The RabbitMQ broker port where a single node is used.
+# (integer value)
+rabbit_port=<%= @rabbit_port %>
+<%- end -%>
+
+# The RabbitMQ userid. (string value)
+rabbit_userid=<%= @rabbit_userid %>
+
+# The RabbitMQ password. (string value)
+rabbit_password=<%= @rabbit_password %>
+
+# The RabbitMQ virtual host. (string value)
+rabbit_virtual_host=<%= @rabbit_virtual_host %>
+
+rabbit_ha_queues=<%= @rabbit_ha_queues_real %>
+
 
 # ========== Datastore Specific Configuration Options ==========
 
