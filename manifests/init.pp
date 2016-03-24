@@ -153,7 +153,7 @@
 #   Defaults to 'trove'.
 #
 # [*cinder_url*]
-#   (optional) URL without the tenant segment.
+#   (optional) Cinder URL without the tenant segment.
 #   Defaults to false.
 #
 # [*swift_url*]
@@ -161,7 +161,7 @@
 #   Defaults to false.
 #
 # [*neutron_url*]
-#   (optional) Cinder URL without the tenant segment.
+#   (optional) Neutron URL without the tenant segment.
 #   Defaults to false.
 #
 # [*os_region_name*]
