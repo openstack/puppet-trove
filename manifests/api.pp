@@ -283,29 +283,29 @@ class trove::api(
   # SSL Options
   if $cert_file {
     trove_config {
-      'DEFAULT/cert_file' : value => $cert_file;
+      'ssl/cert_file' : value => $cert_file;
     }
   } else {
     trove_config {
-      'DEFAULT/cert_file': ensure => absent;
+      'ssl/cert_file': ensure => absent;
     }
   }
   if $key_file {
     trove_config {
-      'DEFAULT/key_file'  : value => $key_file;
+      'ssl/key_file'  : value => $key_file;
     }
   } else {
     trove_config {
-      'DEFAULT/key_file': ensure => absent;
+      'ssl/key_file': ensure => absent;
     }
   }
   if $ca_file {
     trove_config {
-      'DEFAULT/ca_file'   : value => $ca_file;
+      'ssl/ca_file'   : value => $ca_file;
     }
   } else {
     trove_config {
-      'DEFAULT/ca_file': ensure => absent;
+      'ssl/ca_file': ensure => absent;
     }
   }
 

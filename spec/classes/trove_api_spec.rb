@@ -91,6 +91,9 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
+        is_expected.to contain_trove_config('ssl/cert_file').with_ensure('absent')
+        is_expected.to contain_trove_config('ssl/key_file').with_ensure('absent')
+        is_expected.to contain_trove_config('ssl/ca_file').with_ensure('absent')
       end
 
       context 'with deprecated parameters' do
@@ -111,6 +114,22 @@ describe 'trove::api' do
           is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value(expected_params[:auth_url])
           is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value(expected_params[:auth_url])
           is_expected.to contain_trove_config('keystone_authtoken/identity_uri').with_value(expected_params[:auth_protocol] + "://" + expected_params[:auth_host] + ":" + expected_params[:auth_port] + "/")
+        end
+      end
+
+      context 'with SSL enabled on API' do
+      before :each do
+        params.merge!(
+          :cert_file => 'cert',
+          :key_file  => 'key',
+          :ca_file   => 'ca',
+        )
+        end
+
+        it 'contains ssl parameters' do
+          is_expected.to contain_trove_config('ssl/cert_file').with_value('cert')
+          is_expected.to contain_trove_config('ssl/key_file').with_value('key')
+          is_expected.to contain_trove_config('ssl/ca_file').with_value('ca')
         end
       end
 
