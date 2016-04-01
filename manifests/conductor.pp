@@ -50,6 +50,10 @@
 #   (optional) Trove conductor manager.
 #   Defaults to 'trove.conductor.manager.Manager'.
 #
+# [*workers*]
+#   (optional) Number of trove conductor worker processes to start
+#   Default: $::processorcount
+#
 class trove::conductor(
   $enabled                   = true,
   $manage_service            = true,
@@ -62,6 +66,7 @@ class trove::conductor(
   $log_facility              = 'LOG_USER',
   $auth_url                  = 'http://localhost:5000/v2.0',
   $conductor_manager         = 'trove.conductor.manager.Manager',
+  $workers                   = $::processorcount,
 ) inherits trove {
 
   include ::trove::deps
@@ -94,6 +99,7 @@ class trove::conductor(
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/control_exchange':             value => $::trove::control_exchange;
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
+    'DEFAULT/trove_conductor_workers':      value => $workers;
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {

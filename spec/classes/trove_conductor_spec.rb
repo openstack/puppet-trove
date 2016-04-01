@@ -36,6 +36,7 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
+        is_expected.to contain_trove_conductor_config('DEFAULT/trove_conductor_workers').with_value('8')
       end
 
       context 'when using a single RabbitMQ server' do
