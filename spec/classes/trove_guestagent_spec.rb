@@ -29,9 +29,6 @@ describe 'trove::guestagent' do
       it 'configures trove-guestagent with default parameters' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/verbose').with_value(false)
         is_expected.to contain_trove_guestagent_config('DEFAULT/debug').with_value(false)
-        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
       end
 

@@ -80,9 +80,6 @@ class trove::guestagent(
     'DEFAULT/debug':                        value => $debug;
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/swift_url':                    value => $swift_url;
-    'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
-    'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
-    'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/control_exchange':             value => $control_exchange;
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
   }
