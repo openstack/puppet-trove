@@ -37,6 +37,8 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
         is_expected.to contain_trove_conductor_config('DEFAULT/trove_conductor_workers').with_value('8')
+        is_expected.to contain_trove_conductor_config('profiler/enabled').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('profiler/trace_sqlalchemy').with_value('<SERVICE DEFAULT>')
       end
 
       context 'when using a single RabbitMQ server' do

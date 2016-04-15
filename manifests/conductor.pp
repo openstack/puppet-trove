@@ -54,6 +54,14 @@
 #   (optional) Number of trove conductor worker processes to start
 #   Default: $::processorcount
 #
+# [*enable_profiler*]
+#   (optional) If False fully disable profiling feature.
+#   Default: $::os_service_default
+#
+# [*trace_sqlalchemy*]
+#   (optional) If False doesn't trace SQL requests. 
+#   Default: $::os_service_default
+#
 class trove::conductor(
   $enabled                   = true,
   $manage_service            = true,
@@ -67,6 +75,8 @@ class trove::conductor(
   $auth_url                  = 'http://localhost:5000/v2.0',
   $conductor_manager         = 'trove.conductor.manager.Manager',
   $workers                   = $::processorcount,
+  $enable_profiler           = $::os_service_default,
+  $trace_sqlalchemy          = $::os_service_default,
 ) inherits trove {
 
   include ::trove::deps
@@ -100,6 +110,11 @@ class trove::conductor(
     'DEFAULT/control_exchange':             value => $::trove::control_exchange;
     'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
     'DEFAULT/trove_conductor_workers':      value => $workers;
+  }
+  # profiler config
+  trove_conductor_config {
+    'profiler/enabled':          value => $enable_profiler;
+    'profiler/trace_sqlalchemy': value => $trace_sqlalchemy;
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
