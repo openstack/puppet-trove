@@ -101,7 +101,6 @@
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
 #     rabbit (for rabbitmq)
-#     qpid  (for qpid)
 #   Defaults to 'rabbit'
 #
 # [*database_connection*]
@@ -199,40 +198,6 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
-# DEPRECATED PARAMETERS
-#
-# [*qpid_hostname*]
-#   (optional) Location of qpid server
-#   Defaults to undef
-#
-# [*qpid_port*]
-#   (optional) Port for qpid server
-#   Defaults to undef
-#
-# [*qpid_username*]
-#   (optional) Username to use when connecting to qpid
-#   Defaults to undef
-#
-# [*qpid_password*]
-#   (optional) Password to use when connecting to qpid
-#   Defaults to undef
-#
-# [*qpid_heartbeat*]
-#   (optional) Seconds between connection keepalive heartbeats
-#   Defaults to undef
-#
-# [*qpid_protocol*]
-#   (optional) Transport to use, either 'tcp' or 'ssl''
-#   Defaults to undef
-#
-# [*qpid_sasl_mechanisms*]
-#   (optional) Enable one or more SASL mechanisms
-#   Defaults to undef
-#
-# [*qpid_tcp_nodelay*]
-#   (optional) Disable Nagle algorithm
-#   Defaults to undef
-#
 class trove(
   $nova_proxy_admin_pass,
   $notification_driver          = 'noop',
@@ -275,15 +240,6 @@ class trove(
   $neutron_service_type         = 'network',
   $use_neutron                  = true,
   $package_ensure               = 'present',
-  # DEPRECATED PARAMETERS
-  $qpid_hostname                = undef,
-  $qpid_port                    = undef,
-  $qpid_username                = undef,
-  $qpid_password                = undef,
-  $qpid_sasl_mechanisms         = undef,
-  $qpid_heartbeat               = undef,
-  $qpid_protocol                = undef,
-  $qpid_tcp_nodelay             = undef,
 ) {
   include ::trove::deps
   include ::trove::params

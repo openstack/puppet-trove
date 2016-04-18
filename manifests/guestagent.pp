@@ -162,10 +162,6 @@ class trove::guestagent(
     }
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_qpid' or $::trove::rpc_backend == 'qpid'{
-    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
-  }
-
   # Logging
   if $log_file {
     trove_guestagent_config {
