@@ -78,7 +78,7 @@ backup_segment_max_size = 2147483648
 
 [oslo_messaging_rabbit]
 # ============ RabbitMQ connection options ========================
-<%- if @rabbit_hosts -%>
+<%- if @rabbit_hosts and @rabbit_hosts != "<SERVICE DEFAULT>" -%>
 # RabbitMQ HA cluster host:port pairs. (list value)
 rabbit_hosts=<%= @rabbit_hosts.join(',') %>
 
@@ -92,23 +92,51 @@ rabbit_hosts=<%= @rabbit_hosts.join(',') %>
 <%- else -%>
 # The RabbitMQ broker address where a single node is used.
 # (string value)
+<%- if @rabbit_host and @rabbit_host != "<SERVICE DEFAULT>" -%>
 rabbit_host=<%= @rabbit_host %>
+<%- else -%>
+#rabbit_host=localhost
+<%- end -%>
 
 # The RabbitMQ broker port where a single node is used.
 # (integer value)
+<%- if @rabbit_port and @rabbit_port != "<SERVICE DEFAULT>" -%>
 rabbit_port=<%= @rabbit_port %>
+<%- else -%>
+#rabbit_port=5672
+<%- end -%>
 <%- end -%>
 
 # The RabbitMQ userid. (string value)
+<%- if @rabbit_userid and @rabbit_userid != "<SERVICE DEFAULT>" -%>
 rabbit_userid=<%= @rabbit_userid %>
+<%- else -%>
+#rabbit_userid=guest
+<%- end -%>
 
 # The RabbitMQ password. (string value)
+<%- if @rabbit_password and @rabbit_password != "<SERVICE DEFAULT>" -%>
 rabbit_password=<%= @rabbit_password %>
+<%- else -%>
+#rabbit_password=guest
+<%- end -%>
 
 # The RabbitMQ virtual host. (string value)
+<%- if @rabbit_virtual_host and @rabbit_virtual_host != "<SERVICE DEFAULT>" -%>
 rabbit_virtual_host=<%= @rabbit_virtual_host %>
+<%- else -%>
+#rabbit_virtual_host=/
+<%- end -%>
 
-rabbit_ha_queues=<%= @rabbit_ha_queues_real %>
+<%- if @rabbit_ha_queues and @rabbit_ha_queues != "<SERVICE DEFAULT>" -%>
+rabbit_ha_queues=<%= @rabbit_ha_queues %>
+<%- else -%>
+<%- if @rabbit_hosts and @rabbit_hosts != "<SERVICE DEFAULT>" -%>
+rabbit_ha_queues=true
+<%- else -%>
+#rabbit_ha_queues=false
+<%- end -%>
+<%- end -%>
 
 
 # ========== Datastore Specific Configuration Options ==========

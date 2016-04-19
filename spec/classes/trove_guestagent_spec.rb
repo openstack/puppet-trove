@@ -30,13 +30,13 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/verbose').with_value(false)
         is_expected.to contain_trove_guestagent_config('DEFAULT/debug').with_value(false)
         is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/notification_driver').with_value('noop,')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/notification_topics').with_value('notifications')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_password').with_value('guest')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
       end
 
       context 'when using a single RabbitMQ server' do
@@ -47,8 +47,8 @@ describe 'trove::guestagent' do
         end
         it 'configures trove-guestagent with RabbitMQ' do
           is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false')
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         end
       end
 
@@ -126,10 +126,10 @@ describe 'trove::guestagent' do
 
       it do
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -137,16 +137,15 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false,
-           kombu_ssl_version  => 'TLSv1'}"
+           rabbit_use_ssl     => false}"
       end
 
       it do
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
       end
     end
 

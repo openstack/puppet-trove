@@ -31,11 +31,11 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('guest')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('guest')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false)
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/trove_conductor_workers').with_value('8')
         is_expected.to contain_trove_conductor_config('profiler/enabled').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('profiler/trace_sqlalchemy').with_value('<SERVICE DEFAULT>')
@@ -49,8 +49,8 @@ describe 'trove::conductor' do
         end
         it 'configures trove-conductor with RabbitMQ' do
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
-          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false')
-          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('false')
+          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
+          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         end
       end
 
@@ -122,10 +122,10 @@ describe 'trove::conductor' do
 
       it do
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -133,16 +133,15 @@ describe 'trove::conductor' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false,
-           kombu_ssl_version  => 'TLSv1'}"
+           rabbit_use_ssl     => false}"
       end
 
       it do
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
       end
     end
 

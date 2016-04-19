@@ -129,7 +129,6 @@ class trove::taskmanager(
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
-    'DEFAULT/rpc_backend':                  value => $::trove::rpc_backend;
   }
 
   trove_config {
@@ -153,76 +152,31 @@ class trove::taskmanager(
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
-  trove_taskmanager_config {
-    'DEFAULT/notification_driver': value => join(any2array($::trove::notification_driver, ','));
-    'DEFAULT/notification_topics': value => $::trove::notification_topics;
+  oslo::messaging::notifications { 'trove_taskmanager_config':
+    driver => $::trove::notification_driver,
+    topics => $::trove::notification_topics
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit'{
-    if ! $::trove::rabbit_password {
-      fail('When rpc_backend is rabbitmq, you must set rabbit password')
+  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
+    oslo::messaging::rabbit { 'trove_taskmanager_config':
+      rabbit_hosts          => $::trove::rabbit_hosts,
+      rabbit_host           => $::trove::rabbit_host,
+      rabbit_port           => $::trove::rabbit_port,
+      rabbit_ha_queues      => $::trove::rabbit_ha_queues,
+      rabbit_userid         => $::trove::rabbit_userid,
+      rabbit_password       => $::trove::rabbit_password,
+      rabbit_virtual_host   => $::trove::rabbit_virtual_host,
+      rabbit_use_ssl        => $::trove::rabbit_use_ssl,
+      kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
+      amqp_durable_queues   => $::trove::amqp_durable_queues,
+      kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
+      kombu_ssl_certfile    => $::trove::kombu_ssl_certfile,
+      kombu_ssl_keyfile     => $::trove::kombu_ssl_keyfile,
+      kombu_ssl_version     => $::trove::kombu_ssl_version
     }
-    if $::trove::rabbit_hosts {
-      trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($::trove::rabbit_hosts, ',') }
-    } else  {
-      trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_host':      value => $::trove::rabbit_host }
-      trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_port':      value => $::trove::rabbit_port }
-      trove_taskmanager_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${::trove::rabbit_host}:${::trove::rabbit_port}" }
-    }
-
-    if $::trove::rabbit_ha_queues == undef {
-      if size($::trove::rabbit_hosts) > 1 {
-        $rabbit_ha_queues_real = true
-      } else {
-        $rabbit_ha_queues_real = false
-      }
-    } else {
-      $rabbit_ha_queues_real = $::trove::rabbit_ha_queues
-    }
-
+  } else {
     trove_taskmanager_config {
-      'oslo_messaging_rabbit/rabbit_userid':         value => $::trove::rabbit_userid;
-      'oslo_messaging_rabbit/rabbit_password':       value => $::trove::rabbit_password, secret => true;
-      'oslo_messaging_rabbit/rabbit_virtual_host':   value => $::trove::rabbit_virtual_host;
-      'oslo_messaging_rabbit/rabbit_use_ssl':        value => $::trove::rabbit_use_ssl;
-      'oslo_messaging_rabbit/kombu_reconnect_delay': value => $::trove::kombu_reconnect_delay;
-      'oslo_messaging_rabbit/amqp_durable_queues':   value => $::trove::amqp_durable_queues;
-      'oslo_messaging_rabbit/rabbit_ha_queues':      value => $rabbit_ha_queues_real
-    }
-
-    if $::trove::rabbit_use_ssl {
-
-      if $::trove::kombu_ssl_ca_certs {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $::trove::kombu_ssl_ca_certs; }
-      } else {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
-      }
-
-      if $::trove::kombu_ssl_certfile or $::trove::kombu_ssl_keyfile {
-        trove_taskmanager_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $::trove::kombu_ssl_certfile;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $::trove::kombu_ssl_keyfile;
-        }
-      } else {
-        trove_taskmanager_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        }
-      }
-
-      if $::trove::kombu_ssl_version {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $::trove::kombu_ssl_version; }
-      } else {
-        trove_taskmanager_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
-      }
-
-    } else {
-      trove_taskmanager_config {
-        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
-      }
+      'DEFAULT/rpc_backend' : value => $::trove::rpc_backend
     }
   }
 
