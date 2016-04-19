@@ -1,0 +1,7 @@
+---
+deprecations:
+  - Deprecate the templated version of guestagent.conf
+    The templated copy of guestagent.conf is outdated and
+    has been difficult to keep updated with correct defaults.
+    Therefore we deprecate this file. Values will still be
+    configured as before, but by the guestagent class.
