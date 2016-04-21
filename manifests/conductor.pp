@@ -59,7 +59,7 @@
 #   Default: $::os_service_default
 #
 # [*trace_sqlalchemy*]
-#   (optional) If False doesn't trace SQL requests. 
+#   (optional) If False doesn't trace SQL requests.
 #   Default: $::os_service_default
 #
 class trove::conductor(
