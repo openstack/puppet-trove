@@ -138,6 +138,9 @@ rabbit_ha_queues=true
 <%- end -%>
 <%- end -%>
 
+<%- if @amqp_durable_queues and @amqp_durable_queues != "<SERVICE DEFAULT>" -%>
+amqp_durable_queues=<%= @amqp_durable_queues %>
+<%- end -%>
 
 # ========== Datastore Specific Configuration Options ==========
 

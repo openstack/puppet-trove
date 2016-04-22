@@ -125,6 +125,7 @@ describe 'trove::taskmanager' do
           is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_host=10.0.0.1$/)
           is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^#rabbit_port=5672$/)
           is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^rabbit_ha_queues=true$/)
+          is_expected.to contain_file('/etc/trove/trove-guestagent.conf').with_content(/^amqp_durable_queues=true$/)
         end
       end
 
