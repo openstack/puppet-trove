@@ -110,6 +110,9 @@ rabbit_virtual_host=<%= @rabbit_virtual_host %>
 
 rabbit_ha_queues=<%= @rabbit_ha_queues_real %>
 
+<%- if @amqp_durable_queues and @amqp_durable_queues != "<SERVICE DEFAULT>" -%>
+amqp_durable_queues=<%= @amqp_durable_queues %>
+<%- end -%>
 
 # ========== Datastore Specific Configuration Options ==========
 
