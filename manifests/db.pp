@@ -35,16 +35,15 @@
 #
 class trove::db (
   $database_connection     = 'sqlite:////var/lib/trove/trove.sqlite',
-  $database_idle_timeout   = 3600,
-  $database_min_pool_size  = 1,
-  $database_max_pool_size  = 10,
-  $database_max_retries    = 10,
-  $database_retry_interval = 10,
-  $database_max_overflow   = 20,
+  $database_idle_timeout   = $::os_service_default,
+  $database_min_pool_size  = $::os_service_default,
+  $database_max_pool_size  = $::os_service_default,
+  $database_max_retries    = $::os_service_default,
+  $database_retry_interval = $::os_service_default,
+  $database_max_overflow   = $::os_service_default,
 ) {
 
   include ::trove::deps
-  include ::trove::params
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use trove::<myparam> if trove::db::<myparam> isn't specified.
@@ -59,46 +58,13 @@ class trove::db (
   validate_re($database_connection_real,
     '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  if $database_connection_real {
-    case $database_connection_real {
-      /^mysql(\+pymysql)?:\/\//: {
-        require 'mysql::bindings'
-        require 'mysql::bindings::python'
-        if $database_connection_real =~ /^mysql\+pymysql/ {
-          $backend_package = $::trove::params::pymysql_package_name
-        } else {
-          $backend_package = false
-        }
-      }
-      /^postgresql:\/\//: {
-        $backend_package = false
-        require 'postgresql::lib::python'
-      }
-      /^sqlite:\/\//: {
-        $backend_package = $::trove::params::sqlite_package_name
-      }
-      default: {
-        fail('Unsupported backend configured')
-      }
-    }
-
-    if $backend_package and !defined(Package[$backend_package]) {
-      package {'trove-backend-package':
-        ensure => present,
-        name   => $backend_package,
-        tag    => ['openstack', 'trove-package'],
-      }
-    }
-
-    trove_config {
-      'database/connection':     value => $database_connection_real, secret => true;
-      'database/idle_timeout':   value => $database_idle_timeout_real;
-      'database/min_pool_size':  value => $database_min_pool_size_real;
-      'database/max_retries':    value => $database_max_retries_real;
-      'database/retry_interval': value => $database_retry_interval_real;
-      'database/max_pool_size':  value => $database_max_pool_size_real;
-      'database/max_overflow':   value => $database_max_overflow_real;
-    }
+  oslo::db { 'trove_config':
+    connection     => $database_connection_real,
+    idle_timeout   => $database_idle_timeout_real,
+    min_pool_size  => $database_min_pool_size_real,
+    max_pool_size  => $database_max_pool_size_real,
+    max_retries    => $database_max_retries_real,
+    retry_interval => $database_retry_interval_real,
+    max_overflow   => $database_max_overflow_real
   }
-
 }
