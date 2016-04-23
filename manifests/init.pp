@@ -23,71 +23,71 @@
 # [*notification_driver*]
 #   (optional) Driver or drivers to handle sending notifications.
 #   Value can be a string or a list.
-#   Defaults to noop
+#   Defaults to $::os_service_default
 #
 # [*notification_topics*]
 #   (optional) AMQP topic used for OpenStack notifications
-#   Defaults to 'notifications'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_host*]
 #   (optional) Location of rabbitmq installation.
 #   Note that, for security reasons, this rabbitmq host should not be the
 #   same that the core openstack services are using for communication. See
 #   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
-#   Defaults to 'localhost'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_hosts*]
 #   (optional) List of clustered rabbit servers.
 #   Note that, for security reasons, these rabbitmq hosts should not be the
 #   same that the core openstack services are using for communication. See
 #   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*rabbit_port*]
 #   (optional) Port for rabbitmq instance.
-#   Defaults to '5672'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_password*]
 #   (optional) Password used to connect to rabbitmq.
-#   Defaults to 'guest'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_userid*]
 #   (optional) User used to connect to rabbitmq.
-#   Defaults to 'guest'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_virtual_host*]
 #   (optional) The RabbitMQ virtual host.
-#   Defaults to '/'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*rabbit_notification_topic*]
 #   (optional) Notification topic.
-#   Defaults to false.
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_certfile*]
 #   (optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_keyfile*]
 #   (optional) SSL key file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_version*]
 #   (optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #   available on some distributions.
-#   Defaults to 'TLSv1'
+#   Defaults to $::os_service_default
 #
 # [*rabbit_ha_queues*]
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
-#   Defaults to undef
+#   Defaults to $::os_service_default
 #
 # [*kombu_reconnect_delay*]
 #   (optional) How long to wait before reconnecting in response to an AMQP
@@ -96,7 +96,7 @@
 #
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
-#   Defaults to false
+#   Defaults to $::os_service_default
 #
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
@@ -200,23 +200,23 @@
 #
 class trove(
   $nova_proxy_admin_pass,
-  $notification_driver          = 'noop',
-  $notification_topics          = 'notifications',
-  $rabbit_host                  = 'localhost',
-  $rabbit_hosts                 = undef,
-  $rabbit_password              = 'guest',
-  $rabbit_port                  = '5672',
-  $rabbit_userid                = 'guest',
-  $rabbit_virtual_host          = '/',
-  $rabbit_use_ssl               = false,
-  $rabbit_ha_queues             = undef,
-  $rabbit_notification_topic    = 'notifications',
-  $kombu_ssl_ca_certs           = undef,
-  $kombu_ssl_certfile           = undef,
-  $kombu_ssl_keyfile            = undef,
-  $kombu_ssl_version            = 'TLSv1',
+  $notification_driver          = $::os_service_default,
+  $notification_topics          = $::os_service_default,
+  $rabbit_host                  = $::os_service_default,
+  $rabbit_hosts                 = $::os_service_default,
+  $rabbit_password              = $::os_service_default,
+  $rabbit_port                  = $::os_service_default,
+  $rabbit_userid                = $::os_service_default,
+  $rabbit_virtual_host          = $::os_service_default,
+  $rabbit_use_ssl               = $::os_service_default,
+  $rabbit_ha_queues             = $::os_service_default,
+  $rabbit_notification_topic    = $::os_service_default,
+  $kombu_ssl_ca_certs           = $::os_service_default,
+  $kombu_ssl_certfile           = $::os_service_default,
+  $kombu_ssl_keyfile            = $::os_service_default,
+  $kombu_ssl_version            = $::os_service_default,
   $kombu_reconnect_delay        = $::os_service_default,
-  $amqp_durable_queues          = false,
+  $amqp_durable_queues          = $::os_service_default,
   $database_connection          = undef,
   $database_idle_timeout        = undef,
   $database_max_retries         = undef,
