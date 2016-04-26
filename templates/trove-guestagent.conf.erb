@@ -54,9 +54,6 @@ api_extensions_path = trove/extensions/routes
 # These options are for an admin user in your keystone config.
 # It proxies the token received from the user to send to nova via this admin users creds,
 # basically acting like the client via that proxy token.
-nova_proxy_admin_user = <%= @nova_proxy_admin_user %>
-nova_proxy_admin_pass = <%= @nova_proxy_admin_pass %>
-nova_proxy_admin_tenant_name = <%= @nova_proxy_admin_tenant_name %>
 trove_auth_url = <%= @auth_url %>
 swift_url = <%= @swift_url %>
 
