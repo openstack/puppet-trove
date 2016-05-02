@@ -71,10 +71,6 @@
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestagent.conf'.
 #
-# [*use_guestagent_template*]
-#   (optional) Use template to provision trove guest agent configuration file.
-#   Defaults to true.
-#
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
 #   Defaults to undef.
@@ -82,6 +78,12 @@
 # [*taskmanager_queue*]
 #   (optional) Message queue name the Taskmanager will listen to.
 #   Defaults to 'taskmanager'.
+#
+# DEPRECATED OPTIONS
+#
+# [*use_guestagent_template*]
+#   (optional) Use template to provision trove guest agent configuration file.
+#   Defaults to true.
 #
 class trove::taskmanager(
   $enabled                  = true,
@@ -96,9 +98,10 @@ class trove::taskmanager(
   $heat_url                 = false,
   $ensure_package           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
-  $use_guestagent_template  = true,
   $default_neutron_networks = undef,
   $taskmanager_queue        = 'taskmanager',
+  #DEPRECATED OPTIONS
+  $use_guestagent_template  = true,
 ) inherits trove {
 
   include ::trove::deps
@@ -249,6 +252,7 @@ class trove::taskmanager(
 
   if $guestagent_config_file {
     if $use_guestagent_template {
+      warning('The tempated guestagent file is deprecated and will be removed in Ocata. Please configure options directly with the trove::guestagent class using hiera.')
       file { $guestagent_config_file:
         content => template('trove/trove-guestagent.conf.erb'),
         require => Anchor['trove::install::end'],
