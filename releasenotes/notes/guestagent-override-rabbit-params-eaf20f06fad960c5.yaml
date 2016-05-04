@@ -1,0 +1,7 @@
+---
+features:
+  - In some environments, Trove guests will talk to rabbit via a different
+    gateway or VIP and possibly using a different port. This might be done
+    for security or separation reasons. This change allows the guestagent's
+    rabbit host(s) and port information to be different than that from the
+    main cluster.
