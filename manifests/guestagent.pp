@@ -78,7 +78,10 @@ class trove::guestagent(
     'DEFAULT/debug':                        value => $debug;
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/swift_url':                    value => $swift_url;
-    'DEFAULT/control_exchange':             value => $control_exchange;
+  }
+
+  oslo::messaging::default { 'trove_config':
+      control_exchange => $control_exchange
   }
 
   # region name
