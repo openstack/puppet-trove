@@ -1,0 +1,5 @@
+---
+other:
+  - Change the default for swift_url in guestagent to
+    be SERVICE_DEFAULT so that by default, installs
+    will read the Swift URL from the Keystone catalog.

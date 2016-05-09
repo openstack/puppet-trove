@@ -47,8 +47,9 @@
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
 # [*swift_url*]
-#   (optional) Swift URL.
-#   Defaults to 'http://localhost:8080/v1/AUTH_'.
+#   (optional) Swift URL. If this is unset in the class, Trove will
+#   lookup the URL using the Keystone catalog.
+#   Defaults to $::os_service_default.
 #
 # [*control_exchange*]
 #   (optional) Control exchange.
@@ -86,7 +87,7 @@ class trove::guestagent(
   $use_syslog                = false,
   $log_facility              = 'LOG_USER',
   $auth_url                  = 'http://localhost:5000/v2.0',
-  $swift_url                 = 'http://localhost:8080/v1/AUTH_',
+  $swift_url                 = $::os_service_default,
   $control_exchange          = 'trove',
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,

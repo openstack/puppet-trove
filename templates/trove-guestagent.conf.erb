@@ -36,7 +36,9 @@ api_extensions_path = trove/extensions/routes
 # It proxies the token received from the user to send to nova via this admin users creds,
 # basically acting like the client via that proxy token.
 trove_auth_url = <%= @auth_url %>
+<%- if @swift_url and @swift_url != "<SERVICE DEFAULT>" -%>
 swift_url = <%= @swift_url %>
+<%- end -%>
 
 # Datastore management implementations. Format datastore:manager.impl
 # datastore_registry_ext = mysql:trove.guestagent.datastore.mysql.manager.Manager, percona:trove.guestagent.datastore.mysql.manager.Manager
