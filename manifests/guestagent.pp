@@ -104,8 +104,8 @@ class trove::guestagent(
     'DEFAULT/swift_url':                    value => $swift_url;
   }
 
-  oslo::messaging::default { 'trove_config':
-      control_exchange => $control_exchange
+  oslo::messaging::default { 'trove_guestagent_config':
+    control_exchange => $control_exchange
   }
 
   # region name
