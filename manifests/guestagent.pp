@@ -54,6 +54,27 @@
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
 #
+# [*rabbit_hosts*]
+#   (optional) List of clustered rabbit servers.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   different IPs.
+#
+# [*rabbit_host*]
+#   (optional) Location of rabbitmq installation.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   a different IP.
+#
+# [*rabbit_port*]
+#   (optional) Port for rabbitmq instance.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   a different port.
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
@@ -66,7 +87,10 @@ class trove::guestagent(
   $log_facility              = 'LOG_USER',
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = 'http://localhost:8080/v1/AUTH_',
-  $control_exchange          = 'trove'
+  $control_exchange          = 'trove',
+  $rabbit_hosts              = $::trove::rabbit_hosts,
+  $rabbit_host               = $::trove::rabbit_host,
+  $rabbit_port               = $::trove::rabbit_port,
 ) inherits trove {
 
   include ::trove::deps
@@ -99,9 +123,9 @@ class trove::guestagent(
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
     oslo::messaging::rabbit {'trove_guestagent_config':
-      rabbit_hosts          => $::trove::rabbit_hosts,
-      rabbit_host           => $::trove::rabbit_host,
-      rabbit_port           => $::trove::rabbit_port,
+      rabbit_hosts          => $rabbit_hosts,
+      rabbit_host           => $rabbit_host,
+      rabbit_port           => $rabbit_port,
       rabbit_ha_queues      => $::trove::rabbit_ha_queues,
       rabbit_userid         => $::trove::rabbit_userid,
       rabbit_password       => $::trove::rabbit_password,
