@@ -145,6 +145,34 @@ describe 'trove::conductor' do
       end
     end
 
+    context 'with amqp rpc' do
+      let :pre_condition do
+        "class { 'trove' :
+           nova_proxy_admin_pass => 'verysecrete',
+           rpc_backend => 'amqp' }"
+      end
+
+      it do
+        is_expected.to contain_trove_config('DEFAULT/rpc_backend').with_value('amqp')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>')
+      end
+    end
+ 
   end
 
   context 'on Debian platforms' do

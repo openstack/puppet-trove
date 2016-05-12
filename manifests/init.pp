@@ -101,7 +101,72 @@
 # [*rpc_backend*]
 #   (optional) The rpc backend implementation to use, can be:
 #     rabbit (for rabbitmq)
+#     amqp (for AMQP 1.0)
 #   Defaults to 'rabbit'
+#
+# [*amqp_server_request_prefix*]
+#   (Optional) Address prefix used when sending to a specific server
+#   Defaults to $::os_service_default.
+#
+# [*amqp_broadcast_prefix*]
+#   (Optional) address prefix used when broadcasting to all servers
+#   Defaults to $::os_service_default.
+#
+# [*amqp_group_request_prefix*]
+#   (Optional) address prefix when sending to any server in group
+#   Defaults to $::os_service_default.
+#
+# [*amqp_container_name*]
+#   (Optional) Name for the AMQP container
+#   Defaults to $::os_service_default.
+#
+# [*amqp_idle_timeout*]
+#   (Optional) Timeout for inactive connections
+#   Defaults to $::os_service_default.
+#
+# [*amqp_trace*]
+#   (Optional) Debug: dump AMQP frames to stdout
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_ca_file*]
+#   (Optional) CA certificate PEM file to verify server certificate
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_cert_file*]
+#   (Optional) Identifying certificate PEM file to present to clients
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_key_file*]
+#   (Optional) Private key PEM file used to sign cert_file certificate
+#   Defaults to $::os_service_default.
+#
+# [*amqp_ssl_key_password*]
+#   (Optional) Password for decrypting ssl_key_file (if encrypted)
+#   Defaults to $::os_service_default.
+#
+# [*amqp_allow_insecure_clients*]
+#   (Optional) Accept clients using either SSL or plain TCP
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_mechanisms*]
+#   (Optional) Space separated list of acceptable SASL mechanisms
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_config_dir*]
+#   (Optional) Path to directory that contains the SASL configuration
+#   Defaults to $::os_service_default.
+#
+# [*amqp_sasl_config_name*]
+#   (Optional) Name of configuration file (without .conf suffix)
+#   Defaults to $::os_service_default.
+#
+# [*amqp_username*]
+#   (Optional) User name for message broker authentication
+#   Defaults to $::os_service_default.
+#
+# [*amqp_password*]
+#   (Optional) Password for message broker authentication
+#   Defaults to $::os_service_default.
 #
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
@@ -217,6 +282,22 @@ class trove(
   $kombu_ssl_version            = $::os_service_default,
   $kombu_reconnect_delay        = $::os_service_default,
   $amqp_durable_queues          = $::os_service_default,
+  $amqp_server_request_prefix   = $::os_service_default,
+  $amqp_broadcast_prefix        = $::os_service_default,
+  $amqp_group_request_prefix    = $::os_service_default,
+  $amqp_container_name          = $::os_service_default,
+  $amqp_idle_timeout            = $::os_service_default,
+  $amqp_trace                   = $::os_service_default,
+  $amqp_ssl_ca_file             = $::os_service_default,
+  $amqp_ssl_cert_file           = $::os_service_default,
+  $amqp_ssl_key_file            = $::os_service_default,
+  $amqp_ssl_key_password        = $::os_service_default,
+  $amqp_allow_insecure_clients  = $::os_service_default,
+  $amqp_sasl_mechanisms         = $::os_service_default,
+  $amqp_sasl_config_dir         = $::os_service_default,
+  $amqp_sasl_config_name        = $::os_service_default,
+  $amqp_username                = $::os_service_default,
+  $amqp_password                = $::os_service_default,
   $database_connection          = undef,
   $database_idle_timeout        = undef,
   $database_max_retries         = undef,
