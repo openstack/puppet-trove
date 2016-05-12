@@ -88,12 +88,12 @@
 class trove::taskmanager(
   $enabled                  = true,
   $manage_service           = true,
-  $debug                    = false,
-  $verbose                  = false,
+  $debug                    = $::os_service_default,
+  $verbose                  = $::os_service_default,
   $log_file                 = '/var/log/trove/trove-taskmanager.log',
   $log_dir                  = '/var/log/trove',
-  $use_syslog               = false,
-  $log_facility             = 'LOG_USER',
+  $use_syslog               = $::os_service_default,
+  $log_facility             = $::os_service_default,
   $auth_url                 = 'http://localhost:5000/v2.0',
   $heat_url                 = false,
   $ensure_package           = 'present',
@@ -126,8 +126,6 @@ class trove::taskmanager(
 
   # basic service config
   trove_taskmanager_config {
-    'DEFAULT/verbose':                      value => $verbose;
-    'DEFAULT/debug':                        value => $debug;
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
@@ -209,37 +207,13 @@ class trove::taskmanager(
     }
   }
 
-  # Logging
-  if $log_file {
-    trove_taskmanager_config {
-      'DEFAULT/log_file': value  => $log_file;
-    }
-  } else {
-    trove_taskmanager_config {
-      'DEFAULT/log_file': ensure => absent;
-    }
-  }
-
-  if $log_dir {
-    trove_taskmanager_config {
-      'DEFAULT/log_dir': value  => $log_dir;
-    }
-  } else {
-    trove_taskmanager_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  # Syslog
-  if $use_syslog {
-    trove_taskmanager_config {
-      'DEFAULT/use_syslog'          : value => true;
-      'DEFAULT/syslog_log_facility' : value => $log_facility;
-    }
-  } else {
-    trove_taskmanager_config {
-      'DEFAULT/use_syslog': value => false;
-    }
+  oslo::log { 'trove_taskmanager_config':
+    debug               => $debug,
+    verbose             => $verbose,
+    log_file            => $log_file,
+    log_dir             => $log_dir,
+    use_syslog          => $use_syslog,
+    syslog_log_facility => $log_facility
   }
 
   trove::generic_service { 'taskmanager':

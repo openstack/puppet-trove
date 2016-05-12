@@ -66,12 +66,12 @@ class trove::conductor(
   $enabled                   = true,
   $manage_service            = true,
   $ensure_package            = 'present',
-  $verbose                   = false,
-  $debug                     = false,
+  $verbose                   = $::os_service_default,
+  $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/trove-conductor.log',
   $log_dir                   = '/var/log/trove',
-  $use_syslog                = false,
-  $log_facility              = 'LOG_USER',
+  $use_syslog                = $::os_service_default,
+  $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $conductor_manager         = 'trove.conductor.manager.Manager',
   $workers                   = $::processorcount,
@@ -101,8 +101,6 @@ class trove::conductor(
 
   # basic service config
   trove_conductor_config {
-    'DEFAULT/verbose':                      value => $verbose;
-    'DEFAULT/debug':                        value => $debug;
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
@@ -144,37 +142,13 @@ class trove::conductor(
     }
   }
 
-  # Logging
-  if $log_file {
-    trove_conductor_config {
-      'DEFAULT/log_file': value  => $log_file;
-    }
-  } else {
-    trove_conductor_config {
-      'DEFAULT/log_file': ensure => absent;
-    }
-  }
-
-  if $log_dir {
-    trove_conductor_config {
-      'DEFAULT/log_dir': value  => $log_dir;
-    }
-  } else {
-    trove_conductor_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  # Syslog
-  if $use_syslog {
-    trove_conductor_config {
-      'DEFAULT/use_syslog'          : value => true;
-      'DEFAULT/syslog_log_facility' : value => $log_facility;
-    }
-  } else {
-    trove_conductor_config {
-      'DEFAULT/use_syslog': value => false;
-    }
+  oslo::log { 'trove_conductor_config':
+    debug               => $debug,
+    verbose             => $verbose,
+    log_file            => $log_file,
+    log_dir             => $log_dir,
+    use_syslog          => $use_syslog,
+    syslog_log_facility => $log_facility
   }
 
   trove::generic_service { 'conductor':

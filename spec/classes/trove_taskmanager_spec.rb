@@ -51,8 +51,12 @@ describe 'trove::taskmanager' do
       end
 
       it 'configures trove-taskmanager with default parameters' do
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/verbose').with_value(false)
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/debug').with_value(false)
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/verbose').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/log_file').with_value('/var/log/trove/trove-taskmanager.log')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/log_dir').with_value('/var/log/trove')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
