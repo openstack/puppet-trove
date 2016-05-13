@@ -80,12 +80,12 @@ class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
   $ensure_package            = 'present',
-  $verbose                   = false,
-  $debug                     = false,
+  $verbose                   = $::os_service_default,
+  $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/guestagent.log',
   $log_dir                   = '/var/log/trove',
-  $use_syslog                = false,
-  $log_facility              = 'LOG_USER',
+  $use_syslog                = $::os_service_default,
+  $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = $::os_service_default,
   $control_exchange          = 'trove',
@@ -99,8 +99,6 @@ class trove::guestagent(
 
   # basic service config
   trove_guestagent_config {
-    'DEFAULT/verbose':                      value => $verbose;
-    'DEFAULT/debug':                        value => $debug;
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/swift_url':                    value => $swift_url;
   }
@@ -145,37 +143,13 @@ class trove::guestagent(
     }
   }
 
-  # Logging
-  if $log_file {
-    trove_guestagent_config {
-      'DEFAULT/log_file': value  => $log_file;
-    }
-  } else {
-    trove_guestagent_config {
-      'DEFAULT/log_file': ensure => absent;
-    }
-  }
-
-  if $log_dir {
-    trove_guestagent_config {
-      'DEFAULT/log_dir': value  => $log_dir;
-    }
-  } else {
-    trove_guestagent_config {
-      'DEFAULT/log_dir': ensure => absent;
-    }
-  }
-
-  # Syslog
-  if $use_syslog {
-    trove_guestagent_config {
-      'DEFAULT/use_syslog'          : value => true;
-      'DEFAULT/syslog_log_facility' : value => $log_facility;
-    }
-  } else {
-    trove_guestagent_config {
-      'DEFAULT/use_syslog': value => false;
-    }
+  oslo::log { 'trove_guestagent_config':
+    debug               => $debug,
+    verbose             => $verbose,
+    log_file            => $log_file,
+    log_dir             => $log_dir,
+    use_syslog          => $use_syslog,
+    syslog_log_facility => $log_facility
   }
 
   trove::generic_service { 'guestagent':
