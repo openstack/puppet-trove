@@ -28,7 +28,6 @@ describe 'trove::logging' do
      :log_facility => 'LOG_FOO',
      :log_dir => '/var/log',
      :log_file => '/var/log/foo.log',
-     :verbose => true,
      :debug => true,
     }
   end
@@ -62,7 +61,6 @@ describe 'trove::logging' do
       is_expected.to contain_trove_config('DEFAULT/syslog_log_facility').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_trove_config('DEFAULT/log_dir').with(:value => '/var/log/trove')
       is_expected.to contain_trove_config('DEFAULT/log_file').with(:value => '<SERVICE DEFAULT>')
-      is_expected.to contain_trove_config('DEFAULT/verbose').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_trove_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
     end
   end
@@ -74,7 +72,6 @@ describe 'trove::logging' do
       is_expected.to contain_trove_config('DEFAULT/syslog_log_facility').with(:value => 'LOG_FOO')
       is_expected.to contain_trove_config('DEFAULT/log_dir').with(:value => '/var/log')
       is_expected.to contain_trove_config('DEFAULT/log_file').with(:value => '/var/log/foo.log')
-      is_expected.to contain_trove_config('DEFAULT/verbose').with(:value => 'true')
       is_expected.to contain_trove_config('DEFAULT/debug').with(:value => 'true')
     end
   end

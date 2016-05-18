@@ -32,10 +32,6 @@
 # [*keystone_password*]
 #   (required) Password used to authentication.
 #
-# [*verbose*]
-#   (optional) Rather to log the trove api service at verbose level.
-#   Defaults to undef
-#
 # [*debug*]
 #   (optional) Rather to log the trove api service at debug level.
 #   Defaults to undef
@@ -158,9 +154,12 @@
 #   Authentication URL.
 #   Defaults to 'http://localhost:5000/v2.0'.
 #
+# [*verbose*]
+#   (optional) Deprecated. Rather to log the trove api service at verbose level.
+#   Defaults to undef
+#
 class trove::api(
   $keystone_password,
-  $verbose                      = undef,
   $debug                        = undef,
   $log_file                     = undef,
   $log_dir                      = undef,
@@ -192,6 +191,7 @@ class trove::api(
   $auth_url                     = 'http://localhost:5000/v2.0',
   $auth_port                    = '35357',
   $auth_protocol                = 'http',
+  $verbose                      = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -199,6 +199,10 @@ class trove::api(
   include ::trove::db::sync
   include ::trove::logging
   include ::trove::params
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   # basic service config
   trove_config {

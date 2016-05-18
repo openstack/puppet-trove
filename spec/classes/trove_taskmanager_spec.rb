@@ -51,7 +51,6 @@ describe 'trove::taskmanager' do
       end
 
       it 'configures trove-taskmanager with default parameters' do
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/verbose').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')

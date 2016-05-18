@@ -33,10 +33,6 @@
 #   (optional) The state of the trove taskmanager package
 #   Defaults to 'present'
 #
-# [*verbose*]
-#   (optional) Rather to log the trove api service at verbose level.
-#   Default: false
-#
 # [*debug*]
 #   (optional) Rather to log the trove api service at debug level.
 #   Default: false
@@ -85,11 +81,14 @@
 #   (optional) Use template to provision trove guest agent configuration file.
 #   Defaults to true.
 #
+# [*verbose*]
+#   (optional) Deprecated. Rather to log the trove api service at verbose level.
+#   Default: undef
+#
 class trove::taskmanager(
   $enabled                  = true,
   $manage_service           = true,
   $debug                    = $::os_service_default,
-  $verbose                  = $::os_service_default,
   $log_file                 = '/var/log/trove/trove-taskmanager.log',
   $log_dir                  = '/var/log/trove',
   $use_syslog               = $::os_service_default,
@@ -102,10 +101,15 @@ class trove::taskmanager(
   $taskmanager_queue        = 'taskmanager',
   #DEPRECATED OPTIONS
   $use_guestagent_template  = true,
+  $verbose                  = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
@@ -228,7 +232,6 @@ class trove::taskmanager(
 
   oslo::log { 'trove_taskmanager_config':
     debug               => $debug,
-    verbose             => $verbose,
     log_file            => $log_file,
     log_dir             => $log_dir,
     use_syslog          => $use_syslog,

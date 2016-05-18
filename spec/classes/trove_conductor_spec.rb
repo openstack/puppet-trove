@@ -26,7 +26,6 @@ describe 'trove::conductor' do
       end
 
       it 'configures trove-conductor with default parameters' do
-        is_expected.to contain_trove_conductor_config('DEFAULT/verbose').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')

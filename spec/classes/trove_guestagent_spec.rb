@@ -27,7 +27,6 @@ describe 'trove::guestagent' do
       end
 
       it 'configures trove-guestagent with default parameters' do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/verbose').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')

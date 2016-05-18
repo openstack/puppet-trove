@@ -46,16 +46,13 @@ describe 'basic trove' do
         identity_uri      => 'http://127.0.0.1:35357/',
         auth_uri          => 'http://127.0.0.1:5000/',
         debug             => true,
-        verbose           => true,
       }
       class { '::trove::client': }
       class { '::trove::conductor':
         debug   => true,
-        verbose => true,
       }
       class { '::trove::taskmanager':
         debug   => true,
-        verbose => true,
       }
       class { '::trove::quota': }
       EOS

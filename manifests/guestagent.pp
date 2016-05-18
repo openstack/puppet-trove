@@ -16,10 +16,6 @@
 #   (optional) The state of the trove guest agent package
 #   Defaults to 'present'
 #
-# [*verbose*]
-#   (optional) Rather to log the trove guest agent service at verbose level.
-#   Default: false
-#
 # [*debug*]
 #   (optional) Rather to log the trove guest agent service at debug level.
 #   Default: false
@@ -76,11 +72,17 @@
 #   guests need to talk to the rabbit cluster via
 #   a different port.
 #
+#  DEPRECATED PARAMETERS
+#
+# [*verbose*]
+#   (optional) Deprecated. Rather to log the trove
+#   guest agent service at verbose level.
+#   Default: undef
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
   $ensure_package            = 'present',
-  $verbose                   = $::os_service_default,
   $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/guestagent.log',
   $log_dir                   = '/var/log/trove',
@@ -92,10 +94,16 @@ class trove::guestagent(
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
+  #Deprecated
+  $verbose                   = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   # basic service config
   trove_guestagent_config {
@@ -164,7 +172,6 @@ class trove::guestagent(
 
   oslo::log { 'trove_guestagent_config':
     debug               => $debug,
-    verbose             => $verbose,
     log_file            => $log_file,
     log_dir             => $log_dir,
     use_syslog          => $use_syslog,

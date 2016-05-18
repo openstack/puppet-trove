@@ -4,10 +4,6 @@
 #
 # == parameters
 #
-#  [*verbose*]
-#    (Optional) Should the daemons log verbose messages
-#    Defaults to $::os_service_default
-#
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages
 #    Defaults to $::os_service_default
@@ -93,6 +89,12 @@
 #    (optional) Format string for %%(asctime)s in log records.
 #    Defaults to $::os_service_default
 #    Example: 'Y-%m-%d %H:%M:%S'
+#
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (Optional) Deprecated. Should the daemons log verbose messages
+#    Defaults to undef.
 
 class trove::logging(
   $use_syslog                    = $::os_service_default,
@@ -100,7 +102,6 @@ class trove::logging(
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/trove',
   $log_file                      = $::os_service_default,
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -113,6 +114,8 @@ class trove::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
+  # Deprecated
+  $verbose                       = undef,
 ) {
 
   include ::trove::deps
@@ -124,12 +127,14 @@ class trove::logging(
   $log_facility_real = pick($::trove::api::log_facility, $log_facility)
   $log_dir_real      = pick($::trove::api::log_dir, $log_dir)
   $log_file_real     = pick($::trove::api::log_file, $log_file)
-  $verbose_real      = pick($::trove::api::verbose, $verbose)
   $debug_real        = pick($::trove::api::debug, $debug)
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   oslo::log { 'trove_config':
     debug                         => $debug_real,
-    verbose                       => $verbose_real,
     use_stderr                    => $use_stderr_real,
     use_syslog                    => $use_syslog_real,
     log_dir                       => $log_dir_real,
