@@ -36,6 +36,14 @@
 # [*configure_endpoint*]
 #   Should Trove endpoint be configured? Defaults to 'true'.
 #
+# [*configure_user*]
+#   Should Trove user be configured?
+#   Defaults to 'true'.
+#
+# [*configure_user_role*]
+#   Should Trove user_role be configured?
+#   Defaults to 'true'.
+#
 # [*service_type*]
 #   Type of service. Defaults to 'database'.
 #
@@ -120,6 +128,8 @@ class trove::keystone::auth (
   $auth_name           = 'trove',
   $email               = 'trove@localhost',
   $tenant              = 'services',
+  $configure_user      = true,
+  $configure_user_role = true,
   $configure_endpoint  = true,
   $service_name        = undef,
   $service_type        = 'database',
@@ -208,8 +218,8 @@ class trove::keystone::auth (
   ~> Service <| tag == 'trove-server' |>
 
   keystone::resource::service_identity { 'trove':
-    configure_user      => true,
-    configure_user_role => true,
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_name        => $real_service_name,
     service_type        => $service_type,

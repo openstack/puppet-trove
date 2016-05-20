@@ -136,4 +136,14 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron::database') }
   end
+
+  describe 'when disabling user and user_role configuration' do
+    let :params do
+      { :configure_user      => false,
+        :configure_user_role => false,
+        :password            => 'trove_password' }
+    end
+    it { is_expected.to_not contain_keystone_user('trove') }
+    it { is_expected.to_not contain_keystone_user_role('trove@services') }
+  end
 end
