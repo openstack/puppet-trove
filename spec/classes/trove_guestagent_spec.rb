@@ -33,6 +33,7 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/log_file').with_value('/var/log/trove/guestagent.log')
         is_expected.to contain_trove_guestagent_config('DEFAULT/log_dir').with_value('/var/log/trove')
         is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
