@@ -8,10 +8,6 @@
 #    (Optional) Should the daemons log debug messages
 #    Defaults to $::os_service_default
 #
-#  [*use_syslog*]
-#    (Optional) Use syslog for logging.
-#    Defaults to $::os_service_default
-#
 #  [*use_stderr*]
 #    (optional) Use stderr for logging
 #    Defaults to $::os_service_default
@@ -95,9 +91,12 @@
 #  [*verbose*]
 #    (Optional) Deprecated. Should the daemons log verbose messages
 #    Defaults to undef.
-
+#
+#  [*use_syslog*]
+#    (Optional) Use syslog for logging.
+#    Defaults to undef
+#
 class trove::logging(
-  $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/trove',
@@ -116,13 +115,13 @@ class trove::logging(
   $log_date_format               = $::os_service_default,
   # Deprecated
   $verbose                       = undef,
+  $use_syslog                    = undef,
 ) {
 
   include ::trove::deps
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use trove::<myparam> first then trove::logging::<myparam>.
-  $use_syslog_real   = pick($::trove::api::use_syslog, $use_syslog)
   $use_stderr_real   = pick($::trove::api::use_stderr, $use_stderr)
   $log_facility_real = pick($::trove::api::log_facility, $log_facility)
   $log_dir_real      = pick($::trove::api::log_dir, $log_dir)
@@ -133,10 +132,13 @@ class trove::logging(
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
+  if $use_syslog {
+    warning('use_syslog is deprecated, has no effect and will be removed in a future release')
+  }
+
   oslo::log { 'trove_config':
     debug                         => $debug_real,
     use_stderr                    => $use_stderr_real,
-    use_syslog                    => $use_syslog_real,
     log_dir                       => $log_dir_real,
     log_file                      => $log_file_real,
     syslog_log_facility           => $log_facility_real,

@@ -46,10 +46,6 @@
 #   If set to boolean false, it will not log to any directory.
 #   Defaults to undef
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to undef
-#
 # [*use_stderr*]
 #   (optional) Use stderr for logging
 #   Defaults to undef
@@ -158,12 +154,15 @@
 #   (optional) Deprecated. Rather to log the trove api service at verbose level.
 #   Defaults to undef
 #
+# [*use_syslog*]
+#   (optional) DEPRECATED. Use syslog for logging.
+#   Defaults to undef
+#
 class trove::api(
   $keystone_password,
   $debug                        = undef,
   $log_file                     = undef,
   $log_dir                      = undef,
-  $use_syslog                   = undef,
   $use_stderr                   = undef,
   $log_facility                 = undef,
   $bind_host                    = '0.0.0.0',
@@ -192,6 +191,7 @@ class trove::api(
   $auth_port                    = '35357',
   $auth_protocol                = 'http',
   $verbose                      = undef,
+  $use_syslog                   = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -202,6 +202,10 @@ class trove::api(
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
+  if $use_syslog {
+    warning('use_syslog is deprecated, has no effect and will be removed in a future release.')
   }
 
   # basic service config

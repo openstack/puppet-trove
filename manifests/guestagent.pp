@@ -30,10 +30,6 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to '/var/log/trove'
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to false.
-#
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
@@ -79,6 +75,10 @@
 #   guest agent service at verbose level.
 #   Default: undef
 #
+# [*use_syslog*]
+#   (optional) Deprecated. Use syslog for logging.
+#   Defaults to false.
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
@@ -86,7 +86,6 @@ class trove::guestagent(
   $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/guestagent.log',
   $log_dir                   = '/var/log/trove',
-  $use_syslog                = $::os_service_default,
   $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = $::os_service_default,
@@ -96,6 +95,7 @@ class trove::guestagent(
   $rabbit_port               = $::trove::rabbit_port,
   #Deprecated
   $verbose                   = undef,
+  $use_syslog                = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -103,6 +103,10 @@ class trove::guestagent(
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
+  if $use_syslog {
+    warning('use_syslog is deprecated, has no effect and will be removed in a future release.')
   }
 
   # basic service config
@@ -174,7 +178,6 @@ class trove::guestagent(
     debug               => $debug,
     log_file            => $log_file,
     log_dir             => $log_dir,
-    use_syslog          => $use_syslog,
     syslog_log_facility => $log_facility
   }
 

@@ -23,7 +23,6 @@ describe 'trove::logging' do
      :instance_format => '[instance: %(uuid)s] ',
      :instance_uuid_format => '[instance: %(uuid)s] ',
      :log_date_format => '%Y-%m-%d %H:%M:%S',
-     :use_syslog => true,
      :use_stderr => false,
      :log_facility => 'LOG_FOO',
      :log_dir => '/var/log',
@@ -56,7 +55,6 @@ describe 'trove::logging' do
 
   shared_examples 'basic default logging settings' do
     it 'configures trove logging settins with default values' do
-      is_expected.to contain_trove_config('DEFAULT/use_syslog').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_trove_config('DEFAULT/use_stderr').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_trove_config('DEFAULT/syslog_log_facility').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_trove_config('DEFAULT/log_dir').with(:value => '/var/log/trove')
@@ -67,7 +65,6 @@ describe 'trove::logging' do
 
   shared_examples 'basic non-default logging settings' do
     it 'configures trove logging settins with non-default values' do
-      is_expected.to contain_trove_config('DEFAULT/use_syslog').with(:value => 'true')
       is_expected.to contain_trove_config('DEFAULT/use_stderr').with(:value => 'false')
       is_expected.to contain_trove_config('DEFAULT/syslog_log_facility').with(:value => 'LOG_FOO')
       is_expected.to contain_trove_config('DEFAULT/log_dir').with(:value => '/var/log')

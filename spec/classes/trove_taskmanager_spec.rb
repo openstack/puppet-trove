@@ -52,7 +52,6 @@ describe 'trove::taskmanager' do
 
       it 'configures trove-taskmanager with default parameters' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/log_file').with_value('/var/log/trove/trove-taskmanager.log')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/log_dir').with_value('/var/log/trove')
