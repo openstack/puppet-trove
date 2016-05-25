@@ -72,6 +72,13 @@
 #   guests need to talk to the rabbit cluster via
 #   a different port.
 #
+# [*rabbit_use_ssl*]
+#   (optional) Connect over SSL for RabbitMQ
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   a different ssl connection option.
+
 #  DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -94,6 +101,7 @@ class trove::guestagent(
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
+  $rabbit_use_ssl            = $::trove::rabbit_use_ssl,
   #Deprecated
   $verbose                   = undef,
 ) inherits trove {
@@ -133,11 +141,11 @@ class trove::guestagent(
       rabbit_hosts          => $rabbit_hosts,
       rabbit_host           => $rabbit_host,
       rabbit_port           => $rabbit_port,
+      rabbit_use_ssl        => $rabbit_use_ssl,
       rabbit_ha_queues      => $::trove::rabbit_ha_queues,
       rabbit_userid         => $::trove::rabbit_userid,
       rabbit_password       => $::trove::rabbit_password,
       rabbit_virtual_host   => $::trove::rabbit_virtual_host,
-      rabbit_use_ssl        => $::trove::rabbit_use_ssl,
       kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
       amqp_durable_queues   => $::trove::amqp_durable_queues,
       kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
