@@ -23,7 +23,7 @@
 # [*log_file*]
 #   (optional) The path of file used for logging
 #   If set to boolean false, it will not log to any file.
-#   Default: /var/log/trove/guestagent.log
+#   Default: /var/log/trove/trove-guestagent.log
 #
 # [*log_dir*]
 #    (optional) directory to which trove logs are sent.
@@ -103,7 +103,7 @@ class trove::guestagent(
   $manage_service            = true,
   $ensure_package            = 'present',
   $debug                     = $::os_service_default,
-  $log_file                  = '/var/log/trove/guestagent.log',
+  $log_file                  = '/var/log/trove/trove-guestagent.log',
   $log_dir                   = '/var/log/trove',
   $use_syslog                = $::os_service_default,
   $log_facility              = $::os_service_default,

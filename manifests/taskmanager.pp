@@ -51,6 +51,11 @@
 #   (optional) Use syslog for logging.
 #   Defaults to $::os_service_default
 #
+# [*guest_log_file*]
+#   (optional) The path of file used for logging.
+#   If set to boolean false, it will not log to any file.
+#   Defaults to '/var/log/trove/trove-guestagent.log'
+#
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
@@ -92,6 +97,7 @@ class trove::taskmanager(
   $log_file                 = '/var/log/trove/trove-taskmanager.log',
   $log_dir                  = '/var/log/trove',
   $use_syslog               = $::os_service_default,
+  $guest_log_file           = '/var/log/trove/trove-guestagent.log',
   $log_facility             = $::os_service_default,
   $auth_url                 = 'http://localhost:5000/v2.0',
   $heat_url                 = false,
