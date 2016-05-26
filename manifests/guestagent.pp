@@ -86,6 +86,18 @@
 #   guest agent service at verbose level.
 #   Default: undef
 #
+# [*root_grant*]
+#   (optional) Permissions to grant "root" user.
+#   Defaults to $::os_service_default.
+#
+# [*root_grant_option*]
+#   (optional) Permissions to grant "root" user option.
+#   Defaults to $::os_service_default.
+#
+# [*default_password_length*]
+#   (optional) Default password Length for root password.
+#   Defaults to $::os_service_default.
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
@@ -102,6 +114,9 @@ class trove::guestagent(
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
   $rabbit_use_ssl            = $::trove::rabbit_use_ssl,
+  $root_grant                = $::os_service_default,
+  $root_grant_option         = $::os_service_default,
+  $default_password_length   = $::os_service_default,
   #Deprecated
   $verbose                   = undef,
 ) inherits trove {
@@ -117,6 +132,9 @@ class trove::guestagent(
   trove_guestagent_config {
     'DEFAULT/trove_auth_url':               value => $auth_url;
     'DEFAULT/swift_url':                    value => $swift_url;
+    'DEFAULT/root_grant':                   value => $root_grant;
+    'DEFAULT/root_grant_option':            value => $root_grant_option;
+    'DEFAULT/default_password_length':      value => $default_password_length;
   }
 
   oslo::messaging::default { 'trove_guestagent_config':
