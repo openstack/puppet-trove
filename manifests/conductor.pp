@@ -30,6 +30,10 @@
 #    If set to boolean false, it will not log to any directory.
 #    Defaults to '/var/log/trove'
 #
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to $::os_service_default
+#
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
@@ -60,10 +64,6 @@
 #   (optional) Deprecated. Rather to log the trove api service at verbose level.
 #   Default: undef
 #
-# [*use_syslog*]
-#   (optional) Deprecated. Use syslog for logging.
-#   Defaults to undef.
-#
 class trove::conductor(
   $enabled                   = true,
   $manage_service            = true,
@@ -71,6 +71,7 @@ class trove::conductor(
   $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/trove-conductor.log',
   $log_dir                   = '/var/log/trove',
+  $use_syslog                = $::os_service_default,
   $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $conductor_manager         = 'trove.conductor.manager.Manager',
@@ -79,7 +80,6 @@ class trove::conductor(
   $trace_sqlalchemy          = $::os_service_default,
   # Deprecated
   $verbose                   = undef,
-  $use_syslog                = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -87,10 +87,6 @@ class trove::conductor(
 
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
-
-  if $use_syslog {
-    warning('use_syslog is deprecated, has no effect and will be removed in a future release')
   }
 
   if $::trove::database_connection {
@@ -176,6 +172,7 @@ class trove::conductor(
     debug               => $debug,
     log_file            => $log_file,
     log_dir             => $log_dir,
+    use_syslog          => $use_syslog,
     syslog_log_facility => $log_facility
   }
 

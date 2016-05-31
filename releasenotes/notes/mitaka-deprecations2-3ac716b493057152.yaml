@@ -1,7 +1,5 @@
 ---
 deprecations:
-  - use_syslog in DEFAULT section was deprecated in Mitaka, this parameter
-    has no effect and will be removed in a future release
   - max_volumes_per_user, max_instances_per_user, max_backups_per_user was
     deprecated in Mitaka and will be removed after Newton.
 upgrade:
