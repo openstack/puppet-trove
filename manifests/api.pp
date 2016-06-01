@@ -216,7 +216,8 @@ class trove::api(
   }
 
   oslo::messaging::default { 'trove_config':
-      control_exchange => $::trove::control_exchange
+    transport_url    => $::trove::default_transport_url,
+    control_exchange => $::trove::control_exchange
   }
 
   if $identity_uri {
@@ -346,8 +347,9 @@ class trove::api(
   }
 
   oslo::messaging::notifications { 'trove_config':
-    driver => $::trove::notification_driver,
-    topics => $::trove::notification_topics
+    transport_url => $::trove::notification_transport_url,
+    driver        => $::trove::notification_driver,
+    topics        => $::trove::notification_topics
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {

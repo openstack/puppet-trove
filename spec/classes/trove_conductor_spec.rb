@@ -34,6 +34,8 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>')
@@ -148,6 +150,20 @@ describe 'trove::conductor' do
       end
     end
 
+    context 'with transport_url entries' do
+      let :pre_condition do
+        "class { 'trove':
+           nova_proxy_admin_pass => 'verysecrete',
+           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
+      end
+
+      it do
+        is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+      end
+    end
+
     context 'with amqp rpc' do
       let :pre_condition do
         "class { 'trove' :
@@ -156,23 +172,23 @@ describe 'trove::conductor' do
       end
 
       it do
-        is_expected.to contain_trove_config('DEFAULT/rpc_backend').with_value('amqp')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('DEFAULT/rpc_backend').with_value('amqp')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/allow_insecure_clients').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>')
       end
     end
 

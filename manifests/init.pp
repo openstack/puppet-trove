@@ -20,6 +20,20 @@
 # Trove base config
 #
 # == Parameters
+#
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for
+#   notifications and its full configuration. Transport URLs
+#   take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default.
+#
 # [*notification_driver*]
 #   (optional) Driver or drivers to handle sending notifications.
 #   Value can be a string or a list.
@@ -265,6 +279,8 @@
 #
 class trove(
   $nova_proxy_admin_pass,
+  $default_transport_url        = $::os_service_default,
+  $notification_transport_url   = $::os_service_default,
   $notification_driver          = $::os_service_default,
   $notification_topics          = $::os_service_default,
   $rabbit_host                  = $::os_service_default,
