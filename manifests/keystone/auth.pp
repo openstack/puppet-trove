@@ -49,7 +49,7 @@
 #
 # [*service_name*]
 #   (optional) Name of the service.
-#   Defaults to the value of auth_name.
+#   Defaults to 'trove'.
 #
 # [*service_description*]
 #   (optional) Description for keystone service.
@@ -86,7 +86,7 @@ class trove::keystone::auth (
   $configure_user      = true,
   $configure_user_role = true,
   $configure_endpoint  = true,
-  $service_name        = undef,
+  $service_name        = 'trove',
   $service_type        = 'database',
   $service_description = 'Trove Database Service',
   $region              = 'RegionOne',
@@ -97,18 +97,16 @@ class trove::keystone::auth (
 
   include ::trove::deps
 
-  $real_service_name = pick($service_name, $auth_name)
-
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| tag == 'trove-server' |>
 
-  Keystone_endpoint<| title == "${region}/${real_service_name}::${service_type}" |>
+  Keystone_endpoint<| title == "${region}/${service_name}::${service_type}" |>
   ~> Service <| tag == 'trove-server' |>
 
   keystone::resource::service_identity { 'trove':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
-    service_name        => $real_service_name,
+    service_name        => $service_name,
     service_type        => $service_type,
     service_description => $service_description,
     region              => $region,
