@@ -90,8 +90,8 @@ describe 'trove::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('trovey') }
     it { is_expected.to contain_keystone_user_role('trovey@services') }
-    it { is_expected.to contain_keystone_service('trovey::database') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trovey::database') }
+    it { is_expected.to contain_keystone_service('trove::database') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
   end
 
   describe 'when overriding service name' do
