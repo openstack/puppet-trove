@@ -112,7 +112,6 @@ class trove::conductor(
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
-    'DEFAULT/control_exchange':             value => $::trove::control_exchange;
     'DEFAULT/trove_conductor_workers':      value => $workers;
   }
   # profiler config
@@ -121,9 +120,15 @@ class trove::conductor(
     'profiler/trace_sqlalchemy': value => $trace_sqlalchemy;
   }
 
+  oslo::messaging::default { 'trove_conductor_config':
+    transport_url    => $::trove::default_transport_url,
+    control_exchange => $::trove::control_exchange,
+  }
+
   oslo::messaging::notifications { 'trove_conductor_config':
-    driver => $::trove::notification_driver,
-    topics => $::trove::notification_topics
+    transport_url => $::trove::notification_transport_url,
+    driver        => $::trove::notification_driver,
+    topics        => $::trove::notification_topics
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
@@ -144,7 +149,7 @@ class trove::conductor(
       kombu_ssl_version     => $::trove::kombu_ssl_version
     }
   } elsif $::trove::rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'trove_config':
+    oslo::messaging::amqp { 'trove_conductor_config':
       server_request_prefix  => $::trove::amqp_server_request_prefix,
       broadcast_prefix       => $::trove::amqp_broadcast_prefix,
       group_request_prefix   => $::trove::amqp_group_request_prefix,

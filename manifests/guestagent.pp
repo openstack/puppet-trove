@@ -47,10 +47,6 @@
 #   lookup the URL using the Keystone catalog.
 #   Defaults to $::os_service_default.
 #
-# [*control_exchange*]
-#   (optional) Control exchange.
-#   Defaults to 'trove'.
-#
 # [*rabbit_hosts*]
 #   (optional) List of clustered rabbit servers.
 #   Defaults to the value set in the trove class.
@@ -78,7 +74,7 @@
 #   The default can generally be left unless the
 #   guests need to talk to the rabbit cluster via
 #   a different ssl connection option.
-
+#
 #  DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -98,6 +94,10 @@
 #   (optional) Default password Length for root password.
 #   Defaults to $::os_service_default.
 #
+# [*control_exchange*]
+#   (Optional) Moved to init.pp. The default exchange to scope topics.
+#   Defaults to undef.
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
@@ -109,7 +109,6 @@ class trove::guestagent(
   $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = $::os_service_default,
-  $control_exchange          = 'trove',
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
@@ -119,6 +118,7 @@ class trove::guestagent(
   $default_password_length   = $::os_service_default,
   #Deprecated
   $verbose                   = undef,
+  $control_exchange          = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -138,7 +138,8 @@ class trove::guestagent(
   }
 
   oslo::messaging::default { 'trove_guestagent_config':
-    control_exchange => $control_exchange
+    transport_url    => $::trove::default_transport_url,
+    control_exchange => $::trove::control_exchange
   }
 
   # region name
@@ -150,8 +151,9 @@ class trove::guestagent(
   }
 
   oslo::messaging::notifications { 'trove_guestagent_config':
-    driver => $::trove::notification_driver,
-    topics => $::trove::notification_topics
+    transport_url => $::trove::notification_transport_url,
+    driver        => $::trove::notification_driver,
+    topics        => $::trove::notification_topics
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
@@ -172,7 +174,7 @@ class trove::guestagent(
       kombu_ssl_version     => $::trove::kombu_ssl_version
     }
   } elsif $::trove::rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'trove_config':
+    oslo::messaging::amqp { 'trove_guestagent_config':
       server_request_prefix  => $::trove::amqp_server_request_prefix,
       broadcast_prefix       => $::trove::amqp_broadcast_prefix,
       group_request_prefix   => $::trove::amqp_group_request_prefix,

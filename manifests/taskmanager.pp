@@ -163,9 +163,15 @@ class trove::taskmanager(
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
+  oslo::messaging::default { 'trove_taskmanager_config':
+    transport_url    => $::trove::default_transport_url,
+    control_exchange => $::trove::control_exchange
+  }
+
   oslo::messaging::notifications { 'trove_taskmanager_config':
-    driver => $::trove::notification_driver,
-    topics => $::trove::notification_topics
+    transport_url => $::trove::notification_transport_url,
+    driver        => $::trove::notification_driver,
+    topics        => $::trove::notification_topics
   }
 
   if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
@@ -186,7 +192,7 @@ class trove::taskmanager(
       kombu_ssl_version     => $::trove::kombu_ssl_version
     }
   } elsif $::trove::rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'trove_config':
+    oslo::messaging::amqp { 'trove_taskmanager_config':
       server_request_prefix  => $::trove::amqp_server_request_prefix,
       broadcast_prefix       => $::trove::amqp_broadcast_prefix,
       group_request_prefix   => $::trove::amqp_group_request_prefix,

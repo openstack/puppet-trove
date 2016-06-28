@@ -85,6 +85,8 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('200')
+        is_expected.to contain_trove_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
@@ -246,6 +248,20 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+      end
+    end
+
+    context 'with transport_url entries' do
+      let :pre_condition do
+        "class { 'trove':
+           nova_proxy_admin_pass => 'verysecrete',
+           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
+      end
+
+      it do
+        is_expected.to contain_trove_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_trove_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
 
