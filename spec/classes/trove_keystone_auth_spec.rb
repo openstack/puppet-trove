@@ -120,9 +120,13 @@ describe 'trove::keystone::auth' do
     let :params do
       { :configure_user      => false,
         :configure_user_role => false,
+        :service_name => 'trove',
+        :auth_name    => 'trove',
         :password            => 'trove_password' }
     end
     it { is_expected.to_not contain_keystone_user('trove') }
     it { is_expected.to_not contain_keystone_user_role('trove@services') }
+    it { is_expected.to contain_keystone_service('trove::database') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
   end
 end
