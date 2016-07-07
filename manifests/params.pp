@@ -1,6 +1,7 @@
 # Parameters for puppet-trove
 #
 class trove::params {
+  include ::openstacklib::defaults
 
   case $::osfamily {
     'RedHat': {
