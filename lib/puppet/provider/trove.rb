@@ -26,8 +26,7 @@ class Puppet::Provider::Trove < Puppet::Provider
   end
 
   def self.get_trove_credentials
-    auth_keys = ['auth_host', 'auth_port', 'auth_protocol',
-                 'admin_tenant_name', 'admin_user', 'admin_password']
+    auth_keys = ['auth_uri', 'project_name', 'username', 'password']
     conf = trove_conf
     if conf and conf['keystone_authtoken'] and
         auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
@@ -44,15 +43,6 @@ correctly configured.")
     self.class.trove_credentials
   end
 
-  def self.auth_endpoint
-    @auth_endpoint ||= get_auth_endpoint
-  end
-
-  def self.get_auth_endpoint
-    q = trove_credentials
-    "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
-  end
-
   def self.trove_conf
     return @trove_conf if @trove_conf
     @trove_conf = Puppet::Util::IniConfig::File.new
@@ -63,10 +53,10 @@ correctly configured.")
   def self.auth_trove(*args)
     q = trove_credentials
     authenv = {
-      :OS_AUTH_URL    => self.auth_endpoint,
-      :OS_USERNAME    => q['admin_user'],
-      :OS_TENANT_NAME => q['admin_tenant_name'],
-      :OS_PASSWORD    => q['admin_password']
+      :OS_AUTH_URL    => q['auth_uri'],
+      :OS_USERNAME    => q['username'],
+      :OS_PROJECT_NAME => q['project_name'],
+      :OS_PASSWORD    => q['password']
     }
     begin
       withenv authenv do
