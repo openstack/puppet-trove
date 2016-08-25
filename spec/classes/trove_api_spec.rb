@@ -22,11 +22,11 @@ require 'spec_helper'
 describe 'trove::api' do
 
   let :params do
-    { :keystone_password     => 'passw0rd',
-      :identity_uri          => 'http://10.0.0.10:35357/',
-      :auth_uri              => 'http://10.0.0.10:5000/v2.0/',
-      :keystone_tenant       => '_services_',
-      :keystone_user         => 'trove',
+    { :keystone_password => 'passw0rd',
+      :identity_uri      => 'http://10.0.0.10:35357/',
+      :auth_uri          => 'http://10.0.0.10:5000/v2.0/',
+      :keystone_tenant   => '_services_',
+      :keystone_user     => 'trove',
     }
   end
 
@@ -69,10 +69,10 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value('http://10.0.0.10:5000/v2.0/')
-        is_expected.to contain_trove_config('keystone_authtoken/identity_uri').with_value('http://10.0.0.10:35357/')
-        is_expected.to contain_trove_config('keystone_authtoken/admin_tenant_name').with_value('_services_')
-        is_expected.to contain_trove_config('keystone_authtoken/admin_user').with_value('trove')
-        is_expected.to contain_trove_config('keystone_authtoken/admin_password').with_value('passw0rd')
+        is_expected.to contain_trove_config('keystone_authtoken/auth_url').with_value('http://10.0.0.10:35357/')
+        is_expected.to contain_trove_config('keystone_authtoken/project_name').with_value('_services_')
+        is_expected.to contain_trove_config('keystone_authtoken/username').with_value('trove')
+        is_expected.to contain_trove_config('keystone_authtoken/password').with_value('passw0rd')
         is_expected.to contain_trove_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
@@ -97,27 +97,6 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('ssl/cert_file').with_ensure('absent')
         is_expected.to contain_trove_config('ssl/key_file').with_ensure('absent')
         is_expected.to contain_trove_config('ssl/ca_file').with_ensure('absent')
-      end
-
-      context 'with deprecated parameters' do
-        let :deprecated_params do
-          {
-            :auth_host             => '10.0.0.10',
-            :auth_url              => 'http://10.0.0.10:5000/v2.0/',
-            :auth_port             => '35357',
-            :auth_protocol         => 'http',
-          }
-        end
-
-        let :expected_params do
-          params.merge(deprecated_params)
-        end
-
-        it 'should work with deprecated parameters' do
-          is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value(expected_params[:auth_url])
-          is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value(expected_params[:auth_url])
-          is_expected.to contain_trove_config('keystone_authtoken/identity_uri').with_value(expected_params[:auth_protocol] + "://" + expected_params[:auth_host] + ":" + expected_params[:auth_port] + "/")
-        end
       end
 
       context 'with SSL enabled on API' do
