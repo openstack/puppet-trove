@@ -55,21 +55,24 @@ class trove::quota (
   include ::trove::deps
 
   if $max_instances_per_user {
-    warning('max_instances_per_user deprecated, has no effect and will be removed after Newton cycle. Please use max_instances_per_tenant instead.')
+    warning('max_instances_per_user deprecated, has no effect and will be removed after Newton cycle. \
+              Please use max_instances_per_tenant instead.')
     $max_instances_per_tenant_real = $max_instances_per_user
   } else {
     $max_instances_per_tenant_real = $max_instances_per_tenant
   }
 
   if $max_volumes_per_user {
-    warning('max_volumes_per_user deprecated, has no effect and will be removed after Newton cycle. Please use max_volumes_per_tenant instead.')
+    warning('max_volumes_per_user deprecated, has no effect and will be removed after Newton cycle. \
+              Please use max_volumes_per_tenant instead.')
     $max_volumes_per_tenant_real = $max_volumes_per_user
   } else {
     $max_volumes_per_tenant_real = $max_volumes_per_tenant
   }
 
   if $max_backups_per_user {
-    warning('max_backups_per_user deprecated, has no effect and will be removed after Newton cycle. Please use max_backups_per_tenant instead.')
+    warning('max_backups_per_user deprecated, has no effect and will be removed after Newton cycle. \
+              Please use max_backups_per_tenant instead.')
     $max_backups_per_tenant_real = $max_backups_per_user
   } else {
     $max_backups_per_tenant_real = $max_backups_per_tenant

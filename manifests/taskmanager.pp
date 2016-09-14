@@ -260,7 +260,8 @@ class trove::taskmanager(
 
   if $guestagent_config_file {
     if $use_guestagent_template {
-      warning('The tempated guestagent file is deprecated and will be removed in Ocata. Please configure options directly with the trove::guestagent class using hiera.')
+      warning('The tempated guestagent file is deprecated and will be removed in Ocata. \
+                Please configure options directly with the trove::guestagent class using hiera.')
       file { $guestagent_config_file:
         content => template('trove/trove-guestagent.conf.erb'),
         require => Anchor['trove::install::end'],
