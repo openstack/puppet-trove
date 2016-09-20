@@ -22,7 +22,7 @@
 #
 # [*log_file*]
 #   (optional) The path of file used for logging
-#   If set to boolean false, it will not log to any file.
+#   If set to $::os_service_default, it will not log to any file.
 #   Default: /var/log/trove/trove-guestagent.log
 #
 # [*log_dir*]
