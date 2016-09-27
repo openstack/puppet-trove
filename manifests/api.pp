@@ -138,10 +138,6 @@
 #   (Optional) Deprecated. Use trove::keystone::authtoken::auth_uri instead.
 #   Defaults to undef.
 #
-# [*verbose*]
-#   (optional) Deprecated. Rather to log the trove api service at verbose level.
-#   Defaults to undef
-#
 # [*auth_url*]
 #   (optional) Deprecated. Use trove::keystone::authtoken::auth_url instead.
 #   Defaults to undef
@@ -176,7 +172,6 @@ class trove::api(
   $keystone_user                  = undef,
   $identity_uri                   = undef,
   $auth_uri                       = undef,
-  $verbose                        = undef,
   $auth_url                       = undef,
 ) inherits trove {
 
@@ -204,10 +199,6 @@ class trove::api(
 
   if $auth_uri {
     warning('keystone_password is deprecated, use trove::keystone::authtoken::auth_uri instead.')
-  }
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
   if $auth_url {

@@ -86,10 +86,6 @@
 #   (optional) Use template to provision trove guest agent configuration file.
 #   Defaults to true.
 #
-# [*verbose*]
-#   (optional) Deprecated. Rather to log the trove api service at verbose level.
-#   Default: undef
-#
 class trove::taskmanager(
   $enabled                  = true,
   $manage_service           = true,
@@ -107,15 +103,10 @@ class trove::taskmanager(
   $taskmanager_queue        = 'taskmanager',
   #DEPRECATED OPTIONS
   $use_guestagent_template  = true,
-  $verbose                  = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
