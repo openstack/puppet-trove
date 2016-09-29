@@ -25,6 +25,8 @@ class trove::db::sync {
     path        => '/usr/bin',
     user        => 'trove',
     refreshonly => true,
+    try_sleep   => 5,
+    tries       => 10,
     subscribe   => [
       Anchor['trove::install::end'],
       Anchor['trove::config::end'],
