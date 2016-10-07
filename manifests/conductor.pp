@@ -48,7 +48,7 @@
 #
 # [*workers*]
 #   (optional) Number of trove conductor worker processes to start
-#   Default: $::processorcount
+#   Default: $::os_workers
 #
 # [*enable_profiler*]
 #   (optional) If False fully disable profiling feature.
@@ -75,7 +75,7 @@ class trove::conductor(
   $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $conductor_manager         = 'trove.conductor.manager.Manager',
-  $workers                   = $::processorcount,
+  $workers                   = $::os_workers,
   $enable_profiler           = $::os_service_default,
   $trace_sqlalchemy          = $::os_service_default,
   # Deprecated
