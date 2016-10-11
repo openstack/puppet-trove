@@ -1,0 +1,3 @@
+---
+features:
+  - Add ability to configure swift_service_type in guestagent.conf.

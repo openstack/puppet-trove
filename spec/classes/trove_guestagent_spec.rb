@@ -48,6 +48,7 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant_option').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/default_password_length').with_value('<SERVICE DEFAULT>')
@@ -104,6 +105,7 @@ describe 'trove::guestagent' do
       let :params do
         { :auth_url => "http://10.0.0.1:5000/v2.0",
           :swift_url => "http://10.0.0.1:8080/v1/AUTH_",
+          :swift_service_type => 'object-store',
           :rabbit_host => '10.1.0.1',
           :rabbit_port => '5673',
           :rabbit_use_ssl => 'true'
@@ -112,6 +114,7 @@ describe 'trove::guestagent' do
       it 'configures trove-guestagent with custom parameters' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v2.0')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_host').with_value('10.1.0.1')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_port').with_value('5673')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')

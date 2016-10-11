@@ -47,6 +47,10 @@
 #   lookup the URL using the Keystone catalog.
 #   Defaults to $::os_service_default.
 #
+# [*swift_service_type*]
+#   (optional) Service type to use when searching catalog
+#   Defaults to $::os_service_default.
+#
 # [*rabbit_hosts*]
 #   (optional) List of clustered rabbit servers.
 #   Defaults to the value set in the trove class.
@@ -109,6 +113,7 @@ class trove::guestagent(
   $log_facility              = $::os_service_default,
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = $::os_service_default,
+  $swift_service_type        = $::os_service_default,
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
@@ -130,11 +135,12 @@ class trove::guestagent(
 
   # basic service config
   trove_guestagent_config {
-    'DEFAULT/trove_auth_url':               value => $auth_url;
-    'DEFAULT/swift_url':                    value => $swift_url;
-    'DEFAULT/root_grant':                   value => $root_grant;
-    'DEFAULT/root_grant_option':            value => $root_grant_option;
-    'DEFAULT/default_password_length':      value => $default_password_length;
+    'DEFAULT/trove_auth_url':          value => $auth_url;
+    'DEFAULT/swift_url':               value => $swift_url;
+    'DEFAULT/swift_service_type':      value => $swift_service_type;
+    'DEFAULT/root_grant':              value => $root_grant;
+    'DEFAULT/root_grant_option':       value => $root_grant_option;
+    'DEFAULT/default_password_length': value => $default_password_length;
   }
 
   oslo::messaging::default { 'trove_guestagent_config':
