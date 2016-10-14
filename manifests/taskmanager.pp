@@ -80,6 +80,10 @@
 #   (optional) Message queue name the Taskmanager will listen to.
 #   Defaults to 'taskmanager'.
 #
+# [*taskmanager_manager*]
+#   Trove taskmanager entry point.
+#   Defaults to 'trove.taskmanager.manager.Manager'.
+#
 # DEPRECATED OPTIONS
 #
 # [*use_guestagent_template*]
@@ -105,6 +109,7 @@ class trove::taskmanager(
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $default_neutron_networks = undef,
   $taskmanager_queue        = 'taskmanager',
+  $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
   #DEPRECATED OPTIONS
   $use_guestagent_template  = true,
   $verbose                  = undef,
@@ -140,6 +145,7 @@ class trove::taskmanager(
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
+    'DEFAULT/taskmanager_manager':          value => $taskmanager_manager;
   }
 
   trove_config {
