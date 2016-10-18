@@ -69,7 +69,7 @@
 #
 # [*workers*]
 #   (optional) Number of trove API worker processes to start
-#   Default: $::processorcount
+#   Default: $::os_workers
 #
 # [*enabled*]
 #   (optional) Whether to enable services.
@@ -156,7 +156,7 @@ class trove::api(
   $bind_host                      = '0.0.0.0',
   $bind_port                      = '8779',
   $backlog                        = '4096',
-  $workers                        = $::processorcount,
+  $workers                        = $::os_workers,
   $enabled                        = true,
   $purge_config                   = false,
   $cert_file                      = false,
