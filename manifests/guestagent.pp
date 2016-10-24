@@ -81,11 +81,6 @@
 #
 #  DEPRECATED PARAMETERS
 #
-# [*verbose*]
-#   (optional) Deprecated. Rather to log the trove
-#   guest agent service at verbose level.
-#   Default: undef
-#
 # [*root_grant*]
 #   (optional) Permissions to grant "root" user.
 #   Defaults to $::os_service_default.
@@ -122,16 +117,11 @@ class trove::guestagent(
   $root_grant_option         = $::os_service_default,
   $default_password_length   = $::os_service_default,
   #Deprecated
-  $verbose                   = undef,
   $control_exchange          = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   # basic service config
   trove_guestagent_config {
