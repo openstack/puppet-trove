@@ -302,36 +302,26 @@ describe 'trove::taskmanager' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'Debian',
-        :os_workers => 8
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :taskmanager_package_name => 'trove-taskmanager',
+            :taskmanager_service_name => 'trove-taskmanager' }
+        when 'RedHat'
+          { :taskmanager_package_name => 'openstack-trove-taskmanager',
+            :taskmanager_service_name => 'openstack-trove-taskmanager' }
+        end
+      end
+      it_configures 'trove-taskmanager'
     end
-
-    let :platform_params do
-      { :taskmanager_package_name => 'trove-taskmanager',
-        :taskmanager_service_name => 'trove-taskmanager' }
-    end
-
-    it_configures 'trove-taskmanager'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'RedHat',
-        :os_workers => 8
-      })
-    end
-
-    let :platform_params do
-      { :taskmanager_package_name => 'openstack-trove-taskmanager',
-        :taskmanager_service_name => 'openstack-trove-taskmanager' }
-    end
-
-    it_configures 'trove-taskmanager'
   end
 
 end

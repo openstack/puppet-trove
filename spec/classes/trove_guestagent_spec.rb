@@ -217,36 +217,26 @@ describe 'trove::guestagent' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'Debian',
-        :os_workers => 8
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :guestagent_package_name => 'trove-guestagent',
+            :guestagent_service_name => 'trove-guestagent' }
+        when 'RedHat'
+          { :guestagent_package_name => 'openstack-trove-guestagent',
+            :guestagent_service_name => 'openstack-trove-guestagent' }
+        end
+      end
+      it_configures 'trove-guestagent'
     end
-
-    let :platform_params do
-      { :guestagent_package_name => 'trove-guestagent',
-        :guestagent_service_name => 'trove-guestagent' }
-    end
-
-    it_configures 'trove-guestagent'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'RedHat',
-        :os_workers => 8
-      })
-    end
-
-    let :platform_params do
-      { :guestagent_package_name => 'openstack-trove-guestagent',
-        :guestagent_service_name => 'openstack-trove-guestagent' }
-    end
-
-    it_configures 'trove-guestagent'
   end
 
 end
