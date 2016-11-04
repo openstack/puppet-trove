@@ -68,6 +68,7 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/neutron_service_type').with_value('network')
         is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/taskmanager_manager').with_value('trove.taskmanager.manager.Manager')
         is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
