@@ -41,10 +41,10 @@ describe 'basic trove' do
       class { '::trove::keystone::auth':
         password => 'a_big_secret',
       }
+      class { '::trove::keystone::authtoken':
+        password => 'a_big_secret',
+      }
       class { '::trove::api':
-        keystone_password => 'a_big_secret',
-        identity_uri      => 'http://127.0.0.1:35357/',
-        auth_uri          => 'http://127.0.0.1:5000/',
         debug             => true,
       }
       class { '::trove::client': }

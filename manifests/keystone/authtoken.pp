@@ -228,23 +228,16 @@ class trove::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
-  if is_service_default($password) and ! $::trove::api::keystone_password {
+  if is_service_default($password) {
     fail('Please set password for trove service user')
   }
 
-  #NOTE(iurygregory): Use pick to keep backward compatibility
-  $username_real = pick($::trove::api::keystone_user,$username)
-  $password_real = pick($::trove::api::keystone_password,$password)
-  $project_name_real = pick($::trove::api::keystone_tenant,$project_name)
-  $auth_url_real = pick($::trove::api::identity_uri,$::trove::api::auth_url,$auth_url)
-  $auth_uri_real = pick($::trove::api::auth_uri,$auth_uri)
-
   keystone::resource::authtoken { 'trove_config':
-      username                       => $username_real,
-      password                       => $password_real,
-      project_name                   => $project_name_real,
-      auth_url                       => $auth_url_real,
-      auth_uri                       => $auth_uri_real,
+      username                       => $username,
+      password                       => $password,
+      project_name                   => $project_name,
+      auth_url                       => $auth_url,
+      auth_uri                       => $auth_uri,
       auth_version                   => $auth_version,
       auth_type                      => $auth_type,
       auth_section                   => $auth_section,

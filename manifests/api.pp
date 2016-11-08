@@ -116,32 +116,6 @@
 #   (optional) The strategy to use for authentication.
 #   Defaults to 'keystone'
 #
-# == DEPRECATED PARAMETERS
-#
-# [*keystone_tenant*]
-#   (optional) Deprecated. Use trove::keystone::authtoken::project_name instead.
-#   Defaults to undef.
-#
-# [*keystone_user*]
-#   (optional) Deprecated. Use trove::keystone::authtoken::username instead.
-#   Defaults to undef.
-#
-# [*keystone_password*]
-#   (optional) Deprecated. Use trove::keystone::authtoken::password instead.
-#   Defaults to undef.
-#
-# [*identity_uri*]
-#   (optional) Deprecated. Use trove::keystone::authtoken::auth_url instead.
-#   Defaults to undef.
-#
-# [*auth_uri*]
-#   (Optional) Deprecated. Use trove::keystone::authtoken::auth_uri instead.
-#   Defaults to undef.
-#
-# [*auth_url*]
-#   (optional) Deprecated. Use trove::keystone::authtoken::auth_url instead.
-#   Defaults to undef
-#
 class trove::api(
   $debug                          = undef,
   $log_file                       = undef,
@@ -166,13 +140,6 @@ class trove::api(
   $manage_service                 = true,
   $ensure_package                 = 'present',
   $auth_strategy                  = 'keystone',
-  # DEPRECATED PARAMETERS
-  $keystone_password              = undef,
-  $keystone_tenant                = undef,
-  $keystone_user                  = undef,
-  $identity_uri                   = undef,
-  $auth_uri                       = undef,
-  $auth_url                       = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -180,30 +147,6 @@ class trove::api(
   include ::trove::db::sync
   include ::trove::logging
   include ::trove::params
-
-  if $keystone_password {
-    warning('keystone_password is deprecated, use trove::keystone::authtoken::password instead.')
-  }
-
-  if $keystone_tenant {
-    warning('keystone_password is deprecated, use trove::keystone::authtoken::project_name instead.')
-  }
-
-  if $keystone_user {
-    warning('keystone_password is deprecated, use trove::keystone::authtoken::username instead.')
-  }
-
-  if $identity_uri {
-    warning('keystone_password is deprecated, use trove::keystone::authtoken::auth_url instead.')
-  }
-
-  if $auth_uri {
-    warning('keystone_password is deprecated, use trove::keystone::authtoken::auth_uri instead.')
-  }
-
-  if $auth_url {
-    warning('auth_url is deprecated, use trove::keystone::authtoken::auth_url instead.')
-  }
 
   # basic service config
   trove_config {
@@ -225,7 +168,7 @@ class trove::api(
     include ::trove::keystone::authtoken
 
     trove_config {
-      'DEFAULT/trove_auth_url' : value => pick($auth_uri,$::trove::keystone::authtoken::auth_uri);
+      'DEFAULT/trove_auth_url' : value => $::trove::keystone::authtoken::auth_uri;
     }
   }
 

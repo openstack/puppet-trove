@@ -22,12 +22,7 @@ require 'spec_helper'
 describe 'trove::api' do
 
   let :params do
-    { :keystone_password => 'passw0rd',
-      :identity_uri      => 'http://10.0.0.10:35357/',
-      :auth_uri          => 'http://10.0.0.10:5000/v2.0/',
-      :keystone_tenant   => '_services_',
-      :keystone_user     => 'trove',
-    }
+    {}
   end
 
   shared_examples 'trove-api' do
@@ -42,7 +37,10 @@ describe 'trove::api' do
          cinder_service_type       => 'volume',
          swift_service_type        => 'object-store',
          heat_service_type         => 'orchestration',
-         neutron_service_type      => 'network'}"
+         neutron_service_type      => 'network'}
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it 'installs trove-api package and service' do
@@ -64,15 +62,10 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
         is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
         is_expected.to contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
-        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.10:5000/v2.0/')
+        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://localhost:5000')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        is_expected.to contain_trove_config('keystone_authtoken/auth_uri').with_value('http://10.0.0.10:5000/v2.0/')
-        is_expected.to contain_trove_config('keystone_authtoken/auth_url').with_value('http://10.0.0.10:35357/')
-        is_expected.to contain_trove_config('keystone_authtoken/project_name').with_value('_services_')
-        is_expected.to contain_trove_config('keystone_authtoken/username').with_value('trove')
-        is_expected.to contain_trove_config('keystone_authtoken/password').with_value('passw0rd')
         is_expected.to contain_trove_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
@@ -139,7 +132,10 @@ describe 'trove::api' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rabbit_host           => '10.0.0.1'}"
+             rabbit_host           => '10.0.0.1'}
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
         end
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
@@ -154,7 +150,10 @@ describe 'trove::api' do
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
              amqp_durable_queues   => 'true',
-             rabbit_host           => '10.0.0.1'}"
+             rabbit_host           => '10.0.0.1'}
+            class { '::trove::keystone::authtoken':
+              password => 'a_big_secret',
+            }"
         end
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
@@ -168,7 +167,10 @@ describe 'trove::api' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
-             rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
+             rabbit_hosts          => ['10.0.0.1','10.0.0.2']}
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
         end
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
@@ -186,7 +188,10 @@ describe 'trove::api' do
            kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
            kombu_ssl_certfile => '/path/to/ssl/cert/file',
            kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-           kombu_ssl_version  => 'TLSv1'}"
+           kombu_ssl_version  => 'TLSv1'}
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it do
@@ -202,7 +207,10 @@ describe 'trove::api' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => true}"
+           rabbit_use_ssl     => true}
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it do
@@ -218,7 +226,10 @@ describe 'trove::api' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false}"
+           rabbit_use_ssl     => false}
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it do
@@ -235,7 +246,10 @@ describe 'trove::api' do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
            default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
+           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it do
@@ -248,7 +262,10 @@ describe 'trove::api' do
       let :pre_condition do
         "class { 'trove' :
            nova_proxy_admin_pass => 'verysecrete',
-           rpc_backend => 'amqp' }"
+           rpc_backend => 'amqp' }
+         class { '::trove::keystone::authtoken':
+           password => 'a_big_secret',
+         }"
       end
 
       it do

@@ -1,0 +1,8 @@
+---
+other:
+  - removed deprecated trove::api::keystone_user
+  - removed deprecated trove::api::keystone_password
+  - removed deprecated trove::api::keystone_tenant
+  - removed deprecated trove::api::identity_uri
+  - removed deprecated trove::api::auth_url
+  - removed deprecated trove::api::auth_uri
