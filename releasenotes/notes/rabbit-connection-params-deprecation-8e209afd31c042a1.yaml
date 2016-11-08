@@ -1,0 +1,9 @@
+---
+deprecations:
+  - trove::rabbit_host, trove::rabbit_hosts, trove::rabbit_password,
+    trove::rabbit_port, trove::rabbit_userid and
+    trove::rabbit_virtual_host are deprecated.
+    trove::default_transport_url should be used instead.
+  - trove::guestagent::rabbit_host, trove::guestagent::rabbit_hosts, and
+    trove::guestagent::rabbit_port are deprecated.
+    trove::guestagent::default_transport_url should be used instead.

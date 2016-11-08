@@ -94,6 +94,17 @@ describe 'trove::guestagent' do
         end
       end
 
+      context 'when using default transport url' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             default_transport_url => 'rabbit://user:pass@host:1234/virt',}"
+        end
+        it 'configures trove-guestagent with DEFAULT/transport_url' do
+          is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt')
+        end
+      end
+
     end
 
     context 'with custom parameters' do

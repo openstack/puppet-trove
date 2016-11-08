@@ -43,36 +43,6 @@
 #   (optional) AMQP topic used for OpenStack notifications
 #   Defaults to $::os_service_default
 #
-# [*rabbit_host*]
-#   (optional) Location of rabbitmq installation.
-#   Note that, for security reasons, this rabbitmq host should not be the
-#   same that the core openstack services are using for communication. See
-#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (optional) List of clustered rabbit servers.
-#   Note that, for security reasons, these rabbitmq hosts should not be the
-#   same that the core openstack services are using for communication. See
-#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
-#   Defaults to $::os_service_default
-#
-# [*rabbit_port*]
-#   (optional) Port for rabbitmq instance.
-#   Defaults to $::os_service_default
-#
-# [*rabbit_password*]
-#   (optional) Password used to connect to rabbitmq.
-#   Defaults to $::os_service_default
-#
-# [*rabbit_userid*]
-#   (optional) User used to connect to rabbitmq.
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (optional) The RabbitMQ virtual host.
-#   Defaults to $::os_service_default
-#
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to $::os_service_default
@@ -277,18 +247,44 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
+# === DEPRECATED PARAMETERS
+#
+# [*rabbit_host*]
+#   (optional) Location of rabbitmq installation.
+#   Note that, for security reasons, this rabbitmq host should not be the
+#   same that the core openstack services are using for communication. See
+#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
+#   Defaults to $::os_service_default
+#
+# [*rabbit_hosts*]
+#   (optional) List of clustered rabbit servers.
+#   Note that, for security reasons, these rabbitmq hosts should not be the
+#   same that the core openstack services are using for communication. See
+#   http://lists.openstack.org/pipermail/openstack-dev/2015-April/061759.html
+#   Defaults to $::os_service_default
+#
+# [*rabbit_port*]
+#   (optional) Port for rabbitmq instance.
+#   Defaults to $::os_service_default
+#
+# [*rabbit_password*]
+#   (optional) Password used to connect to rabbitmq.
+#   Defaults to $::os_service_default
+#
+# [*rabbit_userid*]
+#   (optional) User used to connect to rabbitmq.
+#   Defaults to $::os_service_default
+#
+# [*rabbit_virtual_host*]
+#   (optional) The RabbitMQ virtual host.
+#   Defaults to $::os_service_default
+#
 class trove(
   $nova_proxy_admin_pass,
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
   $notification_driver          = $::os_service_default,
   $notification_topics          = $::os_service_default,
-  $rabbit_host                  = $::os_service_default,
-  $rabbit_hosts                 = $::os_service_default,
-  $rabbit_password              = $::os_service_default,
-  $rabbit_port                  = $::os_service_default,
-  $rabbit_userid                = $::os_service_default,
-  $rabbit_virtual_host          = $::os_service_default,
   $rabbit_use_ssl               = $::os_service_default,
   $rabbit_ha_queues             = $::os_service_default,
   $rabbit_notification_topic    = $::os_service_default,
@@ -337,9 +333,27 @@ class trove(
   $neutron_service_type         = 'network',
   $use_neutron                  = true,
   $package_ensure               = 'present',
+  # DEPRECATED PARAMETERS
+  $rabbit_host                  = $::os_service_default,
+  $rabbit_hosts                 = $::os_service_default,
+  $rabbit_password              = $::os_service_default,
+  $rabbit_port                  = $::os_service_default,
+  $rabbit_userid                = $::os_service_default,
+  $rabbit_virtual_host          = $::os_service_default,
 ) {
   include ::trove::deps
   include ::trove::params
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_userid) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("trove::rabbit_host, trove::rabbit_hosts, trove::rabbit_password, \
+trove::rabbit_port, trove::rabbit_userid and trove::rabbit_virtual_host are \
+deprecated. Please use trove::default_transport_url instead.")
+  }
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }

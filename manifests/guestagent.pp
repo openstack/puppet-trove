@@ -51,26 +51,11 @@
 #   (optional) Service type to use when searching catalog
 #   Defaults to $::os_service_default.
 #
-# [*rabbit_hosts*]
-#   (optional) List of clustered rabbit servers.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   different IPs.
-#
-# [*rabbit_host*]
-#   (optional) Location of rabbitmq installation.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   a different IP.
-#
-# [*rabbit_port*]
-#   (optional) Port for rabbitmq instance.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   a different port.
+# [*default_transport_url*]
+#   (optional) A URL representing the messaging driver to use and its full
+#   configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::trove::default_transport_url
 #
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
@@ -97,6 +82,27 @@
 #   (Optional) Moved to init.pp. The default exchange to scope topics.
 #   Defaults to undef.
 #
+# [*rabbit_hosts*]
+#   (optional) List of clustered rabbit servers.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   different IPs.
+#
+# [*rabbit_host*]
+#   (optional) Location of rabbitmq installation.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   a different IP.
+#
+# [*rabbit_port*]
+#   (optional) Port for rabbitmq instance.
+#   Defaults to the value set in the trove class.
+#   The default can generally be left unless the
+#   guests need to talk to the rabbit cluster via
+#   a different port.
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
@@ -109,19 +115,28 @@ class trove::guestagent(
   $auth_url                  = 'http://localhost:5000/v2.0',
   $swift_url                 = $::os_service_default,
   $swift_service_type        = $::os_service_default,
-  $rabbit_hosts              = $::trove::rabbit_hosts,
-  $rabbit_host               = $::trove::rabbit_host,
-  $rabbit_port               = $::trove::rabbit_port,
+  $default_transport_url     = $::trove::default_transport_url,
   $rabbit_use_ssl            = $::trove::rabbit_use_ssl,
   $root_grant                = $::os_service_default,
   $root_grant_option         = $::os_service_default,
   $default_password_length   = $::os_service_default,
   #Deprecated
   $control_exchange          = undef,
+  $rabbit_hosts              = $::trove::rabbit_hosts,
+  $rabbit_host               = $::trove::rabbit_host,
+  $rabbit_port               = $::trove::rabbit_port,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_port) {
+    warning("trove::guestagent::rabbit_host, trove::guestagent::rabbit_hosts, \
+and trove::guestagent::rabbit_port are deprecated. Please use \
+trove::guestagent::default_transport_url instead.")
+  }
 
   # basic service config
   trove_guestagent_config {
@@ -134,7 +149,7 @@ class trove::guestagent(
   }
 
   oslo::messaging::default { 'trove_guestagent_config':
-    transport_url    => $::trove::default_transport_url,
+    transport_url    => $default_transport_url,
     control_exchange => $::trove::control_exchange
   }
 

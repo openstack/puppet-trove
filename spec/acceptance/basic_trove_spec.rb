@@ -30,9 +30,7 @@ describe 'basic trove' do
       # Trove resources
       class { '::trove':
         database_connection   => 'mysql+pymysql://trove:a_big_secret@127.0.0.1/trove?charset=utf8',
-        rabbit_userid         => 'trove',
-        rabbit_password       => 'an_even_bigger_secret',
-        rabbit_host           => '127.0.0.1',
+        default_transport_url => 'rabbit://trove:an_even_bigger_secret@127.0.0.1:5672/',
         nova_proxy_admin_pass => 'a_big_secret',
       }
       class { '::trove::db::mysql':
