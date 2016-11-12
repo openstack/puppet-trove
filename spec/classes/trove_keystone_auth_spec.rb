@@ -22,111 +22,122 @@ require 'spec_helper'
 
 describe 'trove::keystone::auth' do
 
-  let :facts do
-    @default_facts.merge({ :osfamily => 'Debian' })
-  end
+  shared_examples_for 'trove::keystone::auth' do
+    context 'with default class parameters' do
+      let :params do
+        { :password => 'trove_password',
+          :tenant   => 'foobar' }
+      end
 
-  describe 'with default class parameters' do
-    let :params do
-      { :password => 'trove_password',
-        :tenant   => 'foobar' }
+      it { is_expected.to contain_keystone_user('trove').with(
+        :ensure   => 'present',
+        :password => 'trove_password',
+      ) }
+
+      it { is_expected.to contain_keystone_user_role('trove@foobar').with(
+        :ensure => 'present',
+        :roles  => ['admin']
+      )}
+
+      it { is_expected.to contain_keystone_service('trove::database').with(
+        :ensure      => 'present',
+        :description => 'Trove Database Service'
+      ) }
+
+      it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
+        :ensure       => 'present',
+        :public_url   => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
+        :admin_url    => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
+        :internal_url => "http://127.0.0.1:8779/v1.0/%(tenant_id)s"
+      ) }
     end
 
-    it { is_expected.to contain_keystone_user('trove').with(
-      :ensure   => 'present',
-      :password => 'trove_password',
-    ) }
+    context 'when configuring trove-server' do
+      let :pre_condition do
+        "class { 'trove::server': auth_password => 'test' }"
+      end
 
-    it { is_expected.to contain_keystone_user_role('trove@foobar').with(
-      :ensure  => 'present',
-      :roles   => ['admin']
-    )}
-
-    it { is_expected.to contain_keystone_service('trove::database').with(
-      :ensure      => 'present',
-      :description => 'Trove Database Service'
-    ) }
-
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
-      :ensure       => 'present',
-      :public_url   => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
-      :admin_url    => "http://127.0.0.1:8779/v1.0/%(tenant_id)s",
-      :internal_url => "http://127.0.0.1:8779/v1.0/%(tenant_id)s"
-    ) }
-  end
-
-  describe 'when configuring trove-server' do
-    let :pre_condition do
-      "class { 'trove::server': auth_password => 'test' }"
+      let :params do
+        { :password => 'trove_password',
+          :tenant   => 'foobar' }
+      end
     end
 
-    let :params do
-      { :password => 'trove_password',
-        :tenant   => 'foobar' }
-    end
-  end
+    context 'when overriding endpoint URLs' do
+      let :params do
+        { :password     => 'passw0rd',
+          :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
+          :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
+          :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s' }
+      end
 
-  describe 'when overriding endpoint URLs' do
-    let :params do
-      { :password     => 'passw0rd',
+      it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
+        :ensure       => 'present',
         :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
         :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
-        :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s' }
+        :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s'
+      ) }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database').with(
-      :ensure       => 'present',
-      :public_url   => 'https://10.10.10.10:80/v1.0/%(tenant_id)s',
-      :internal_url => 'http://10.10.10.11:81/v1.0/%(tenant_id)s',
-      :admin_url    => 'http://10.10.10.12:81/v1.0/%(tenant_id)s'
-    ) }
-  end
+    context 'when overriding auth name' do
+      let :params do
+        { :password  => 'foo',
+          :auth_name => 'trovey' }
+      end
 
-  describe 'when overriding auth name' do
-    let :params do
-      { :password => 'foo',
-        :auth_name => 'trovey' }
+      it { is_expected.to contain_keystone_user('trovey') }
+      it { is_expected.to contain_keystone_user_role('trovey@services') }
+      it { is_expected.to contain_keystone_service('trove::database') }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
     end
 
-    it { is_expected.to contain_keystone_user('trovey') }
-    it { is_expected.to contain_keystone_user_role('trovey@services') }
-    it { is_expected.to contain_keystone_service('trove::database') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
-  end
+    context 'when overriding service name' do
+      let :params do
+        { :service_name => 'trove_service',
+          :auth_name    => 'trove',
+          :password     => 'trove_password' }
+      end
 
-  describe 'when overriding service name' do
-    let :params do
-      { :service_name => 'trove_service',
-        :auth_name    => 'trove',
-        :password     => 'trove_password' }
+      it { is_expected.to contain_keystone_user('trove') }
+      it { is_expected.to contain_keystone_user_role('trove@services') }
+      it { is_expected.to contain_keystone_service('trove_service::database') }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service::database') }
     end
 
-    it { is_expected.to contain_keystone_user('trove') }
-    it { is_expected.to contain_keystone_user_role('trove@services') }
-    it { is_expected.to contain_keystone_service('trove_service::database') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove_service::database') }
-  end
+    context 'when disabling endpoint configuration' do
+      let :params do
+        { :configure_endpoint => false,
+          :password           => 'trove_password' }
+      end
 
-  describe 'when disabling endpoint configuration' do
-    let :params do
-      { :configure_endpoint => false,
-        :password           => 'trove_password' }
+      it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron::database') }
     end
 
-    it { is_expected.to_not contain_keystone_endpoint('RegionOne/neutron::database') }
+    context 'when disabling user and user_role configuration' do
+      let :params do
+        { :configure_user      => false,
+          :configure_user_role => false,
+          :service_name        => 'trove',
+          :auth_name           => 'trove',
+          :password            => 'trove_password' }
+      end
+      it { is_expected.to_not contain_keystone_user('trove') }
+      it { is_expected.to_not contain_keystone_user_role('trove@services') }
+      it { is_expected.to contain_keystone_service('trove::database') }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
+    end
   end
 
-  describe 'when disabling user and user_role configuration' do
-    let :params do
-      { :configure_user      => false,
-        :configure_user_role => false,
-        :service_name => 'trove',
-        :auth_name    => 'trove',
-        :password            => 'trove_password' }
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_configures 'trove::keystone::auth'
     end
-    it { is_expected.to_not contain_keystone_user('trove') }
-    it { is_expected.to_not contain_keystone_user_role('trove@services') }
-    it { is_expected.to contain_keystone_service('trove::database') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/trove::database') }
   end
+
 end

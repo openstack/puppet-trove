@@ -194,36 +194,26 @@ describe 'trove::conductor' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'Debian',
-        :os_workers => 8,
-      })
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({ :os_workers => 8 }))
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :conductor_package_name => 'trove-conductor',
+            :conductor_service_name => 'trove-conductor' }
+        when 'RedHat'
+          { :conductor_package_name => 'openstack-trove-conductor',
+            :conductor_service_name => 'openstack-trove-conductor' }
+        end
+      end
+      it_configures 'trove-conductor'
     end
-
-    let :platform_params do
-      { :conductor_package_name => 'trove-conductor',
-        :conductor_service_name => 'trove-conductor' }
-    end
-
-    it_configures 'trove-conductor'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily   => 'RedHat',
-        :os_workers => 8,
-      })
-    end
-
-    let :platform_params do
-      { :conductor_package_name => 'openstack-trove-conductor',
-        :conductor_service_name => 'openstack-trove-conductor' }
-    end
-
-    it_configures 'trove-conductor'
   end
 
 end

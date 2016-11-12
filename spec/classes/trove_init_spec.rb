@@ -41,30 +41,35 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
         is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
       }
+
+      it 'installs common package' do
+        is_expected.to contain_package('trove').with(
+          :name   => platform_params[:package_name],
+          :ensure => 'present',
+          :tag    => ['openstack', 'trove-package'],
+        )
+      end
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-    end
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    it_configures 'trove'
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :package_name => 'trove-common', }
+        when 'RedHat'
+          { :package_name => 'openstack-trove', }
+        end
+      end
+      it_configures 'trove'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it 'installs common package' do
-      is_expected.to contain_package('trove').with(
-        :name   => 'openstack-trove',
-        :ensure => 'present',
-        :tag    => ['openstack', 'trove-package'],
-      )
-    end
-
-    it_configures 'trove'
-  end
 end
