@@ -31,7 +31,7 @@ Setup
 
 **What the trove module affects:**
 
-* [Trove](http://docs.openstack.org/developer/trove/), the database service for OpenStack.
+* [trove](http://docs.openstack.org/developer/trove/), the database service for OpenStack.
 
 ### Installing trove
 
@@ -164,7 +164,7 @@ Limitations
 Security
 --------
 
-For security reasons, a separate in-cloud RabbitMQ cluster should be set up for Trove to use. The reason for this is that the guest agent needs to communicate with RabbitMQ, so it is not advisable to give instances access to the same RabbitMQ server that the core OpenStack services are using for communication.
+For security reasons, a separate in-cloud RabbitMQ cluster should be set up for trove to use. The reason for this is that the guest agent needs to communicate with RabbitMQ, so it is not advisable to give instances access to the same RabbitMQ server that the core OpenStack services are using for communication.
 
 Please note that puppet-trove cannot check if this rule is being followed, so it is the deployer's responsibility to do it.
 
