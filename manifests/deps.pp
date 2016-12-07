@@ -44,9 +44,9 @@ class trove::deps {
 
   # policy config should occur in the config block also as soon as
   # puppet-trove supports it. Leave commented out for now.
-  # Anchor['trove::config::begin']
-  # -> Openstacklib::Policy::Base<||>
-  # ~> Anchor['trove::config::end']
+  Anchor['trove::config::begin']
+  -> Openstacklib::Policy::Base<||>
+  ~> Anchor['trove::config::end']
 
   # We need troveclient installed before marking service end so that trove
   # will have clients available to create resources. This tag handles the

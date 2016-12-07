@@ -341,7 +341,9 @@ class trove(
   $rabbit_userid                = $::os_service_default,
   $rabbit_virtual_host          = $::os_service_default,
 ) {
+
   include ::trove::deps
+  include ::trove::policy
   include ::trove::params
 
   if !is_service_default($rabbit_host) or

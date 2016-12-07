@@ -22,6 +22,8 @@ class trove::policy (
   $policy_path = '/etc/trove/policy.json',
 ) {
 
+  include ::trove::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
