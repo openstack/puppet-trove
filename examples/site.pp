@@ -13,12 +13,12 @@ class { '::trove::keystone::auth':
 class { '::trove::db::mysql':
   password      => 'dbpass',
   host          => '10.0.0.1',
-  allowed_hosts => '10.0.0.1'
+  allowed_hosts => ['10.0.0.1']
 }
 
 class { '::trove':
   database_connection   => 'mysql://trove:secrete@10.0.0.1/trove?charset=utf8',
-  rabbit_hosts          => '10.0.0.1',
+  rabbit_hosts          => ['10.0.0.1'],
   rabbit_password       => 'secrete',
   nova_proxy_admin_pass => 'novapass',
 }
