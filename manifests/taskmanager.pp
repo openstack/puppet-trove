@@ -126,7 +126,7 @@ class trove::taskmanager(
     }
     trove_taskmanager_config {
       'database/connection':   value => $::trove::database_connection;
-      'database/idle_timeout': value => $::trove::database_idle_timeoutl;
+      'database/idle_timeout': value => $::trove::database_idle_timeout;
     }
   }
 
