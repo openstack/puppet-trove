@@ -97,10 +97,10 @@ class trove::keystone::auth (
 
   include ::trove::deps
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| tag == 'trove-server' |>
+  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| tag == 'trove-service' |>
 
   Keystone_endpoint<| title == "${region}/${service_name}::${service_type}" |>
-  ~> Service <| tag == 'trove-server' |>
+  ~> Service <| tag == 'trove-service' |>
 
   keystone::resource::service_identity { 'trove':
     configure_user      => $configure_user,
