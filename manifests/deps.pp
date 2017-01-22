@@ -48,6 +48,10 @@ class trove::deps {
   -> Openstacklib::Policy::Base<||>
   ~> Anchor['trove::config::end']
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['trove::dbsync::begin']
+
   # We need troveclient installed before marking service end so that trove
   # will have clients available to create resources. This tag handles the
   # troveclient but indirectly since the client is not available in
