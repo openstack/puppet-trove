@@ -64,6 +64,10 @@
 #   guests need to talk to the rabbit cluster via
 #   a different ssl connection option.
 #
+# [*backup_aes_cbc_key*]
+#   (optional) Default OpenSSL aes_cbc key
+#   Defaults to $::os_service_default.
+#
 #  DEPRECATED PARAMETERS
 #
 # [*root_grant*]
@@ -120,6 +124,7 @@ class trove::guestagent(
   $root_grant                = $::os_service_default,
   $root_grant_option         = $::os_service_default,
   $default_password_length   = $::os_service_default,
+  $backup_aes_cbc_key        = $::os_service_default,
   #Deprecated
   $control_exchange          = undef,
   $rabbit_hosts              = $::trove::rabbit_hosts,
@@ -146,6 +151,7 @@ trove::guestagent::default_transport_url instead.")
     'DEFAULT/root_grant':              value => $root_grant;
     'DEFAULT/root_grant_option':       value => $root_grant_option;
     'DEFAULT/default_password_length': value => $default_password_length;
+    'DEFAULT/backup_aes_cbc_key':      value => $backup_aes_cbc_key;
   }
 
   oslo::messaging::default { 'trove_guestagent_config':

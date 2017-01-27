@@ -1,0 +1,3 @@
+---
+features:
+  - Add the ability to configure aes_cbc key for backup in trove-guestagent.conf
