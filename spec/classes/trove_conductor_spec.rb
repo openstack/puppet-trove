@@ -35,6 +35,8 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_conductor_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
@@ -122,7 +124,7 @@ describe 'trove::conductor' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => true}"
+           rabbit_use_ssl        => true}"
       end
 
       it do
@@ -138,7 +140,7 @@ describe 'trove::conductor' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false}"
+           rabbit_use_ssl        => false}"
       end
 
       it do
@@ -153,13 +155,17 @@ describe 'trove::conductor' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+           nova_proxy_admin_pass      => 'verysecrete',
+           default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
+           rpc_response_timeout       => '120',
+           control_exchange           => 'openstack',
            notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
       end
 
       it do
         is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_trove_conductor_config('DEFAULT/rpc_response_timeout').with_value('120')
+        is_expected.to contain_trove_conductor_config('DEFAULT/control_exchange').with_value('openstack')
         is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
@@ -168,7 +174,7 @@ describe 'trove::conductor' do
       let :pre_condition do
         "class { 'trove' :
            nova_proxy_admin_pass => 'verysecrete',
-           rpc_backend => 'amqp' }"
+           rpc_backend           => 'amqp' }"
       end
 
       it do

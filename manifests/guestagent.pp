@@ -143,6 +143,11 @@ and trove::guestagent::rabbit_port are deprecated. Please use \
 trove::guestagent::default_transport_url instead.")
   }
 
+  if $control_exchange {
+    warning("control_exchange parameter is deprecated. Please use \
+trove::control_exchange instead.")
+  }
+
   # basic service config
   trove_guestagent_config {
     'DEFAULT/trove_auth_url':          value => $auth_url;
@@ -155,8 +160,9 @@ trove::guestagent::default_transport_url instead.")
   }
 
   oslo::messaging::default { 'trove_guestagent_config':
-    transport_url    => $default_transport_url,
-    control_exchange => $::trove::control_exchange
+    transport_url        => $default_transport_url,
+    control_exchange     => $::trove::control_exchange,
+    rpc_response_timeout => $::trove::rpc_response_timeout,
   }
 
   # region name

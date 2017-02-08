@@ -196,6 +196,10 @@
 #   (optional) Admin tenant name used to connect to nova.
 #   Defaults to 'admin'
 #
+# [*rpc_response_timeout*]
+#  (Optional) Seconds to wait for a response from a call.
+#  Defaults to $::os_service_default
+#
 # [*control_exchange*]
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
@@ -321,6 +325,7 @@ class trove(
   $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',
+  $rpc_response_timeout         = $::os_service_default,
   $control_exchange             = 'trove',
   $cinder_url                   = false,
   $swift_url                    = false,
