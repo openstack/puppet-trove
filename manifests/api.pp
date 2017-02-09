@@ -160,8 +160,9 @@ class trove::api(
   }
 
   oslo::messaging::default { 'trove_config':
-    transport_url    => $::trove::default_transport_url,
-    control_exchange => $::trove::control_exchange
+    transport_url        => $::trove::default_transport_url,
+    control_exchange     => $::trove::control_exchange,
+    rpc_response_timeout => $::trove::rpc_response_timeout,
   }
 
   if $auth_strategy == 'keystone' {

@@ -161,8 +161,9 @@ class trove::taskmanager(
   }
 
   oslo::messaging::default { 'trove_taskmanager_config':
-    transport_url    => $::trove::default_transport_url,
-    control_exchange => $::trove::control_exchange
+    transport_url        => $::trove::default_transport_url,
+    control_exchange     => $::trove::control_exchange,
+    rpc_response_timeout => $::trove::rpc_response_timeout,
   }
 
   oslo::messaging::notifications { 'trove_taskmanager_config':

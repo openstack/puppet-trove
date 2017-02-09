@@ -71,6 +71,8 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/taskmanager_manager').with_value('trove.taskmanager.manager.Manager')
         is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
@@ -232,7 +234,7 @@ describe 'trove::taskmanager' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => true}"
+           rabbit_use_ssl        => true}"
       end
 
       it do
@@ -248,7 +250,7 @@ describe 'trove::taskmanager' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false}"
+           rabbit_use_ssl        => false}"
       end
 
       it do
@@ -263,13 +265,17 @@ describe 'trove::taskmanager' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+           nova_proxy_admin_pass      => 'verysecrete',
+           default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
+           rpc_response_timeout       => '120',
+           control_exchange           => 'openstack',
            notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
       end
 
       it do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/rpc_response_timeout').with_value('120')
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/control_exchange').with_value('openstack')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
@@ -278,7 +284,7 @@ describe 'trove::taskmanager' do
       let :pre_condition do
         "class { 'trove' :
            nova_proxy_admin_pass => 'verysecrete',
-           rpc_backend => 'amqp' }"
+           rpc_backend           => 'amqp' }"
       end
 
       it do

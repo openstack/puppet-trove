@@ -35,6 +35,8 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
@@ -99,10 +101,14 @@ describe 'trove::guestagent' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             default_transport_url => 'rabbit://user:pass@host:1234/virt',}"
+             default_transport_url => 'rabbit://user:pass@host:1234/virt',
+             rpc_response_timeout  => '120',
+             control_exchange      => 'openstack',}"
         end
         it 'configures trove-guestagent with DEFAULT/transport_url' do
           is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt')
+          is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('120')
+          is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('openstack')
         end
       end
 
@@ -115,12 +121,12 @@ describe 'trove::guestagent' do
       end
 
       let :params do
-        { :auth_url => "http://10.0.0.1:5000/v2.0",
-          :swift_url => "http://10.0.0.1:8080/v1/AUTH_",
+        { :auth_url           => "http://10.0.0.1:5000/v2.0",
+          :swift_url          => "http://10.0.0.1:8080/v1/AUTH_",
           :swift_service_type => 'object-store',
-          :rabbit_host => '10.1.0.1',
-          :rabbit_port => '5673',
-          :rabbit_use_ssl => 'true'
+          :rabbit_host        => '10.1.0.1',
+          :rabbit_port        => '5673',
+          :rabbit_use_ssl     => 'true'
         }
       end
       it 'configures trove-guestagent with custom parameters' do
@@ -157,7 +163,7 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => true}"
+           rabbit_use_ssl        => true}"
       end
 
       it do
@@ -173,7 +179,7 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl     => false}"
+           rabbit_use_ssl        => false}"
       end
 
       it do
@@ -188,13 +194,17 @@ describe 'trove::guestagent' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+           nova_proxy_admin_pass      => 'verysecrete',
+           default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
+           rpc_response_timeout       => '60',
+           control_exchange           => 'exchange',
            notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
       end
 
       it do
         is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('60')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('exchange')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       end
     end
