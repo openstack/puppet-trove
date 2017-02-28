@@ -217,7 +217,6 @@ describe 'trove::guestagent' do
       end
 
       it do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_backend').with_value('amqp')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>')
