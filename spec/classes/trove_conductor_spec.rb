@@ -37,6 +37,9 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/control_exchange').with_value('trove')
+        is_expected.to contain_trove_conductor_config('DEFAULT/remote_nova_client').with_ensure('absent')
+        is_expected.to contain_trove_conductor_config('DEFAULT/remote_cinder_client').with_ensure('absent')
+        is_expected.to contain_trove_conductor_config('DEFAULT/remote_neutron_client').with_ensure('absent')
         is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
@@ -46,6 +49,22 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/trove_conductor_workers').with_value('8')
         is_expected.to contain_trove_conductor_config('profiler/enabled').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('profiler/trace_sqlalchemy').with_value('<SERVICE DEFAULT>')
+      end
+
+      context 'with single tenant mode enabled' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             single_tenant_mode    => 'true'}
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
+        end
+        it 'single tenant client values are set' do
+          is_expected.to contain_trove_conductor_config('DEFAULT/remote_nova_client').with_value('trove.common.single_tenant_remote.nova_client_trove_admin')
+          is_expected.to contain_trove_conductor_config('DEFAULT/remote_cinder_client').with_value('trove.common.single_tenant_remote.cinder_client_trove_admin')
+          is_expected.to contain_trove_conductor_config('DEFAULT/remote_neutron_client').with_value('trove.common.single_tenant_remote.neutron_client_trove_admin')
+        end
       end
 
       context 'when using a single RabbitMQ server' do

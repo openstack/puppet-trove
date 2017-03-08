@@ -160,6 +160,21 @@ class trove::taskmanager(
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
+  if $::trove::single_tenant_mode {
+    trove_taskmanager_config {
+      'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
+      'DEFAULT/remote_cinder_client':  value => 'trove.common.single_tenant_remote.cinder_client_trove_admin';
+      'DEFAULT/remote_neutron_client': value => 'trove.common.single_tenant_remote.neutron_client_trove_admin';
+    }
+  }
+  else {
+    trove_taskmanager_config {
+      'DEFAULT/remote_nova_client':    ensure => absent;
+      'DEFAULT/remote_cinder_client':  ensure => absent;
+      'DEFAULT/remote_neutron_client': ensure => absent;
+    }
+  }
+
   oslo::messaging::default { 'trove_taskmanager_config':
     transport_url        => $::trove::default_transport_url,
     control_exchange     => $::trove::control_exchange,

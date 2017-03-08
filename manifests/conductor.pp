@@ -108,6 +108,21 @@ class trove::conductor(
     'profiler/trace_sqlalchemy': value => $trace_sqlalchemy;
   }
 
+  if $::trove::single_tenant_mode {
+    trove_conductor_config {
+      'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
+      'DEFAULT/remote_cinder_client':  value => 'trove.common.single_tenant_remote.cinder_client_trove_admin';
+      'DEFAULT/remote_neutron_client': value => 'trove.common.single_tenant_remote.neutron_client_trove_admin';
+    }
+  }
+  else {
+    trove_conductor_config {
+      'DEFAULT/remote_nova_client':    ensure => absent;
+      'DEFAULT/remote_cinder_client':  ensure => absent;
+      'DEFAULT/remote_neutron_client': ensure => absent;
+    }
+  }
+
   oslo::messaging::default { 'trove_conductor_config':
     transport_url        => $::trove::default_transport_url,
     control_exchange     => $::trove::control_exchange,

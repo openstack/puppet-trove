@@ -181,6 +181,11 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to: undef.
 #
+# [*single_tenant_mode*]
+#   (optional) If set to true, will configure Trove to work in single
+#   tenant mode.
+#   Defaults to false.
+#
 # [*nova_compute_url*]
 #   (optional) URL without the tenant segment.
 #   Defaults to false.
@@ -321,6 +326,7 @@ class trove(
   $database_min_pool_size       = undef,
   $database_max_pool_size       = undef,
   $database_max_overflow        = undef,
+  $single_tenant_mode           = false,
   $rpc_backend                  = 'rabbit',
   $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',

@@ -81,6 +81,9 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/control_exchange').with_value('trove')
+        is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
+        is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_ensure('absent')
+        is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_ensure('absent')
         is_expected.to contain_trove_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
@@ -127,6 +130,22 @@ describe 'trove::api' do
           is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('1000')
           is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('1000')
           is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('2000')
+        end
+      end
+
+      context 'with single tenant mode enabled' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             single_tenant_mode    => 'true'}
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
+        end
+        it 'single tenant client values are set' do
+          is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_value('trove.common.single_tenant_remote.nova_client_trove_admin')
+          is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_value('trove.common.single_tenant_remote.cinder_client_trove_admin')
+          is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_value('trove.common.single_tenant_remote.neutron_client_trove_admin')
         end
       end
 
