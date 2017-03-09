@@ -25,7 +25,7 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
-# [*ensure_package*]
+# [*package_ensure*]
 #   (optional) Whether the trove api package will be installed
 #   Defaults to 'present'
 #
@@ -116,30 +116,38 @@
 #   (optional) The strategy to use for authentication.
 #   Defaults to 'keystone'
 #
+# DEPRECATED PARAMETERS
+#
+# [*ensure_package*]
+#   (optional) Whether the trove api package will be installed
+#   Defaults to undef
+#
 class trove::api(
-  $debug                          = undef,
-  $log_file                       = undef,
-  $log_dir                        = undef,
-  $use_syslog                     = undef,
-  $use_stderr                     = undef,
-  $log_facility                   = undef,
-  $bind_host                      = '0.0.0.0',
-  $bind_port                      = '8779',
-  $backlog                        = '4096',
-  $workers                        = $::os_workers,
-  $enabled                        = true,
-  $purge_config                   = false,
-  $cert_file                      = false,
-  $key_file                       = false,
-  $ca_file                        = false,
-  $http_get_rate                  = 200,
-  $http_post_rate                 = 200,
-  $http_put_rate                  = 200,
-  $http_delete_rate               = 200,
-  $http_mgmt_post_rate            = 200,
-  $manage_service                 = true,
-  $ensure_package                 = 'present',
-  $auth_strategy                  = 'keystone',
+  $debug               = undef,
+  $log_file            = undef,
+  $log_dir             = undef,
+  $use_syslog          = undef,
+  $use_stderr          = undef,
+  $log_facility        = undef,
+  $bind_host           = '0.0.0.0',
+  $bind_port           = '8779',
+  $backlog             = '4096',
+  $workers             = $::os_workers,
+  $enabled             = true,
+  $purge_config        = false,
+  $cert_file           = false,
+  $key_file            = false,
+  $ca_file             = false,
+  $http_get_rate       = 200,
+  $http_post_rate      = 200,
+  $http_put_rate       = 200,
+  $http_delete_rate    = 200,
+  $http_mgmt_post_rate = 200,
+  $manage_service      = true,
+  $package_ensure      = 'present',
+  $auth_strategy       = 'keystone',
+  # DEPRECATED PARAMETERS
+  $ensure_package      = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -147,6 +155,14 @@ class trove::api(
   include ::trove::db::sync
   include ::trove::logging
   include ::trove::params
+
+  if $ensure_package {
+    warning("trove::api::ensure_package is deprecated and will be removed in \
+the future release. Please use trove::api::package_ensure instead.")
+    $package_ensure_real = $ensure_package
+  } else {
+    $package_ensure_real = $package_ensure
+  }
 
   # basic service config
   trove_config {
@@ -283,7 +299,7 @@ class trove::api(
   trove::generic_service { 'api':
     enabled        => $enabled,
     manage_service => $manage_service,
-    ensure_package => $ensure_package,
+    package_ensure => $package_ensure_real,
     package_name   => $::trove::params::api_package_name,
     service_name   => $::trove::params::api_service_name,
   }
