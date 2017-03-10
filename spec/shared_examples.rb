@@ -27,7 +27,7 @@ shared_examples 'generic trove service' do |service|
   context 'with overridden parameters' do
     let :params do
       { :enabled        => true,
-        :ensure_package => '2014.1-1' }
+        :package_ensure => '2014.1-1' }
     end
 
     it 'installs package and service' do

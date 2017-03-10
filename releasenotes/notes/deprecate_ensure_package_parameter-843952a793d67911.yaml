@@ -1,0 +1,12 @@
+---
+deprecations:
+  - trove::generic_service::ensure_package is now deprecated and will be removed
+    in the future release. Please use trove::generic_service::package_ensure instead.
+  - trove::taskmanager::ensure_package is now deprecated and will be removed
+    in the future release. Please use trove::taskmanager::package_ensure instead.
+  - trove::api::ensure_package is now deprecated and will be removed
+    in the future release. Please use trove::api::package_ensure instead.
+  - trove::conductor::ensure_package is now deprecated and will be removed
+    in the future release. Please use trove::conductor::package_ensure instead.
+  - trove::guestagent::ensure_package is now deprecated and will be removed
+    in the future release. Please use trove::guestagent::package_ensure instead.

@@ -12,7 +12,7 @@
 #   (optional) Whether to start/stop the service
 #   Defaults to true
 #
-# [*ensure_package*]
+# [*package_ensure*]
 #   (optional) The state of the trove guest agent package
 #   Defaults to 'present'
 #
@@ -107,10 +107,14 @@
 #   guests need to talk to the rabbit cluster via
 #   a different port.
 #
+# [*ensure_package*]
+#   (optional) The state of the trove guest agent package
+#   Defaults to undef
+#
 class trove::guestagent(
   $enabled                   = true,
   $manage_service            = true,
-  $ensure_package            = 'present',
+  $package_ensure            = 'present',
   $debug                     = $::os_service_default,
   $log_file                  = '/var/log/trove/trove-guestagent.log',
   $log_dir                   = '/var/log/trove',
@@ -130,6 +134,7 @@ class trove::guestagent(
   $rabbit_hosts              = $::trove::rabbit_hosts,
   $rabbit_host               = $::trove::rabbit_host,
   $rabbit_port               = $::trove::rabbit_port,
+  $ensure_package            = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -141,6 +146,14 @@ class trove::guestagent(
     warning("trove::guestagent::rabbit_host, trove::guestagent::rabbit_hosts, \
 and trove::guestagent::rabbit_port are deprecated. Please use \
 trove::guestagent::default_transport_url instead.")
+  }
+
+  if $ensure_package {
+    warning("trove::guestagent::ensure_package is deprecated and will be removed \
+in the future release. Please use trove::guestagent::package_ensure instead.")
+    $package_ensure_real = $ensure_package
+  } else {
+    $package_ensure_real = $package_ensure
   }
 
   if $control_exchange {
@@ -234,7 +247,7 @@ trove::control_exchange instead.")
     manage_service => $manage_service,
     package_name   => $::trove::params::guestagent_package_name,
     service_name   => $::trove::params::guestagent_service_name,
-    ensure_package => $ensure_package,
+    package_ensure => $package_ensure_real,
   }
 
 }
