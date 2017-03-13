@@ -81,9 +81,11 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
+          :rabbit_use_ssl => '<SERVICE DEFAULT>',
+        )
       end
 
       context 'when set use_guestagent_template to false' do
@@ -241,11 +243,13 @@ describe 'trove::taskmanager' do
       end
 
       it do
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+        is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
+          :rabbit_use_ssl     => true,
+          :kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
+          :kombu_ssl_certfile => '/path/to/ssl/cert/file',
+          :kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
+          :kombu_ssl_version  => 'TLSv1',
+        )
       end
     end
 
@@ -257,11 +261,13 @@ describe 'trove::taskmanager' do
       end
 
       it do
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
+          :rabbit_use_ssl     => true,
+          :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile  => '<SERVICE DEFAULT>',
+          :kombu_ssl_version  => '<SERVICE DEFAULT>',
+        )
       end
     end
 
@@ -273,11 +279,13 @@ describe 'trove::taskmanager' do
       end
 
       it do
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
+          :rabbit_use_ssl     => false,
+          :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile  => '<SERVICE DEFAULT>',
+          :kombu_ssl_version  => '<SERVICE DEFAULT>',
+        )
       end
     end
 
