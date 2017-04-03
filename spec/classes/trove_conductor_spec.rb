@@ -26,11 +26,6 @@ describe 'trove::conductor' do
       end
 
       it 'configures trove-conductor with default parameters' do
-        is_expected.to contain_trove_conductor_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('DEFAULT/log_file').with_value('/var/log/trove/trove-conductor.log')
-        is_expected.to contain_trove_conductor_config('DEFAULT/log_dir').with_value('/var/log/trove')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
@@ -50,6 +45,16 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('profiler/trace_sqlalchemy').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_oslo__messaging__rabbit('trove_conductor_config').with(
           :rabbit_use_ssl => '<SERVICE DEFAULT>',
+        )
+      end
+
+      it 'configures trove-conductor with default logging parameters' do
+        is_expected.to contain_oslo__log('trove_conductor_config').with(
+          :use_syslog          => '<SERVICE DEFAULT>',
+          :syslog_log_facility => '<SERVICE DEFAULT>',
+          :log_dir             => '/var/log/trove',
+          :log_file            => '/var/log/trove/trove-conductor.log',
+          :debug               => '<SERVICE DEFAULT>',
         )
       end
 

@@ -51,11 +51,6 @@ describe 'trove::taskmanager' do
       end
 
       it 'configures trove-taskmanager with default parameters' do
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/debug').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/use_syslog').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/syslog_log_facility').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/log_file').with_value('/var/log/trove/trove-taskmanager.log')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/log_dir').with_value('/var/log/trove')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
@@ -85,6 +80,16 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
           :rabbit_use_ssl => '<SERVICE DEFAULT>',
+        )
+      end
+
+      it 'configures trove-taskmanager with default logging parameters' do
+        is_expected.to contain_oslo__log('trove_taskmanager_config').with(
+          :use_syslog          => '<SERVICE DEFAULT>',
+          :syslog_log_facility => '<SERVICE DEFAULT>',
+          :log_dir             => '/var/log/trove',
+          :log_file            => '/var/log/trove/trove-taskmanager.log',
+          :debug               => '<SERVICE DEFAULT>',
         )
       end
 
