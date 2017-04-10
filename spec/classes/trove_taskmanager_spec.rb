@@ -54,15 +54,13 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value(nil)
-        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value(nil)
+        is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/cinder_service_type').with_value('volume')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/neutron_service_type').with_value('network')
-        is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/taskmanager_manager').with_value('trove.taskmanager.manager.Manager')
         is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
@@ -203,15 +201,12 @@ describe 'trove::taskmanager' do
         end
 
         it 'configures trove to use the Neutron network driver' do
-          is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value('trove_service')
-          is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
 
         end
 
         it 'configures trove to use any network label' do
-          is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/network_label_regex').with_value('.*')
         end
       end
@@ -225,13 +220,11 @@ describe 'trove::taskmanager' do
         end
 
         it 'configures trove to use the Nova Network network driver' do
-          is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
+          is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_ensure('absent')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
-
         end
 
         it 'configures trove to use the "private" network label' do
-          is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('^private$')
           is_expected.to contain_trove_taskmanager_config('DEFAULT/network_label_regex').with_value('^private$')
         end
       end

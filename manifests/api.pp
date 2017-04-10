@@ -116,6 +116,10 @@
 #   (optional) The strategy to use for authentication.
 #   Defaults to 'keystone'
 #
+# [*taskmanager_queue*]
+#   (optional) Message queue name the Taskmanager will listen to.
+#   Defaults to 'taskmanager'.
+#
 # DEPRECATED PARAMETERS
 #
 # [*ensure_package*]
@@ -146,6 +150,7 @@ class trove::api(
   $manage_service      = true,
   $package_ensure      = 'present',
   $auth_strategy       = 'keystone',
+  $taskmanager_queue   = 'taskmanager',
   # DEPRECATED PARAMETERS
   $ensure_package      = undef,
 ) inherits trove {
@@ -261,6 +266,24 @@ the future release. Please use trove::api::package_ensure instead.")
     'DEFAULT/neutron_service_type':      value => $::trove::neutron_service_type;
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
     'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
+  }
+
+  if $::trove::use_neutron {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '.*';
+      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+      'DEFAULT/default_neutron_networks':    value => $::trove::default_neutron_networks;
+    }
+  } else {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '^private$';
+      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+      'DEFAULT/default_neutron_networks':    ensure => absent;
+    }
+  }
+
+  trove_config {
+    'DEFAULT/taskmanager_queue': value => $taskmanager_queue;
   }
 
   oslo::messaging::notifications { 'trove_config':

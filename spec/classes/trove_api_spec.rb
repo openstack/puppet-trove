@@ -66,6 +66,7 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
+        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
@@ -79,6 +80,7 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
         is_expected.to contain_trove_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
@@ -198,6 +200,49 @@ describe 'trove::api' do
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+        end
+      end
+
+      context 'when using Neutron' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass    => 'verysecrete',
+             use_neutron              => true,
+             default_neutron_networks => 'trove_service',
+           }
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
+        end
+
+        it 'configures trove to use the Neutron network driver' do
+          is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
+          is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+        end
+
+        it 'configures trove to use any network label' do
+          is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
+        end
+      end
+
+      context 'when using Nova Network' do
+        let :pre_condition do
+          "class { 'trove':
+             nova_proxy_admin_pass => 'verysecrete',
+             use_neutron           => false
+           }
+           class { '::trove::keystone::authtoken':
+             password => 'a_big_secret',
+           }"
+        end
+
+        it 'configures trove to use the Nova Network network driver' do
+          is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_ensure('absent')
+          is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
+        end
+
+        it 'configures trove to use the "private" network label' do
+          is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('^private$')
         end
       end
 

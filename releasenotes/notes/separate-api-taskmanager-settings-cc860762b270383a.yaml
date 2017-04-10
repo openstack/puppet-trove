@@ -1,0 +1,10 @@
+---
+deprecations:
+  - trove::taskmanager::default_neutron_networks is now deprecated and will be
+    removed in the future release. Please use trove::default_neutron_networks
+    instead.
+  - trove::taskmanager::taskmanager_queue is now been removed.
+    Please use trove::api::taskmanager_queue instead.
+fixes:
+  - Neutron settings were not applied to the API when the API and taskmanager
+    were run on separate hosts. This has now been corrected.

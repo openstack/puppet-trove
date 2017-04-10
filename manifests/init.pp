@@ -252,6 +252,10 @@
 #   (optional) Use Neutron
 #   Defaults to true
 #
+# [*default_neutron_networks*]
+#   (optional) The network that trove will attach by default.
+#   Defaults to undef.
+#
 # [*package_ensure*]
 #   (optional) The state of the package.
 #   Defaults to 'present'
@@ -343,6 +347,7 @@ class trove(
   $heat_service_type            = 'orchestration',
   $neutron_service_type         = 'network',
   $use_neutron                  = true,
+  $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
   $rabbit_host                  = $::os_service_default,

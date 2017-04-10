@@ -107,10 +107,10 @@ class trove::taskmanager(
   $heat_url                 = false,
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
-  $default_neutron_networks = undef,
-  $taskmanager_queue        = 'taskmanager',
   $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
   #DEPRECATED OPTIONS
+  $default_neutron_networks = undef,
+  $taskmanager_queue        = undef,
   $use_guestagent_template  = true,
   $ensure_package           = undef,
 ) inherits trove {
@@ -124,6 +124,16 @@ the future release. Please use trove::taskmanager::package_ensure instead.")
     $package_ensure_real = $ensure_package
   } else {
     $package_ensure_real = $package_ensure
+  }
+
+  if $default_neutron_networks {
+    warning("trove::taskmanager::default_neutron_networks is deprecated and will be removed in \
+the future release. Please use trove::default_neutron_networks instead.")
+  }
+  $default_neutron_networks_real = pick($default_neutron_networks, $::trove::default_neutron_networks)
+
+  if $taskmanager_queue {
+    fail('Please use trove::api::taskmanager_queue instead to configure taskmanager_queue')
   }
 
   if $::trove::database_connection {
@@ -150,10 +160,6 @@ the future release. Please use trove::taskmanager::package_ensure instead.")
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
     'DEFAULT/taskmanager_manager':          value => $taskmanager_manager;
-  }
-
-  trove_config {
-    'DEFAULT/taskmanager_queue':   value => $taskmanager_queue;
   }
 
   # region name
@@ -243,24 +249,12 @@ the future release. Please use trove::taskmanager::package_ensure instead.")
   }
 
   if $::trove::use_neutron {
-    trove_config {
-      'DEFAULT/network_label_regex':         value => '.*';
-      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
-      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
-    }
-
     trove_taskmanager_config {
       'DEFAULT/network_label_regex':         value => '.*';
       'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
-      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
+      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks_real;
     }
   } else {
-    trove_config {
-      'DEFAULT/network_label_regex':         value => '^private$';
-      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
-      'DEFAULT/default_neutron_networks':    ensure => absent;
-    }
-
     trove_taskmanager_config {
       'DEFAULT/network_label_regex':         value => '^private$';
       'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
