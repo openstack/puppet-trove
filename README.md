@@ -31,7 +31,7 @@ Setup
 
 **What the trove module affects:**
 
-* [trove](http://docs.openstack.org/developer/trove/), the database service for OpenStack.
+* [trove](https://docs.openstack.org/trove/latest/), the database service for OpenStack.
 
 ### Installing trove
 
@@ -185,7 +185,7 @@ Development
 
 Developer documentation for the entire puppet-openstack project.
 
-* http://docs.openstack.org/developer/puppet-openstack-guide/
+* https://docs.openstack.org/puppet-openstack-guide/latest/
 
 Contributors
 ------------
