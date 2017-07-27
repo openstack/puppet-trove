@@ -206,46 +206,40 @@ the future release. Please use trove::default_neutron_networks instead.")
     topics        => $::trove::notification_topics
   }
 
-  if $::trove::rpc_backend == 'trove.openstack.common.rpc.impl_kombu' or $::trove::rpc_backend == 'rabbit' {
-    oslo::messaging::rabbit { 'trove_taskmanager_config':
-      rabbit_hosts          => $::trove::rabbit_hosts,
-      rabbit_host           => $::trove::rabbit_host,
-      rabbit_port           => $::trove::rabbit_port,
-      rabbit_ha_queues      => $::trove::rabbit_ha_queues,
-      rabbit_userid         => $::trove::rabbit_userid,
-      rabbit_password       => $::trove::rabbit_password,
-      rabbit_virtual_host   => $::trove::rabbit_virtual_host,
-      rabbit_use_ssl        => $::trove::rabbit_use_ssl,
-      kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
-      amqp_durable_queues   => $::trove::amqp_durable_queues,
-      kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
-      kombu_ssl_certfile    => $::trove::kombu_ssl_certfile,
-      kombu_ssl_keyfile     => $::trove::kombu_ssl_keyfile,
-      kombu_ssl_version     => $::trove::kombu_ssl_version
-    }
-  } elsif $::trove::rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'trove_taskmanager_config':
-      server_request_prefix  => $::trove::amqp_server_request_prefix,
-      broadcast_prefix       => $::trove::amqp_broadcast_prefix,
-      group_request_prefix   => $::trove::amqp_group_request_prefix,
-      container_name         => $::trove::amqp_container_name,
-      idle_timeout           => $::trove::amqp_idle_timeout,
-      trace                  => $::trove::amqp_trace,
-      ssl_ca_file            => $::trove::amqp_ssl_ca_file,
-      ssl_cert_file          => $::trove::amqp_ssl_cert_file,
-      ssl_key_file           => $::trove::amqp_ssl_key_file,
-      ssl_key_password       => $::trove::amqp_ssl_key_password,
-      allow_insecure_clients => $::trove::amqp_allow_insecure_clients,
-      sasl_mechanisms        => $::trove::amqp_sasl_mechanisms,
-      sasl_config_dir        => $::trove::amqp_sasl_config_dir,
-      sasl_config_name       => $::trove::amqp_sasl_config_name,
-      username               => $::trove::amqp_username,
-      password               => $::trove::amqp_password,
-    }
-  } else {
-    trove_taskmanager_config {
-      'DEFAULT/rpc_backend' : value => $::trove::rpc_backend
-    }
+  oslo::messaging::rabbit { 'trove_taskmanager_config':
+    rabbit_hosts          => $::trove::rabbit_hosts,
+    rabbit_host           => $::trove::rabbit_host,
+    rabbit_port           => $::trove::rabbit_port,
+    rabbit_ha_queues      => $::trove::rabbit_ha_queues,
+    rabbit_userid         => $::trove::rabbit_userid,
+    rabbit_password       => $::trove::rabbit_password,
+    rabbit_virtual_host   => $::trove::rabbit_virtual_host,
+    rabbit_use_ssl        => $::trove::rabbit_use_ssl,
+    kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
+    amqp_durable_queues   => $::trove::amqp_durable_queues,
+    kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
+    kombu_ssl_certfile    => $::trove::kombu_ssl_certfile,
+    kombu_ssl_keyfile     => $::trove::kombu_ssl_keyfile,
+    kombu_ssl_version     => $::trove::kombu_ssl_version
+  }
+
+  oslo::messaging::amqp { 'trove_taskmanager_config':
+    server_request_prefix  => $::trove::amqp_server_request_prefix,
+    broadcast_prefix       => $::trove::amqp_broadcast_prefix,
+    group_request_prefix   => $::trove::amqp_group_request_prefix,
+    container_name         => $::trove::amqp_container_name,
+    idle_timeout           => $::trove::amqp_idle_timeout,
+    trace                  => $::trove::amqp_trace,
+    ssl_ca_file            => $::trove::amqp_ssl_ca_file,
+    ssl_cert_file          => $::trove::amqp_ssl_cert_file,
+    ssl_key_file           => $::trove::amqp_ssl_key_file,
+    ssl_key_password       => $::trove::amqp_ssl_key_password,
+    allow_insecure_clients => $::trove::amqp_allow_insecure_clients,
+    sasl_mechanisms        => $::trove::amqp_sasl_mechanisms,
+    sasl_config_dir        => $::trove::amqp_sasl_config_dir,
+    sasl_config_name       => $::trove::amqp_sasl_config_name,
+    username               => $::trove::amqp_username,
+    password               => $::trove::amqp_password,
   }
 
   if $::trove::use_neutron {

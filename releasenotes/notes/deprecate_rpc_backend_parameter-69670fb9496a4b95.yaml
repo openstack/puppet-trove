@@ -1,0 +1,4 @@
+---
+deprecations:
+  - trove::rpc_backend is deprecated and will be removed in a future
+    release. Please use trove::default_transport_url instead.

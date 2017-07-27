@@ -223,11 +223,10 @@ describe 'trove::guestagent' do
       end
     end
 
-    context 'with amqp rpc' do
+    context 'with amqp messaging' do
       let :pre_condition do
         "class { 'trove' :
-           nova_proxy_admin_pass => 'verysecrete',
-           rpc_backend => 'amqp' }"
+           nova_proxy_admin_pass => 'verysecrete'}"
       end
 
       it do

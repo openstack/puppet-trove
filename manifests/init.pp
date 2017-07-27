@@ -82,12 +82,6 @@
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to $::os_service_default
 #
-# [*rpc_backend*]
-#   (optional) The rpc backend implementation to use, can be:
-#     rabbit (for rabbitmq)
-#     amqp (for AMQP 1.0)
-#   Defaults to 'rabbit'
-#
 # [*amqp_server_request_prefix*]
 #   (Optional) Address prefix used when sending to a specific server
 #   Defaults to $::os_service_default.
@@ -292,6 +286,12 @@
 #   (optional) The RabbitMQ virtual host.
 #   Defaults to $::os_service_default
 #
+# [*rpc_backend*]
+#   (optional) The rpc backend implementation to use, can be:
+#     rabbit (for rabbitmq)
+#     amqp (for AMQP 1.0)
+#   Defaults to 'rabbit'
+#
 class trove(
   $nova_proxy_admin_pass,
   $default_transport_url        = $::os_service_default,
@@ -331,7 +331,6 @@ class trove(
   $database_max_pool_size       = undef,
   $database_max_overflow        = undef,
   $single_tenant_mode           = false,
-  $rpc_backend                  = 'rabbit',
   $nova_compute_url             = false,
   $nova_proxy_admin_user        = 'admin',
   $nova_proxy_admin_tenant_name = 'admin',
@@ -356,6 +355,7 @@ class trove(
   $rabbit_port                  = $::os_service_default,
   $rabbit_userid                = $::os_service_default,
   $rabbit_virtual_host          = $::os_service_default,
+  $rpc_backend                  = 'rabbit',
 ) {
 
   include ::trove::deps
@@ -367,10 +367,12 @@ class trove(
     !is_service_default($rabbit_password) or
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
+    !is_service_default($rabbit_virtual_host) or
+    !is_service_default($rpc_backend) {
     warning("trove::rabbit_host, trove::rabbit_hosts, trove::rabbit_password, \
-trove::rabbit_port, trove::rabbit_userid and trove::rabbit_virtual_host are \
-deprecated. Please use trove::default_transport_url instead.")
+trove::rabbit_port, trove::rabbit_userid, trove::rabbit_virtual_host and \
+trove::rpc_backend are deprecated. Please use trove::default_transport_url \
+instead.")
   }
 
   if $nova_compute_url {

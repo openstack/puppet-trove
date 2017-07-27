@@ -340,7 +340,7 @@ describe 'trove::api' do
       let :pre_condition do
         "class { 'trove' :
            nova_proxy_admin_pass => 'verysecrete',
-           rpc_backend => 'amqp' }
+         }
          class { '::trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
