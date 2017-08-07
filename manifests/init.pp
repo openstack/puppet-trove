@@ -368,7 +368,7 @@ class trove(
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
     !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
+    $rpc_backend {
     warning("trove::rabbit_host, trove::rabbit_hosts, trove::rabbit_password, \
 trove::rabbit_port, trove::rabbit_userid, trove::rabbit_virtual_host and \
 trove::rpc_backend are deprecated. Please use trove::default_transport_url \
