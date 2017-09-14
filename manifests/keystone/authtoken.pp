@@ -177,18 +177,20 @@
 #   (Optional) The region in which the identity server can be found.
 #   Defaults to $::os_service_default.
 #
-# [*revocation_cache_time*]
-#   (Optional) Determines the frequency at which the list of revoked tokens is
-#   retrieved from the Identity service (in seconds). A high number of
-#   revocation events combined with a low cache duration may significantly
-#   reduce performance. Only valid for PKI tokens. Integer value
-#   Defaults to $::os_service_default.
-#
 # [*token_cache_time*]
 #   (Optional) In order to prevent excessive effort spent validating tokens,
 #   the middleware caches previously-seen tokens for a configurable duration
 #   (in seconds). Set to -1 to disable caching completely. Integer value
 #   Defaults to $::os_service_default.
+#
+# DEPRECATED PARAMETERS
+#
+# [*revocation_cache_time*]
+#   (Optional) Determines the frequency at which the list of revoked tokens is
+#   retrieved from the Identity service (in seconds). A high number of
+#   revocation events combined with a low cache duration may significantly
+#   reduce performance. Only valid for PKI tokens. Integer value
+#   Defaults to undef
 #
 class trove::keystone::authtoken(
   $username                       = 'trove',
@@ -224,49 +226,53 @@ class trove::keystone::authtoken(
   $memcached_servers              = $::os_service_default,
   $manage_memcache_package        = false,
   $region_name                    = $::os_service_default,
-  $revocation_cache_time          = $::os_service_default,
   $token_cache_time               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $revocation_cache_time          = undef,
 ) {
 
   if is_service_default($password) {
     fail('Please set password for trove service user')
   }
 
+  if $revocation_cache_time {
+    warning('revocation_cache_time parameter is deprecated, has no effect and will be removed in the future.')
+  }
+
   keystone::resource::authtoken { 'trove_config':
-      username                       => $username,
-      password                       => $password,
-      project_name                   => $project_name,
-      auth_url                       => $auth_url,
-      auth_uri                       => $auth_uri,
-      auth_version                   => $auth_version,
-      auth_type                      => $auth_type,
-      auth_section                   => $auth_section,
-      user_domain_name               => $user_domain_name,
-      project_domain_name            => $project_domain_name,
-      insecure                       => $insecure,
-      cache                          => $cache,
-      cafile                         => $cafile,
-      certfile                       => $certfile,
-      check_revocations_for_cached   => $check_revocations_for_cached,
-      delay_auth_decision            => $delay_auth_decision,
-      enforce_token_bind             => $enforce_token_bind,
-      hash_algorithms                => $hash_algorithms,
-      http_connect_timeout           => $http_connect_timeout,
-      http_request_max_retries       => $http_request_max_retries,
-      include_service_catalog        => $include_service_catalog,
-      keyfile                        => $keyfile,
-      memcache_pool_conn_get_timeout => $memcache_pool_conn_get_timeout,
-      memcache_pool_dead_retry       => $memcache_pool_dead_retry,
-      memcache_pool_maxsize          => $memcache_pool_maxsize,
-      memcache_pool_socket_timeout   => $memcache_pool_socket_timeout,
-      memcache_secret_key            => $memcache_secret_key,
-      memcache_security_strategy     => $memcache_security_strategy,
-      memcache_use_advanced_pool     => $memcache_use_advanced_pool,
-      memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
-      memcached_servers              => $memcached_servers,
-      manage_memcache_package        => $manage_memcache_package,
-      region_name                    => $region_name,
-      revocation_cache_time          => $revocation_cache_time,
-      token_cache_time               => $token_cache_time,
-    }
+    username                       => $username,
+    password                       => $password,
+    project_name                   => $project_name,
+    auth_url                       => $auth_url,
+    auth_uri                       => $auth_uri,
+    auth_version                   => $auth_version,
+    auth_type                      => $auth_type,
+    auth_section                   => $auth_section,
+    user_domain_name               => $user_domain_name,
+    project_domain_name            => $project_domain_name,
+    insecure                       => $insecure,
+    cache                          => $cache,
+    cafile                         => $cafile,
+    certfile                       => $certfile,
+    check_revocations_for_cached   => $check_revocations_for_cached,
+    delay_auth_decision            => $delay_auth_decision,
+    enforce_token_bind             => $enforce_token_bind,
+    hash_algorithms                => $hash_algorithms,
+    http_connect_timeout           => $http_connect_timeout,
+    http_request_max_retries       => $http_request_max_retries,
+    include_service_catalog        => $include_service_catalog,
+    keyfile                        => $keyfile,
+    memcache_pool_conn_get_timeout => $memcache_pool_conn_get_timeout,
+    memcache_pool_dead_retry       => $memcache_pool_dead_retry,
+    memcache_pool_maxsize          => $memcache_pool_maxsize,
+    memcache_pool_socket_timeout   => $memcache_pool_socket_timeout,
+    memcache_secret_key            => $memcache_secret_key,
+    memcache_security_strategy     => $memcache_security_strategy,
+    memcache_use_advanced_pool     => $memcache_use_advanced_pool,
+    memcache_pool_unused_timeout   => $memcache_pool_unused_timeout,
+    memcached_servers              => $memcached_servers,
+    manage_memcache_package        => $manage_memcache_package,
+    region_name                    => $region_name,
+    token_cache_time               => $token_cache_time,
+  }
 }
