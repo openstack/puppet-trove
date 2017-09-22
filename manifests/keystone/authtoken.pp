@@ -231,6 +231,8 @@ class trove::keystone::authtoken(
   $revocation_cache_time          = undef,
 ) {
 
+  include ::trove::deps
+
   if is_service_default($password) {
     fail('Please set password for trove service user')
   }
