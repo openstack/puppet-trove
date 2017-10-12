@@ -117,8 +117,16 @@ class trove::logging(
   $use_syslog_real   = pick($::trove::api::use_syslog, $use_syslog)
   $use_stderr_real   = pick($::trove::api::use_stderr, $use_stderr)
   $log_facility_real = pick($::trove::api::log_facility, $log_facility)
-  $log_dir_real      = pick($::trove::api::log_dir, $log_dir)
-  $log_file_real     = pick($::trove::api::log_file, $log_file)
+  if $log_dir != '' {
+    $log_dir_real = pick($::trove::api::log_dir,$log_dir)
+  } else {
+    $log_dir_real = $log_dir
+  }
+  if $log_file != '' {
+    $log_file_real = pick($::trove::api::log_file,$log_file)
+  } else {
+    $log_file_real = $log_file
+  }
   $debug_real        = pick($::trove::api::debug, $debug)
 
   oslo::log { 'trove_config':
