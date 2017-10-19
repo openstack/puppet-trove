@@ -40,7 +40,7 @@
 #
 # [*auth_url*]
 #   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v2.0'.
+#   Defaults to 'http://localhost:5000/v3'.
 #
 # [*swift_url*]
 #   (optional) Swift URL. If this is unset in the class, Trove will
@@ -120,7 +120,7 @@ class trove::guestagent(
   $log_dir                   = '/var/log/trove',
   $use_syslog                = $::os_service_default,
   $log_facility              = $::os_service_default,
-  $auth_url                  = 'http://localhost:5000/v2.0',
+  $auth_url                  = 'http://localhost:5000/v3',
   $swift_url                 = $::os_service_default,
   $swift_service_type        = $::os_service_default,
   $default_transport_url     = $::trove::default_transport_url,
@@ -161,9 +161,11 @@ in the future release. Please use trove::guestagent::package_ensure instead.")
 trove::control_exchange instead.")
   }
 
+  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
+
   # basic service config
   trove_guestagent_config {
-    'DEFAULT/trove_auth_url':          value => $auth_url;
+    'DEFAULT/trove_auth_url':          value => $trove_auth_url;
     'DEFAULT/swift_url':               value => $swift_url;
     'DEFAULT/swift_service_type':      value => $swift_service_type;
     'DEFAULT/root_grant':              value => $root_grant;

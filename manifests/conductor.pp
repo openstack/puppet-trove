@@ -40,7 +40,7 @@
 #
 # [*auth_url*]
 #   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v2.0'.
+#   Defaults to 'http://localhost:5000/v3'.
 #
 # [*conductor_manager*]
 #   (optional) Trove conductor manager.
@@ -73,7 +73,7 @@ class trove::conductor(
   $log_dir           = '/var/log/trove',
   $use_syslog        = $::os_service_default,
   $log_facility      = $::os_service_default,
-  $auth_url          = 'http://localhost:5000/v2.0',
+  $auth_url          = 'http://localhost:5000/v3',
   $conductor_manager = 'trove.conductor.manager.Manager',
   $workers           = $::os_workers,
   $enable_profiler   = $::os_service_default,
@@ -111,8 +111,9 @@ the future release. Please use trove::conductor::package_ensure instead.")
   }
 
   # basic service config
+  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
   trove_conductor_config {
-    'DEFAULT/trove_auth_url':               value => $auth_url;
+    'DEFAULT/trove_auth_url':               value => $trove_auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;

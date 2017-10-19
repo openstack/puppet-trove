@@ -127,7 +127,7 @@ describe 'trove::guestagent' do
       end
 
       let :params do
-        { :auth_url           => "http://10.0.0.1:5000/v2.0",
+        { :auth_url           => "http://10.0.0.1:5000/",
           :swift_url          => "http://10.0.0.1:8080/v1/AUTH_",
           :swift_service_type => 'object-store',
           :rabbit_host        => '10.1.0.1',
@@ -136,7 +136,7 @@ describe 'trove::guestagent' do
         }
       end
       it 'configures trove-guestagent with custom parameters' do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v2.0')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v3')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_host').with_value('10.1.0.1')

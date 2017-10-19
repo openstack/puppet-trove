@@ -62,7 +62,7 @@
 #
 # [*auth_url*]
 #   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v2.0'.
+#   Defaults to 'http://localhost:5000/v3'.
 #
 # [*heat_url*]
 #   (optional) URL without the tenant segment.
@@ -103,7 +103,7 @@ class trove::taskmanager(
   $use_syslog               = $::os_service_default,
   $guest_log_file           = '/var/log/trove/trove-guestagent.log',
   $log_facility             = $::os_service_default,
-  $auth_url                 = 'http://localhost:5000/v2.0',
+  $auth_url                 = 'http://localhost:5000/v3',
   $heat_url                 = false,
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
@@ -153,9 +153,11 @@ the future release. Please use trove::default_neutron_networks instead.")
     }
   }
 
+  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
+
   # basic service config
   trove_taskmanager_config {
-    'DEFAULT/trove_auth_url':               value => $auth_url;
+    'DEFAULT/trove_auth_url':               value => $trove_auth_url;
     'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
     'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
     'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
