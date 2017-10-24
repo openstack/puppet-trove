@@ -80,11 +80,11 @@ The `trove_conductor_config` provider is a children of the ini_setting provider.
 
 ```puppet
 trove_conductor_config { 'DEFAULT/auth_url' :
-  value => http://localhost:5000/v2.0,
+  value => http://localhost:5000/v3,
 }
 ```
 
-This will write `auth_url=http://localhost:5000/v2.0` in the `[DEFAULT]` section.
+This will write `auth_url=http://localhost:5000/v3` in the `[DEFAULT]` section.
 
 ##### name
 
@@ -108,11 +108,11 @@ The `trove_guestagent_config` provider is a children of the ini_setting provider
 
 ```puppet
 trove_guestagent_config { 'DEFAULT/trove_auth_url' :
-  value => http://localhost:5000/v2.0,
+  value => http://localhost:5000/v3,
 }
 ```
 
-This will write `trove_auth_url=http://localhost:5000/v2.0` in the `[DEFAULT]` section.
+This will write `trove_auth_url=http://localhost:5000/v3` in the `[DEFAULT]` section.
 
 ##### name
 

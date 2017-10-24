@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    In queens cycle, Keystone API v2.0 has been retired. Default values for auth_url
+    parameter in the different classes have been changed to point to the v3 URL.

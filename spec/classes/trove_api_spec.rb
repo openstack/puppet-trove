@@ -62,7 +62,7 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
         is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
         is_expected.to contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
-        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://localhost:5000')
+        is_expected.to contain_trove_config('DEFAULT/trove_auth_url').with_value('http://localhost:5000/v3')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
         is_expected.to contain_trove_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')

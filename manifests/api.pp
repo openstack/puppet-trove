@@ -204,8 +204,9 @@ the future release. Please use trove::api::package_ensure instead.")
   if $auth_strategy == 'keystone' {
     include ::trove::keystone::authtoken
 
+    $trove_auth_url = "${regsubst($::trove::keystone::authtoken::auth_uri, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
     trove_config {
-      'DEFAULT/trove_auth_url' : value => $::trove::keystone::authtoken::auth_uri;
+      'DEFAULT/trove_auth_url' : value => $trove_auth_url;
     }
   }
 
