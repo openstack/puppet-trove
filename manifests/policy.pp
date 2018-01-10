@@ -8,8 +8,14 @@
 #   (optional) Set of policies to configure for trove
 #   Example :
 #     {
-#       'trove-context_is_admin' => {'context_is_admin' => 'true'},
-#       'trove-default'          => {'default' => 'rule:admin_or_owner'}
+#       'trove-context_is_admin' => {
+#         'key' => 'context_is_admin',
+#         'value' => 'true'
+#       },
+#       'trove-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
 #     }
 #   Defaults to empty hash.
 #
@@ -23,13 +29,18 @@ class trove::policy (
 ) {
 
   include ::trove::deps
+  include ::trove::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::trove::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)
+
   oslo::policy { 'trove_config': policy_file => $policy_path }
+
 }

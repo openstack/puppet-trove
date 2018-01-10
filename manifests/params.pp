@@ -6,6 +6,7 @@ class trove::params {
   include ::openstacklib::defaults
 
   $client_package_name = 'python-troveclient'
+  $group               = 'trove'
 
   case $::osfamily {
     'RedHat': {
