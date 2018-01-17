@@ -268,6 +268,16 @@ the future release. Please use trove::api::package_ensure instead.")
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
   }
 
+  # endpoint type
+  trove_config {
+    'DEFAULT/nova_compute_endpoint_type': value => $::trove::nova_compute_endpoint_type;
+    'DEFAULT/cinder_endpoint_type':       value => $::trove::cinder_endpoint_type;
+    'DEFAULT/neutron_endpoint_type':      value => $::trove::neutron_endpoint_type;
+    'DEFAULT/swift_endpoint_type':        value => $::trove::swift_endpoint_type;
+    'DEFAULT/glance_endpoint_type':       value => $::trove::glance_endpoint_type;
+    'DEFAULT/trove_endpoint_type':        value => $::trove::trove_endpoint_type;
+  }
+
   if $::trove::use_neutron {
     trove_config {
       'DEFAULT/network_label_regex':         value => '.*';

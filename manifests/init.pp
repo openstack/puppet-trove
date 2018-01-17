@@ -244,6 +244,30 @@
 #   (optional) Neutron service type to use when searching catalog.
 #   Defaults to 'network'.
 #
+# [*nova_compute_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
+# [*neutron_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
+# [*cinder_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
+# [*swift_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
+# [*glance_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
+# [*trove_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $::os_service_default
+#
 # [*use_neutron*]
 #   (optional) Use Neutron
 #   Defaults to true
@@ -351,6 +375,12 @@ class trove(
   $cinder_service_type          = 'volumev2',
   $swift_service_type           = 'object-store',
   $neutron_service_type         = 'network',
+  $nova_compute_endpoint_type   = $::os_service_default,
+  $cinder_endpoint_type         = $::os_service_default,
+  $swift_endpoint_type          = $::os_service_default,
+  $glance_endpoint_type         = $::os_service_default,
+  $trove_endpoint_type          = $::os_service_default,
+  $neutron_endpoint_type        = $::os_service_default,
   $use_neutron                  = true,
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',

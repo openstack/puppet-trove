@@ -1,0 +1,6 @@
+---
+features:
+  - Add trove::nova_compute_endpoint_type, trove::neutron_endpoint_type,
+    trove::glance_endpoint_type, trove::cinder_endpoint_type,
+    trove::swift_endpoint_type, trove::trove_endpoint_type options to
+    configure endpoint type to use when searching catalog.

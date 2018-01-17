@@ -31,12 +31,19 @@ describe 'trove::api' do
 
       let :pre_condition do
         "class { 'trove':
-         nova_proxy_admin_pass     => 'verysecrete',
-         os_region_name            => 'RegionOne',
-         nova_compute_service_type => 'compute',
-         cinder_service_type       => 'volume',
-         swift_service_type        => 'object-store',
-         neutron_service_type      => 'network'}
+         nova_proxy_admin_pass      => 'verysecrete',
+         os_region_name             => 'RegionOne',
+         nova_compute_service_type  => 'compute',
+         cinder_service_type        => 'volume',
+         swift_service_type         => 'object-store',
+         neutron_service_type       => 'network',
+         nova_compute_endpoint_type => '<SERVICE DEFAULT>',
+         cinder_endpoint_type       => '<SERVICE DEFAULT>',
+         swift_endpoint_type        => '<SERVICE DEFAULT>',
+         trove_endpoint_type        => '<SERVICE DEFAULT>',
+         glance_endpoint_type       => '<SERVICE DEFAULT>',
+         neutron_endpoint_type      => '<SERVICE DEFAULT>',
+         }
          class { '::trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
@@ -72,6 +79,12 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volume')
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/cinder_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/swift_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/trove_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/neutron_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/glance_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_get_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_post_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('200')

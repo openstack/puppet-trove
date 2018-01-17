@@ -175,6 +175,16 @@ the future release. Please use trove::default_neutron_networks instead.")
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
   }
 
+  # endpoint type
+  trove_taskmanager_config {
+    'DEFAULT/nova_compute_endpoint_type': value => $::trove::nova_compute_endpoint_type;
+    'DEFAULT/cinder_endpoint_type':       value => $::trove::cinder_endpoint_type;
+    'DEFAULT/neutron_endpoint_type':      value => $::trove::neutron_endpoint_type;
+    'DEFAULT/swift_endpoint_type':        value => $::trove::swift_endpoint_type;
+    'DEFAULT/glance_endpoint_type':       value => $::trove::glance_endpoint_type;
+    'DEFAULT/trove_endpoint_type':        value => $::trove::trove_endpoint_type;
+  }
+
   if $::trove::single_tenant_mode {
     trove_taskmanager_config {
       'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
