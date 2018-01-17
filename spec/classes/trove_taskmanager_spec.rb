@@ -32,7 +32,6 @@ describe 'trove::taskmanager' do
          nova_compute_service_type => 'compute',
          cinder_service_type       => 'volume',
          swift_service_type        => 'object-store',
-         heat_service_type         => 'orchestration',
          neutron_service_type      => 'network'}"
       end
 
@@ -59,7 +58,6 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/cinder_service_type').with_value('volume')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/swift_service_type').with_value('object-store')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/neutron_service_type').with_value('network')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/taskmanager_manager').with_value('trove.taskmanager.manager.Manager')
         is_expected.to contain_file('/etc/trove/trove-guestagent.conf')

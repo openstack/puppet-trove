@@ -1,0 +1,4 @@
+---
+deprecations:
+  - trove::heat_service_type is deprecated and will be removed in a future
+    release.
