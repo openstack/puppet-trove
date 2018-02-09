@@ -193,20 +193,21 @@ trove::control_exchange instead.")
   }
 
   oslo::messaging::rabbit {'trove_guestagent_config':
-    rabbit_hosts          => $rabbit_hosts,
-    rabbit_host           => $rabbit_host,
-    rabbit_port           => $rabbit_port,
-    rabbit_use_ssl        => $rabbit_use_ssl,
-    rabbit_ha_queues      => $::trove::rabbit_ha_queues,
-    rabbit_userid         => $::trove::rabbit_userid,
-    rabbit_password       => $::trove::rabbit_password,
-    rabbit_virtual_host   => $::trove::rabbit_virtual_host,
-    kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
-    amqp_durable_queues   => $::trove::amqp_durable_queues,
-    kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
-    kombu_ssl_certfile    => $::trove::kombu_ssl_certfile,
-    kombu_ssl_keyfile     => $::trove::kombu_ssl_keyfile,
-    kombu_ssl_version     => $::trove::kombu_ssl_version
+    rabbit_hosts            => $rabbit_hosts,
+    rabbit_host             => $rabbit_host,
+    rabbit_port             => $rabbit_port,
+    rabbit_use_ssl          => $rabbit_use_ssl,
+    rabbit_ha_queues        => $::trove::rabbit_ha_queues,
+    rabbit_userid           => $::trove::rabbit_userid,
+    rabbit_password         => $::trove::rabbit_password,
+    rabbit_virtual_host     => $::trove::rabbit_virtual_host,
+    kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
+    kombu_failover_strategy => $::trove::kombu_failover_strategy,
+    amqp_durable_queues     => $::trove::amqp_durable_queues,
+    kombu_ssl_ca_certs      => $::trove::kombu_ssl_ca_certs,
+    kombu_ssl_certfile      => $::trove::kombu_ssl_certfile,
+    kombu_ssl_keyfile       => $::trove::kombu_ssl_keyfile,
+    kombu_ssl_version       => $::trove::kombu_ssl_version
   }
 
   oslo::messaging::amqp { 'trove_guestagent_config':

@@ -78,6 +78,12 @@
 #   consumer cancel notification.
 #   Defaults to $::os_service_default
 #
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $::os_service_default
+#
 # [*amqp_durable_queues*]
 #   (optional) Define queues as "durable" to rabbitmq.
 #   Defaults to $::os_service_default
@@ -306,6 +312,7 @@ class trove(
   $kombu_ssl_keyfile            = $::os_service_default,
   $kombu_ssl_version            = $::os_service_default,
   $kombu_reconnect_delay        = $::os_service_default,
+  $kombu_failover_strategy      = $::os_service_default,
   $amqp_durable_queues          = $::os_service_default,
   $amqp_server_request_prefix   = $::os_service_default,
   $amqp_broadcast_prefix        = $::os_service_default,
