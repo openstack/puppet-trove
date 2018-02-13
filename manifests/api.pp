@@ -266,7 +266,6 @@ the future release. Please use trove::api::package_ensure instead.")
     'DEFAULT/cinder_service_type':       value => $::trove::cinder_service_type;
     'DEFAULT/neutron_service_type':      value => $::trove::neutron_service_type;
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
-    'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
   if $::trove::use_neutron {

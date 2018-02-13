@@ -64,10 +64,6 @@
 #   (optional) Authentication URL.
 #   Defaults to 'http://localhost:5000/v3'.
 #
-# [*heat_url*]
-#   (optional) URL without the tenant segment.
-#   Defaults to false
-#
 # [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestagent.conf'.
@@ -104,7 +100,6 @@ class trove::taskmanager(
   $guest_log_file           = '/var/log/trove/trove-guestagent.log',
   $log_facility             = $::os_service_default,
   $auth_url                 = 'http://localhost:5000/v3',
-  $heat_url                 = false,
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
@@ -178,7 +173,6 @@ the future release. Please use trove::default_neutron_networks instead.")
     'DEFAULT/cinder_service_type':       value => $::trove::cinder_service_type;
     'DEFAULT/neutron_service_type':      value => $::trove::neutron_service_type;
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
-    'DEFAULT/heat_service_type':         value => $::trove::heat_service_type;
   }
 
   if $::trove::single_tenant_mode {

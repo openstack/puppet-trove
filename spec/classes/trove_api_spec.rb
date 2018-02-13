@@ -36,7 +36,6 @@ describe 'trove::api' do
          nova_compute_service_type => 'compute',
          cinder_service_type       => 'volume',
          swift_service_type        => 'object-store',
-         heat_service_type         => 'orchestration',
          neutron_service_type      => 'network'}
          class { '::trove::keystone::authtoken':
            password => 'a_big_secret',
@@ -72,7 +71,6 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volume')
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
-        is_expected.to contain_trove_config('DEFAULT/heat_service_type').with_value('orchestration')
         is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
         is_expected.to contain_trove_config('DEFAULT/http_get_rate').with_value('200')
         is_expected.to contain_trove_config('DEFAULT/http_post_rate').with_value('200')
