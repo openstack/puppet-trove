@@ -73,6 +73,7 @@ describe 'trove::taskmanager' do
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_taskmanager_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_oslo__messaging__rabbit('trove_taskmanager_config').with(
           :rabbit_use_ssl => '<SERVICE DEFAULT>',

@@ -203,20 +203,21 @@ the future release. Please use trove::default_neutron_networks instead.")
   }
 
   oslo::messaging::rabbit { 'trove_taskmanager_config':
-    rabbit_hosts          => $::trove::rabbit_hosts,
-    rabbit_host           => $::trove::rabbit_host,
-    rabbit_port           => $::trove::rabbit_port,
-    rabbit_ha_queues      => $::trove::rabbit_ha_queues,
-    rabbit_userid         => $::trove::rabbit_userid,
-    rabbit_password       => $::trove::rabbit_password,
-    rabbit_virtual_host   => $::trove::rabbit_virtual_host,
-    rabbit_use_ssl        => $::trove::rabbit_use_ssl,
-    kombu_reconnect_delay => $::trove::kombu_reconnect_delay,
-    amqp_durable_queues   => $::trove::amqp_durable_queues,
-    kombu_ssl_ca_certs    => $::trove::kombu_ssl_ca_certs,
-    kombu_ssl_certfile    => $::trove::kombu_ssl_certfile,
-    kombu_ssl_keyfile     => $::trove::kombu_ssl_keyfile,
-    kombu_ssl_version     => $::trove::kombu_ssl_version
+    rabbit_hosts            => $::trove::rabbit_hosts,
+    rabbit_host             => $::trove::rabbit_host,
+    rabbit_port             => $::trove::rabbit_port,
+    rabbit_ha_queues        => $::trove::rabbit_ha_queues,
+    rabbit_userid           => $::trove::rabbit_userid,
+    rabbit_password         => $::trove::rabbit_password,
+    rabbit_virtual_host     => $::trove::rabbit_virtual_host,
+    rabbit_use_ssl          => $::trove::rabbit_use_ssl,
+    kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
+    kombu_failover_strategy => $::trove::kombu_failover_strategy,
+    amqp_durable_queues     => $::trove::amqp_durable_queues,
+    kombu_ssl_ca_certs      => $::trove::kombu_ssl_ca_certs,
+    kombu_ssl_certfile      => $::trove::kombu_ssl_certfile,
+    kombu_ssl_keyfile       => $::trove::kombu_ssl_keyfile,
+    kombu_ssl_version       => $::trove::kombu_ssl_version
   }
 
   oslo::messaging::amqp { 'trove_taskmanager_config':
