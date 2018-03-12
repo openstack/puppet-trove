@@ -19,6 +19,7 @@ describe 'trove::db::sync' do
                          'Anchor[trove::config::end]',
                          'Anchor[trove::dbsync::begin]'],
         :notify      => 'Anchor[trove::dbsync::end]',
+        :tag         => 'openstack-db',
       )
     end
 
