@@ -34,5 +34,6 @@ class trove::db::sync {
       Anchor['trove::dbsync::begin']
     ],
     notify      => Anchor['trove::dbsync::end'],
+    tag         => 'openstack-db',
   }
 }
