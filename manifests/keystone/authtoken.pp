@@ -228,6 +228,8 @@ class trove::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::trove::deps
+
   if is_service_default($password) {
     fail('Please set password for trove service user')
   }
