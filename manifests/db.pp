@@ -33,6 +33,10 @@
 #   If set, use this value for max_overflow with sqlalchemy.
 #   (Optional) Defaults to 20.
 #
+# [*database_pool_timeout*]
+#   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
+#   Defaults to $::os_service_default
+#
 class trove::db (
   $database_connection     = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_idle_timeout   = $::os_service_default,
@@ -41,6 +45,7 @@ class trove::db (
   $database_max_retries    = $::os_service_default,
   $database_retry_interval = $::os_service_default,
   $database_max_overflow   = $::os_service_default,
+  $database_pool_timeout   = $::os_service_default,
 ) {
 
   include ::trove::deps
@@ -65,6 +70,7 @@ class trove::db (
     max_pool_size  => $database_max_pool_size_real,
     max_retries    => $database_max_retries_real,
     retry_interval => $database_retry_interval_real,
-    max_overflow   => $database_max_overflow_real
+    max_overflow   => $database_max_overflow_real,
+    pool_timeout   => $database_pool_timeout,
   }
 }
