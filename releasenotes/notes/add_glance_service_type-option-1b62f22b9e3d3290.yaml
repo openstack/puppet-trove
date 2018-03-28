@@ -1,0 +1,4 @@
+---
+features:
+  - Add trove::glance_service_type option to configure glance
+    service type to use when searching catalog.

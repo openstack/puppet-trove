@@ -265,6 +265,7 @@ the future release. Please use trove::api::package_ensure instead.")
     'DEFAULT/nova_compute_service_type': value => $::trove::nova_compute_service_type;
     'DEFAULT/cinder_service_type':       value => $::trove::cinder_service_type;
     'DEFAULT/neutron_service_type':      value => $::trove::neutron_service_type;
+    'DEFAULT/glance_service_type':       value => $::trove::glance_service_type;
     'DEFAULT/swift_service_type':        value => $::trove::swift_service_type;
   }
 

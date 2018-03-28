@@ -244,6 +244,10 @@
 #   (optional) Neutron service type to use when searching catalog.
 #   Defaults to 'network'.
 #
+# [*glance_service_type*]
+#   (optional) Glance service type to use when searching catalog.
+#   Defaults to 'image'.
+#
 # [*nova_compute_endpoint_type*]
 #   (optional) Service endpoint type to use when searching catalog.
 #   Defaults to $::os_service_default
@@ -375,6 +379,7 @@ class trove(
   $cinder_service_type          = 'volumev2',
   $swift_service_type           = 'object-store',
   $neutron_service_type         = 'network',
+  $glance_service_type         = 'image',
   $nova_compute_endpoint_type   = $::os_service_default,
   $cinder_endpoint_type         = $::os_service_default,
   $swift_endpoint_type          = $::os_service_default,
