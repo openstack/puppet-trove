@@ -120,12 +120,6 @@
 #   (optional) Message queue name the Taskmanager will listen to.
 #   Defaults to 'taskmanager'.
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_package*]
-#   (optional) Whether the trove api package will be installed
-#   Defaults to undef
-#
 class trove::api(
   $debug               = undef,
   $log_file            = undef,
@@ -151,8 +145,6 @@ class trove::api(
   $package_ensure      = 'present',
   $auth_strategy       = 'keystone',
   $taskmanager_queue   = 'taskmanager',
-  # DEPRECATED PARAMETERS
-  $ensure_package      = undef,
 ) inherits trove {
 
   include ::trove::deps
@@ -160,14 +152,6 @@ class trove::api(
   include ::trove::db::sync
   include ::trove::logging
   include ::trove::params
-
-  if $ensure_package {
-    warning("trove::api::ensure_package is deprecated and will be removed in \
-the future release. Please use trove::api::package_ensure instead.")
-    $package_ensure_real = $ensure_package
-  } else {
-    $package_ensure_real = $package_ensure
-  }
 
   # basic service config
   trove_config {
@@ -343,7 +327,7 @@ the future release. Please use trove::api::package_ensure instead.")
   trove::generic_service { 'api':
     enabled        => $enabled,
     manage_service => $manage_service,
-    package_ensure => $package_ensure_real,
+    package_ensure => $package_ensure,
     package_name   => $::trove::params::api_package_name,
     service_name   => $::trove::params::api_service_name,
   }

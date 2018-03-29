@@ -86,10 +86,6 @@
 #   (optional) Use template to provision trove guest agent configuration file.
 #   Defaults to true.
 #
-# [*ensure_package*]
-#   (optional) The state of the trove taskmanager package
-#   Defaults to undef
-#
 class trove::taskmanager(
   $enabled                  = true,
   $manage_service           = true,
@@ -107,19 +103,10 @@ class trove::taskmanager(
   $default_neutron_networks = undef,
   $taskmanager_queue        = undef,
   $use_guestagent_template  = true,
-  $ensure_package           = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
-
-  if $ensure_package {
-    warning("trove::taskmanager::ensure_package is deprecated and will be removed in \
-the future release. Please use trove::taskmanager::package_ensure instead.")
-    $package_ensure_real = $ensure_package
-  } else {
-    $package_ensure_real = $package_ensure
-  }
 
   if $default_neutron_networks {
     warning("trove::taskmanager::default_neutron_networks is deprecated and will be removed in \
@@ -277,7 +264,7 @@ the future release. Please use trove::default_neutron_networks instead.")
     manage_service => $manage_service,
     package_name   => $::trove::params::taskmanager_package_name,
     service_name   => $::trove::params::taskmanager_service_name,
-    package_ensure => $package_ensure_real,
+    package_ensure => $package_ensure,
   }
 
   if $guestagent_config_file {

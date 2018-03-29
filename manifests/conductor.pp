@@ -58,12 +58,6 @@
 #   (optional) If False doesn't trace SQL requests.
 #   Default: $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_package*]
-#   (optional) The state of the trove conductor package
-#   Defaults to undef
-#
 class trove::conductor(
   $enabled           = true,
   $manage_service    = true,
@@ -78,20 +72,10 @@ class trove::conductor(
   $workers           = $::os_workers,
   $enable_profiler   = $::os_service_default,
   $trace_sqlalchemy  = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $ensure_package    = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
-
-  if $ensure_package {
-    warning("trove::conductor::ensure_package is deprecated and will be removed in \
-the future release. Please use trove::conductor::package_ensure instead.")
-    $package_ensure_real = $ensure_package
-  } else {
-    $package_ensure_real = $package_ensure
-  }
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
@@ -202,7 +186,7 @@ the future release. Please use trove::conductor::package_ensure instead.")
     manage_service => $manage_service,
     package_name   => $::trove::params::conductor_package_name,
     service_name   => $::trove::params::conductor_service_name,
-    package_ensure => $package_ensure_real,
+    package_ensure => $package_ensure,
   }
 
 }

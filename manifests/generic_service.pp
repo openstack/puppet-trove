@@ -47,20 +47,12 @@
 #   (optional) Control the ensure parameter for the package ressource.
 #   Defaults to 'present'.
 #
-# DEPRECATED PARAMETERS
-#
-# [*ensure_package*]
-#   (optional) Control the ensure parameter for the package ressource.
-#   Defaults to undef.
-#
 define trove::generic_service(
   $package_name,
   $service_name,
   $enabled        = false,
   $manage_service = true,
   $package_ensure = 'present',
-  # DEPRECATED PARAMETERS
-  $ensure_package = undef
 ) {
 
   include ::trove::deps
@@ -68,18 +60,10 @@ define trove::generic_service(
 
   $trove_title = "trove-${name}"
 
-  if $ensure_package {
-    warning("trove::generic_service::ensure_package is deprecated and will be removed \
-in the future release. Please use trove::generic_service::package_ensure instead.")
-    $package_ensure_real = $ensure_package
-  } else {
-    $package_ensure_real = $package_ensure
-  }
-
   if ($package_name) {
     if !defined(Package[$package_name]) {
       package { $trove_title:
-        ensure => $package_ensure_real,
+        ensure => $package_ensure,
         name   => $package_name,
         tag    => ['openstack', 'trove-package'],
       }
