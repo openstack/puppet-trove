@@ -5,7 +5,13 @@
 class trove::params {
   include ::openstacklib::defaults
 
-  $client_package_name = 'python-troveclient'
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+
+  $client_package_name = "python${pyvers}-troveclient"
   $group               = 'trove'
 
   case $::osfamily {

@@ -25,14 +25,20 @@ describe 'trove::client' do
   shared_examples_for 'trove client' do
 
     context 'with default parameters' do
-      it { is_expected.to contain_package('python-troveclient').with_ensure('present') }
+      it { is_expected.to contain_package('python-troveclient').with(
+        'ensure' => 'present',
+        'name'   => platform_params[:client_package_name],
+      )}
     end
 
     context 'with package_ensure parameter provided' do
       let :params do
         { :package_ensure => false }
       end
-      it { is_expected.to contain_package('python-troveclient').with_ensure('false') }
+      it { is_expected.to contain_package('python-troveclient').with(
+        'ensure' => false,
+        'name'   => platform_params[:client_package_name],
+      )}
     end
 
   end
@@ -43,6 +49,19 @@ describe 'trove::client' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian'
+            { :client_package_name => 'python3-troveclient' }
+          else
+            { :client_package_name => 'python-troveclient' }
+          end
+        when 'RedHat'
+          { :client_package_name => 'python-troveclient' }
+        end
       end
 
       it_configures 'trove client'
