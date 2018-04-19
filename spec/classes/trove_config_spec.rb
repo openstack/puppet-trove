@@ -32,6 +32,8 @@ describe 'trove::config' do
       }
     end
 
+    it { is_expected.to contain_class('trove::deps') }
+
     it 'configures arbitrary trove configurations' do
       is_expected.to contain_trove_config('DEFAULT/foo').with_value('fooValue')
       is_expected.to contain_trove_config('DEFAULT/bar').with_value('barValue')
