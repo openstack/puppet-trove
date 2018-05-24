@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated trove::heat_service_type is now removed.

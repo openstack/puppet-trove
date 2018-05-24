@@ -322,10 +322,6 @@
 #     amqp (for AMQP 1.0)
 #   Defaults to 'rabbit'
 #
-# [*heat_service_type*]
-#   (optional) Heat service type to use when searching catalog.
-#   Defaults to undef.
-#
 class trove(
   $nova_proxy_admin_pass,
   $default_transport_url        = $::os_service_default,
@@ -397,7 +393,6 @@ class trove(
   $rabbit_userid                = $::os_service_default,
   $rabbit_virtual_host          = $::os_service_default,
   $rpc_backend                  = 'rabbit',
-  $heat_service_type            = undef,
 ) {
 
   include ::trove::deps
@@ -415,10 +410,6 @@ class trove(
 trove::rabbit_port, trove::rabbit_userid, trove::rabbit_virtual_host and \
 trove::rpc_backend are deprecated. Please use trove::default_transport_url \
 instead.")
-  }
-
-  if $heat_service_type {
-    warning('The heat_service_type parameter is deprecated, has no effect and will be removed in R release')
   }
 
   if $nova_compute_url {
