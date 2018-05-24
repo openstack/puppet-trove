@@ -36,8 +36,6 @@ describe 'trove::conductor' do
         is_expected.to contain_trove_conductor_config('DEFAULT/remote_cinder_client').with_ensure('absent')
         is_expected.to contain_trove_conductor_config('DEFAULT/remote_neutron_client').with_ensure('absent')
         is_expected.to contain_trove_conductor_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
@@ -79,10 +77,9 @@ describe 'trove::conductor' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rabbit_host           => '10.0.0.1'}"
+           }"
         end
         it 'configures trove-conductor with RabbitMQ' do
-          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         end
@@ -94,10 +91,9 @@ describe 'trove::conductor' do
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
              amqp_durable_queues   => 'true',
-             rabbit_host           => '10.0.0.1'}"
+           }"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true')
         end
@@ -107,10 +103,10 @@ describe 'trove::conductor' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rabbit_hosts          => ['10.0.0.1','10.0.0.2']}"
+             rabbit_ha_queues      => true,
+           }"
         end
         it 'configures trove-conductor with RabbitMQ' do
-          is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
           is_expected.to contain_trove_conductor_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
         end
       end

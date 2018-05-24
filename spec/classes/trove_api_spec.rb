@@ -102,8 +102,6 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
@@ -171,13 +169,12 @@ describe 'trove::api' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
-             rabbit_host           => '10.0.0.1'}
+           }
            class { '::trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
           is_expected.to contain_trove_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
         end
@@ -189,13 +186,12 @@ describe 'trove::api' do
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
              amqp_durable_queues   => 'true',
-             rabbit_host           => '10.0.0.1'}
+           }
             class { '::trove::keystone::authtoken':
               password => 'a_big_secret',
             }"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_host').with_value('10.0.0.1')
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
           is_expected.to contain_trove_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true')
         end
@@ -206,13 +202,12 @@ describe 'trove::api' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
-             rabbit_hosts          => ['10.0.0.1','10.0.0.2']}
+           }
            class { '::trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_hosts').with_value(['10.0.0.1,10.0.0.2'])
           is_expected.to contain_trove_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
         end
       end

@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The deprecated trove::rabbit_host, trove::rabbit_hosts, trove::rabbit_password,
+    trove::rabbit_port, trove::rabbit_userid and trove::rabit_virtual_host are now
+    removed. Please use trove::default_transport_url instead.
