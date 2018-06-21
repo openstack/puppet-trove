@@ -191,3 +191,8 @@ Contributors
 ------------
 
 * https://github.com/enovance/puppet-trove/graphs/contributors
+
+Release Notes
+-------------
+
+* https://docs.openstack.org/releasenotes/puppet-trove
