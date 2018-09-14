@@ -38,7 +38,8 @@ class trove::params {
       $taskmanager_service_name = 'trove-taskmanager'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
+module ${module_name} only support osfamily RedHat and Debian")
     }
 
   } # Case $::osfamily
