@@ -86,62 +86,30 @@
 #   (Optional) Moved to init.pp. The default exchange to scope topics.
 #   Defaults to undef.
 #
-# [*rabbit_hosts*]
-#   (optional) List of clustered rabbit servers.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   different IPs.
-#
-# [*rabbit_host*]
-#   (optional) Location of rabbitmq installation.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   a different IP.
-#
-# [*rabbit_port*]
-#   (optional) Port for rabbitmq instance.
-#   Defaults to the value set in the trove class.
-#   The default can generally be left unless the
-#   guests need to talk to the rabbit cluster via
-#   a different port.
-#
 class trove::guestagent(
-  $enabled                   = true,
-  $manage_service            = true,
-  $package_ensure            = 'present',
-  $debug                     = $::os_service_default,
-  $log_file                  = '/var/log/trove/trove-guestagent.log',
-  $log_dir                   = '/var/log/trove',
-  $use_syslog                = $::os_service_default,
-  $log_facility              = $::os_service_default,
-  $auth_url                  = 'http://localhost:5000/v3',
-  $swift_url                 = $::os_service_default,
-  $swift_service_type        = $::os_service_default,
-  $default_transport_url     = $::trove::default_transport_url,
-  $rabbit_use_ssl            = $::trove::rabbit_use_ssl,
-  $root_grant                = $::os_service_default,
-  $root_grant_option         = $::os_service_default,
-  $default_password_length   = $::os_service_default,
-  $backup_aes_cbc_key        = $::os_service_default,
+  $enabled                 = true,
+  $manage_service          = true,
+  $package_ensure          = 'present',
+  $debug                   = $::os_service_default,
+  $log_file                = '/var/log/trove/trove-guestagent.log',
+  $log_dir                 = '/var/log/trove',
+  $use_syslog              = $::os_service_default,
+  $log_facility            = $::os_service_default,
+  $auth_url                = 'http://localhost:5000/v3',
+  $swift_url               = $::os_service_default,
+  $swift_service_type      = $::os_service_default,
+  $default_transport_url   = $::trove::default_transport_url,
+  $rabbit_use_ssl          = $::trove::rabbit_use_ssl,
+  $root_grant              = $::os_service_default,
+  $root_grant_option       = $::os_service_default,
+  $default_password_length = $::os_service_default,
+  $backup_aes_cbc_key      = $::os_service_default,
   #Deprecated
-  $control_exchange          = undef,
-  $rabbit_hosts              = $::trove::rabbit_hosts,
-  $rabbit_host               = $::trove::rabbit_host,
-  $rabbit_port               = $::trove::rabbit_port,
+  $control_exchange        = undef,
 ) inherits trove {
 
   include ::trove::deps
   include ::trove::params
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_port) {
-    warning("trove::guestagent::rabbit_host, trove::guestagent::rabbit_hosts, \
-and trove::guestagent::rabbit_port are deprecated. Please use \
-trove::guestagent::default_transport_url instead.")
-  }
 
   if $control_exchange {
     warning("control_exchange parameter is deprecated. Please use \
@@ -182,14 +150,8 @@ trove::control_exchange instead.")
   }
 
   oslo::messaging::rabbit {'trove_guestagent_config':
-    rabbit_hosts            => $rabbit_hosts,
-    rabbit_host             => $rabbit_host,
-    rabbit_port             => $rabbit_port,
     rabbit_use_ssl          => $rabbit_use_ssl,
     rabbit_ha_queues        => $::trove::rabbit_ha_queues,
-    rabbit_userid           => $::trove::rabbit_userid,
-    rabbit_password         => $::trove::rabbit_password,
-    rabbit_virtual_host     => $::trove::rabbit_virtual_host,
     kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
     kombu_failover_strategy => $::trove::kombu_failover_strategy,
     amqp_durable_queues     => $::trove::amqp_durable_queues,
