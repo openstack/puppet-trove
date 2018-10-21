@@ -18,8 +18,7 @@ class { '::trove::db::mysql':
 
 class { '::trove':
   database_connection   => 'mysql://trove:secrete@10.0.0.1/trove?charset=utf8',
-  rabbit_hosts          => ['10.0.0.1'],
-  rabbit_password       => 'secrete',
+  default_transport_url => 'rabbit://trove:an_even_bigger_secret@10.0.0.1:5672/trove',
   nova_proxy_admin_pass => 'novapass',
 }
 
