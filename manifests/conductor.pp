@@ -137,13 +137,7 @@ class trove::conductor(
   }
 
   oslo::messaging::rabbit {'trove_conductor_config':
-    rabbit_hosts            => $::trove::rabbit_hosts,
-    rabbit_host             => $::trove::rabbit_host,
-    rabbit_port             => $::trove::rabbit_port,
     rabbit_ha_queues        => $::trove::rabbit_ha_queues,
-    rabbit_userid           => $::trove::rabbit_userid,
-    rabbit_password         => $::trove::rabbit_password,
-    rabbit_virtual_host     => $::trove::rabbit_virtual_host,
     rabbit_use_ssl          => $::trove::rabbit_use_ssl,
     kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
     kombu_failover_strategy => $::trove::kombu_failover_strategy,
