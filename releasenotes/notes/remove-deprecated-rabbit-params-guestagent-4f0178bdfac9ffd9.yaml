@@ -1,0 +1,9 @@
+---
+fixes:
+  - |
+    The guestagent config now sets the transport_url instead of the removed
+    rabbit options.
+upgrade:
+  - |
+    The deprecated rabbit_host, rabbit_hosts and rabbit_port parameters in
+    trove::guestagent is now removed, please use default_transport_url instead.

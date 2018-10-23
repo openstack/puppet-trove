@@ -5,7 +5,7 @@
 # URL representing the messaging driver to use and its full configuration.
 # If not set, we fall back to the 'rpc_backend' option and driver specific
 # configuration.
-#transport_url=<None>
+transport_url = <%= @default_transport_url %>
 
 # The messaging driver to use. Options include rabbit and zmq.
 # Default is rabbit. (string value)
@@ -72,56 +72,6 @@ backup_segment_max_size = 2147483648
 
 [oslo_messaging_rabbit]
 # ============ RabbitMQ connection options ========================
-<%- if @rabbit_hosts and @rabbit_hosts != "<SERVICE DEFAULT>" -%>
-# RabbitMQ HA cluster host:port pairs. (list value)
-rabbit_hosts=<%= @rabbit_hosts.join(',') %>
-
-# The RabbitMQ broker address where a single node is used.
-# (string value)
-#rabbit_host=localhost
-
-# The RabbitMQ broker port where a single node is used.
-# (integer value)
-#rabbit_port=5672
-<%- else -%>
-# The RabbitMQ broker address where a single node is used.
-# (string value)
-<%- if @rabbit_host and @rabbit_host != "<SERVICE DEFAULT>" -%>
-rabbit_host=<%= @rabbit_host %>
-<%- else -%>
-#rabbit_host=localhost
-<%- end -%>
-
-# The RabbitMQ broker port where a single node is used.
-# (integer value)
-<%- if @rabbit_port and @rabbit_port != "<SERVICE DEFAULT>" -%>
-rabbit_port=<%= @rabbit_port %>
-<%- else -%>
-#rabbit_port=5672
-<%- end -%>
-<%- end -%>
-
-# The RabbitMQ userid. (string value)
-<%- if @rabbit_userid and @rabbit_userid != "<SERVICE DEFAULT>" -%>
-rabbit_userid=<%= @rabbit_userid %>
-<%- else -%>
-#rabbit_userid=guest
-<%- end -%>
-
-# The RabbitMQ password. (string value)
-<%- if @rabbit_password and @rabbit_password != "<SERVICE DEFAULT>" -%>
-rabbit_password=<%= @rabbit_password %>
-<%- else -%>
-#rabbit_password=guest
-<%- end -%>
-
-# The RabbitMQ virtual host. (string value)
-<%- if @rabbit_virtual_host and @rabbit_virtual_host != "<SERVICE DEFAULT>" -%>
-rabbit_virtual_host=<%= @rabbit_virtual_host %>
-<%- else -%>
-#rabbit_virtual_host=/
-<%- end -%>
-
 <%- if @rabbit_ha_queues and @rabbit_ha_queues != "<SERVICE DEFAULT>" -%>
 rabbit_ha_queues=<%= @rabbit_ha_queues %>
 <%- else -%>
