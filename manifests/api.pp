@@ -188,9 +188,7 @@ class trove::api(
   if $auth_strategy == 'keystone' {
     include ::trove::keystone::authtoken
 
-    # TODO(tobasco): Remove pick when deprecated auth_url is removed and only use www_authenticate_url
-    $trove_auth_url_pick = pick($::trove::keystone::authtoken::auth_uri, $::trove::keystone::authtoken::www_authenticate_uri)
-    $trove_auth_url = "${regsubst($trove_auth_url_pick, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
+    $trove_auth_url = "${regsubst($::trove::keystone::authtoken::www_authenticate_uri, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
     trove_config {
       'DEFAULT/trove_auth_url' : value => $trove_auth_url;
     }
