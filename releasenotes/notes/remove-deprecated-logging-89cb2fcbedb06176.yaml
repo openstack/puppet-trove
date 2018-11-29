@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated parameters use_syslog, use_stderr, log_facility, log_dir, log_file
+    and debug in the api class is now removed. Please set them in the logging class.
