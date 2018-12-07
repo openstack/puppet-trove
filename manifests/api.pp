@@ -29,32 +29,6 @@
 #   (optional) Whether the trove api package will be installed
 #   Defaults to 'present'
 #
-# [*debug*]
-#   (optional) Rather to log the trove api service at debug level.
-#   Defaults to undef
-#
-# [*log_file*]
-#   (optional) The path of file used for logging
-#   If set to $::os_service_default, it will not log to any file.
-#   Defaults to undef
-#
-# [*log_dir*]
-#   (optional) directory to which trove logs are sent.
-#   If set to $::os_service_default, it will not log to any directory.
-#   Defaults to undef
-#
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to undef
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines.
-#   Defaults to undef.
-#
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
 #   Default: 0.0.0.0
@@ -121,12 +95,6 @@
 #   Defaults to 'taskmanager'.
 #
 class trove::api(
-  $debug               = undef,
-  $log_file            = undef,
-  $log_dir             = undef,
-  $use_syslog          = undef,
-  $use_stderr          = undef,
-  $log_facility        = undef,
   $bind_host           = '0.0.0.0',
   $bind_port           = '8779',
   $backlog             = '4096',
@@ -150,7 +118,6 @@ class trove::api(
   include ::trove::deps
   include ::trove::db
   include ::trove::db::sync
-  include ::trove::logging
   include ::trove::params
 
   # basic service config
