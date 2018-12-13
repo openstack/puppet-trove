@@ -22,53 +22,62 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for Trove user.
+#   (Required) Password for Trove user.
 #
 # [*auth_name*]
-#   Username for Trove service. Defaults to 'trove'.
+#   (Optional) Username for Trove service.
+#   Defaults to 'trove'.
 #
 # [*email*]
-#   Email for Trove user. Defaults to 'trove@localhost'.
+#   (Optional) Email for Trove user.
+#   Defaults to 'trove@localhost'.
 #
 # [*tenant*]
-#   Tenant for Trove user. Defaults to 'services'.
+#   (Optional) Tenant for Trove user.
+#   Defaults to 'services'.
 #
 # [*configure_endpoint*]
-#   Should Trove endpoint be configured? Defaults to 'true'.
+#   (Optional) Should Trove endpoint be configured?
+#   Defaults to true.
 #
 # [*configure_user*]
-#   Should Trove user be configured?
-#   Defaults to 'true'.
+#   (Optional) Should Trove user be configured?
+#   Defaults to true.
 #
 # [*configure_user_role*]
-#   Should Trove user_role be configured?
-#   Defaults to 'true'.
+#   (Optional) Should Trove user_role be configured?
+#   Defaults to true.
 #
 # [*service_type*]
-#   Type of service. Defaults to 'database'.
+#   (Optional) Type of service.
+#   Defaults to 'database'.
 #
 # [*service_name*]
-#   (optional) Name of the service.
+#   (Optional) Name of the service.
 #   Defaults to 'trove'.
 #
 # [*service_description*]
-#   (optional) Description for keystone service.
+#   (Optional) Description for keystone service.
 #   Defaults to 'Trove Database Service'.
 #
 # [*region*]
-#   Region for endpoint. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   (0ptional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8779/v1.0/%(tenant_id)s'
 #
 # === Examples
 #

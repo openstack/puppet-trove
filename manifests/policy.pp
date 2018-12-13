@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for trove
+#   (Optional) Set of policies to configure for trove
 #   Example :
 #     {
 #       'trove-context_is_admin' => {
@@ -20,7 +20,7 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the trove policy.json file
+#   (Optional) Path to the trove policy.json file
 #   Defaults to /etc/trove/policy.json
 #
 class trove::policy (
