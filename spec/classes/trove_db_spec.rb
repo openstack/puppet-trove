@@ -1,12 +1,11 @@
 require 'spec_helper'
 
 describe 'trove::db' do
-
   shared_examples 'trove::db' do
-
     context 'with default parameters' do
+      it { should contain_class('trove::deps') }
 
-      it { is_expected.to contain_oslo__db('trove_config').with(
+      it { should contain_oslo__db('trove_config').with(
         :connection     => 'sqlite:////var/lib/trove/trove.sqlite',
         :idle_timeout   => '<SERVICE DEFAULT>',
         :min_pool_size  => '<SERVICE DEFAULT>',
@@ -20,17 +19,21 @@ describe 'trove::db' do
 
     context 'with specific parameters' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://trove:trove@localhost/trove',
+        {
+          :database_connection     => 'mysql+pymysql://trove:trove@localhost/trove',
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
           :database_max_pool_size  => '21',
           :database_max_retries    => '11',
           :database_max_overflow   => '21',
           :database_pool_timeout   => '21',
-          :database_retry_interval => '11', }
+          :database_retry_interval => '11',
+        }
       end
 
-      it { is_expected.to contain_oslo__db('trove_config').with(
+      it { should contain_class('trove::deps') }
+
+      it { should contain_oslo__db('trove_config').with(
         :connection     => 'mysql+pymysql://trove:trove@localhost/trove',
         :idle_timeout   => '3601',
         :min_pool_size  => '2',
@@ -40,67 +43,6 @@ describe 'trove::db' do
         :max_overflow   => '21',
         :pool_timeout   => '21',
       )}
-    end
-
-    context 'with MySQL-python library as backend package' do
-      let :params do
-        { :database_connection => 'mysql://trove:trove@localhost/trove', }
-    end
-
-      it { is_expected.to contain_package('python-mysqldb').with(:ensure => 'present') }
-    end
-
-    context 'with postgresql backend' do
-      let :params do
-        { :database_connection => 'postgresql://trove:trove@localhost/trove', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
-      end
-
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'redis://trove:trove@localhost/trove', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
-    context 'with incorrect pymysql database_connection string' do
-      let :params do
-        { :database_connection => 'foo+pymysql://trove:trove@localhost/trove', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
-  end
-
-  shared_examples_for 'trove::db on Debian platforms' do
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://trove:trove@localhost/trove', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-pymysql').with(
-          :ensure => 'present',
-          :name   => 'python-pymysql',
-          :tag    => 'openstack',
-        )
-      end
-    end
-  end
-
-  shared_examples_for 'trove::db on RedHat platforms' do
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection => 'mysql+pymysql://trove:trove@localhost/trove', }
-      end
-
     end
   end
 
@@ -112,9 +54,7 @@ describe 'trove::db' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'trove::db'
-      it_configures "trove::db on #{facts[:osfamily]} platforms"
+      it_behaves_like 'trove::db'
     end
   end
-
 end
