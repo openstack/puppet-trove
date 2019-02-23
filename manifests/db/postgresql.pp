@@ -34,7 +34,7 @@ class trove::db::postgresql(
 
   include ::trove::deps
 
-  validate_string($password)
+  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::postgresql { 'trove':
     password_hash => postgresql_password($user, $password),

@@ -61,7 +61,7 @@ class trove::db::mysql(
 
   include ::trove::deps
 
-  validate_string($password)
+  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql { 'trove':
     user          => $user,

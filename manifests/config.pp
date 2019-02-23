@@ -71,16 +71,15 @@ class trove::config (
 
   include ::trove::deps
 
-  validate_hash($trove_config)
-  validate_hash($trove_taskmanager_config)
-  validate_hash($trove_conductor_config)
-  validate_hash($trove_guestagent_config)
-  validate_hash($trove_api_paste_ini)
+  validate_legacy(Hash, 'validate_hash', $trove_config)
+  validate_legacy(Hash, 'validate_hash', $trove_taskmanager_config)
+  validate_legacy(Hash, 'validate_hash', $trove_conductor_config)
+  validate_legacy(Hash, 'validate_hash', $trove_guestagent_config)
+  validate_legacy(Hash, 'validate_hash', $trove_api_paste_ini)
 
   create_resources('trove_config', $trove_config)
   create_resources('trove_taskmanager_config', $trove_taskmanager_config)
   create_resources('trove_conductor_config', $trove_conductor_config)
   create_resources('trove_guestagent_config', $trove_guestagent_config)
   create_resources('trove_api_paste_ini', $trove_api_paste_ini)
-
 }
