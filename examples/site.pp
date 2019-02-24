@@ -24,14 +24,14 @@ class { '::trove':
 
 class { '::trove::api':
   bind_host         => '10.0.0.1',
-  auth_url          => 'https://identity.openstack.org:5000/v2.0',
+  auth_url          => 'https://identity.openstack.org:5000/v3',
   keystone_password => 'verysecrete'
 }
 
 class { '::trove::conductor':
-  auth_url          => 'https://identity.openstack.org:5000/v2.0'
+  auth_url          => 'https://identity.openstack.org:5000/v3'
 }
 
 class { '::trove::taskmanager':
-  auth_url          => 'https://identity.openstack.org:5000/v2.0'
+  auth_url          => 'https://identity.openstack.org:5000/v3'
 }
