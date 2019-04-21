@@ -203,4 +203,4 @@ Release Notes
 Repository
 ----------
 
-* https://git.openstack.org/cgit/openstack/puppet-trove
+* https://opendev.org/openstack/puppet-trove
