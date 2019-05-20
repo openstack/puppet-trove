@@ -24,6 +24,8 @@ describe 'trove::client' do
 
   shared_examples_for 'trove client' do
 
+    it { is_expected.to contain_class('trove::deps') }
+
     context 'with default parameters' do
       it { is_expected.to contain_package('python-troveclient').with(
         'ensure' => 'present',
