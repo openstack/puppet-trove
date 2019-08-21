@@ -73,6 +73,16 @@
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
 #   Defaults to $::os_service_default
 #
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to $::os_service_default
+#
 # [*kombu_reconnect_delay*]
 #   (optional) How long to wait before reconnecting in response to an AMQP
 #   consumer cancel notification.
@@ -293,6 +303,7 @@ class trove(
   $rabbit_use_ssl               = $::os_service_default,
   $rabbit_ha_queues             = $::os_service_default,
   $rabbit_notification_topic    = $::os_service_default,
+  $rabbit_heartbeat_in_pthread  = $::os_service_default,
   $kombu_ssl_ca_certs           = $::os_service_default,
   $kombu_ssl_certfile           = $::os_service_default,
   $kombu_ssl_keyfile            = $::os_service_default,

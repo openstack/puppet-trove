@@ -152,6 +152,7 @@ trove::control_exchange instead.")
   oslo::messaging::rabbit {'trove_guestagent_config':
     rabbit_use_ssl          => $rabbit_use_ssl,
     rabbit_ha_queues        => $::trove::rabbit_ha_queues,
+    heartbeat_in_pthread    => $::trove::rabbit_heartbeat_in_pthread,
     kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
     kombu_failover_strategy => $::trove::kombu_failover_strategy,
     amqp_durable_queues     => $::trove::amqp_durable_queues,

@@ -41,6 +41,7 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant').with_value('<SERVICE DEFAULT>')
@@ -73,13 +74,15 @@ describe 'trove::guestagent' do
       context 'when using a single RabbitMQ server with enable ha options' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             rabbit_ha_queues      => 'true',
-             amqp_durable_queues   => 'true',
+             nova_proxy_admin_pass       => 'verysecrete',
+             rabbit_ha_queues            => 'true',
+             rabbit_heartbeat_in_pthread => 'true',
+             amqp_durable_queues         => 'true',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('true')
           is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true')
         end
       end
