@@ -45,7 +45,7 @@ describe 'trove::api' do
          glance_endpoint_type       => '<SERVICE DEFAULT>',
          neutron_endpoint_type      => '<SERVICE DEFAULT>',
          }
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end
@@ -154,7 +154,7 @@ describe 'trove::api' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
              single_tenant_mode    => 'true'}
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
@@ -170,7 +170,7 @@ describe 'trove::api' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
            }
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
@@ -187,7 +187,7 @@ describe 'trove::api' do
              rabbit_ha_queues      => 'true',
              amqp_durable_queues   => 'true',
            }
-            class { '::trove::keystone::authtoken':
+            class { 'trove::keystone::authtoken':
               password => 'a_big_secret',
             }"
         end
@@ -203,7 +203,7 @@ describe 'trove::api' do
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => 'true',
            }
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
@@ -219,7 +219,7 @@ describe 'trove::api' do
              use_neutron              => true,
              default_neutron_networks => 'trove_service',
            }
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
@@ -240,7 +240,7 @@ describe 'trove::api' do
              nova_proxy_admin_pass => 'verysecrete',
              use_neutron           => false
            }
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end
@@ -266,7 +266,7 @@ describe 'trove::api' do
            kombu_ssl_certfile => '/path/to/ssl/cert/file',
            kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
            kombu_ssl_version  => 'TLSv1'}
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end
@@ -287,7 +287,7 @@ describe 'trove::api' do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
            rabbit_use_ssl     => true}
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end
@@ -308,7 +308,7 @@ describe 'trove::api' do
         "class { 'trove':
            nova_proxy_admin_pass => 'verysecrete',
            rabbit_use_ssl        => false}
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end
@@ -332,7 +332,7 @@ describe 'trove::api' do
            rpc_response_timeout       => '120',
            control_exchange           => 'openstack',
            notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end
@@ -350,7 +350,7 @@ describe 'trove::api' do
         "class { 'trove' :
            nova_proxy_admin_pass => 'verysecrete',
          }
-         class { '::trove::keystone::authtoken':
+         class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
       end

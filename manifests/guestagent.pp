@@ -108,8 +108,8 @@ class trove::guestagent(
   $control_exchange        = undef,
 ) inherits trove {
 
-  include ::trove::deps
-  include ::trove::params
+  include trove::deps
+  include trove::params
 
   if $control_exchange {
     warning("control_exchange parameter is deprecated. Please use \

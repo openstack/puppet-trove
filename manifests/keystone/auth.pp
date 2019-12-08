@@ -104,7 +104,7 @@ class trove::keystone::auth (
   $internal_url        = 'http://127.0.0.1:8779/v1.0/%(tenant_id)s',
 ) {
 
-  include ::trove::deps
+  include trove::deps
 
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| tag == 'trove-service' |>
 

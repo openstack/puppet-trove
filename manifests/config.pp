@@ -69,7 +69,7 @@ class trove::config (
   $trove_api_paste_ini      = {},
 ) {
 
-  include ::trove::deps
+  include trove::deps
 
   validate_legacy(Hash, 'validate_hash', $trove_config)
   validate_legacy(Hash, 'validate_hash', $trove_taskmanager_config)

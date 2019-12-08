@@ -28,8 +28,8 @@ class trove::policy (
   $policy_path = '/etc/trove/policy.json',
 ) {
 
-  include ::trove::deps
-  include ::trove::params
+  include trove::deps
+  include trove::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

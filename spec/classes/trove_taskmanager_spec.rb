@@ -123,7 +123,7 @@ describe 'trove::taskmanager' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
              single_tenant_mode    => 'true'}
-           class { '::trove::keystone::authtoken':
+           class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
         end

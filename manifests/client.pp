@@ -35,7 +35,7 @@ class trove::client (
   $package_ensure = present,
 ) inherits trove::params {
 
-  include ::trove::deps
+  include trove::deps
 
   package { 'python-troveclient':
     ensure => $package_ensure,

@@ -74,8 +74,8 @@ class trove::conductor(
   $trace_sqlalchemy  = $::os_service_default,
 ) inherits trove {
 
-  include ::trove::deps
-  include ::trove::params
+  include trove::deps
+  include trove::params
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {

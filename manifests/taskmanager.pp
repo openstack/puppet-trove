@@ -105,8 +105,8 @@ class trove::taskmanager(
   $use_guestagent_template  = true,
 ) inherits trove {
 
-  include ::trove::deps
-  include ::trove::params
+  include trove::deps
+  include trove::params
 
   if $default_neutron_networks {
     warning("trove::taskmanager::default_neutron_networks is deprecated and will be removed in \

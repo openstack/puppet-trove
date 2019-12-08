@@ -55,8 +55,8 @@ define trove::generic_service(
   $package_ensure = 'present',
 ) {
 
-  include ::trove::deps
-  include ::trove::params
+  include trove::deps
+  include trove::params
 
   $trove_title = "trove-${name}"
 

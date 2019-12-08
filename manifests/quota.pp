@@ -52,7 +52,7 @@ class trove::quota (
   $max_backups_per_user     = undef,
 ) {
 
-  include ::trove::deps
+  include trove::deps
 
   if $max_instances_per_user {
     warning("max_instances_per_user deprecated, has no effect and will be removed after Newton cycle. \

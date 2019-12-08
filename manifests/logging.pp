@@ -120,7 +120,7 @@ class trove::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::trove::deps
+  include trove::deps
 
   oslo::log { 'trove_config':
     debug                         => $debug,

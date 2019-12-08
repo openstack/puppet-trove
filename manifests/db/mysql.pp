@@ -59,7 +59,7 @@ class trove::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::trove::deps
+  include trove::deps
 
   validate_legacy(String, 'validate_string', $password)
 

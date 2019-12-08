@@ -19,7 +19,7 @@
 #
 class trove::db::sync {
 
-  include ::trove::deps
+  include trove::deps
 
   exec { 'trove-manage db_sync':
     path        => '/usr/bin',

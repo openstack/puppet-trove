@@ -360,9 +360,9 @@ class trove(
   $package_ensure               = 'present',
 ) {
 
-  include ::trove::deps
-  include ::trove::policy
-  include ::trove::params
+  include trove::deps
+  include trove::policy
+  include trove::params
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }

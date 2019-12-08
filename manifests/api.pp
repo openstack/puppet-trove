@@ -115,10 +115,10 @@ class trove::api(
   $taskmanager_queue   = 'taskmanager',
 ) inherits trove {
 
-  include ::trove::deps
-  include ::trove::db
-  include ::trove::db::sync
-  include ::trove::params
+  include trove::deps
+  include trove::db
+  include trove::db::sync
+  include trove::params
 
   # basic service config
   trove_config {
@@ -153,7 +153,7 @@ class trove::api(
   }
 
   if $auth_strategy == 'keystone' {
-    include ::trove::keystone::authtoken
+    include trove::keystone::authtoken
 
     $trove_auth_url = "${regsubst($::trove::keystone::authtoken::www_authenticate_uri, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
     trove_config {
