@@ -179,10 +179,6 @@
 #   (optional) Interval between retries of opening a database connection.
 #   Defaults to undef.
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to: undef.
@@ -294,6 +290,12 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to: undef.
+#
 class trove(
   $nova_proxy_admin_pass,
   $default_transport_url        = $::os_service_default,
@@ -331,7 +333,6 @@ class trove(
   $database_idle_timeout        = undef,
   $database_max_retries         = undef,
   $database_retry_interval      = undef,
-  $database_min_pool_size       = undef,
   $database_max_pool_size       = undef,
   $database_max_overflow        = undef,
   $single_tenant_mode           = false,
@@ -358,6 +359,8 @@ class trove(
   $use_neutron                  = true,
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size       = undef,
 ) {
 
   include trove::deps
