@@ -75,5 +75,5 @@
     ],
     "source": "git://github.com/openstack/puppet-trove.git",
     "summary": "Puppet module for OpenStack Trove",
-    "version": "16.2.0"
+    "version": "16.2.1"
 }
