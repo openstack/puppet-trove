@@ -1,3 +1,4 @@
+require 'puppet'
 require 'puppet/type/trove_guestagent_config'
 
 describe 'Puppet::Type.type(:trove_guestagent_config)' do
@@ -7,11 +8,11 @@ describe 'Puppet::Type.type(:trove_guestagent_config)' do
 
   it 'should autorequire the package that installs the file' do
     catalog = Puppet::Resource::Catalog.new
-    package = Puppet::Type.type(:package).new(:name => 'trove-guestagent')
-    catalog.add_resource package, @trove_guestagent_config
+    anchor = Puppet::Type.type(:anchor).new(:name => 'trove::install::end')
+    catalog.add_resource anchor, @trove_guestagent_config
     dependency = @trove_guestagent_config.autorequire
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(@trove_guestagent_config)
-    expect(dependency[0].source).to eq(package)
+    expect(dependency[0].source).to eq(anchor)
   end
 end

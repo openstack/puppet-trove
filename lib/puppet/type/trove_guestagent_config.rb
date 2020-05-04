@@ -46,7 +46,7 @@ Puppet::Type.newtype(:trove_guestagent_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'trove-guestagent'
+  autorequire(:anchor) do
+    ['trove::install::end']
   end
 end

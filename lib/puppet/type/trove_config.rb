@@ -46,7 +46,7 @@ Puppet::Type.newtype(:trove_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'trove-api'
+  autorequire(:anchor) do
+    ['trove::install::end']
   end
 end
