@@ -76,6 +76,7 @@ class trove::conductor(
 
   include trove::deps
   include trove::params
+  include trove::conductor::service_credentials
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
@@ -95,14 +96,10 @@ class trove::conductor(
   }
 
   # basic service config
-  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
   trove_conductor_config {
-    'DEFAULT/trove_auth_url':               value => $trove_auth_url;
-    'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
-    'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
-    'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
-    'DEFAULT/trove_conductor_workers':      value => $workers;
+    'DEFAULT/trove_conductor_workers': value => $workers;
   }
+
   # profiler config
   trove_conductor_config {
     'profiler/enabled':          value => $enable_profiler;

@@ -38,10 +38,6 @@
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
 #
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v3'.
-#
 # [*swift_url*]
 #   (optional) Swift URL. If this is unset in the class, Trove will
 #   lookup the URL using the Keystone catalog.
@@ -64,12 +60,6 @@
 #   guests need to talk to the rabbit cluster via
 #   a different ssl connection option.
 #
-# [*backup_aes_cbc_key*]
-#   (optional) Default OpenSSL aes_cbc key
-#   Defaults to $::os_service_default.
-#
-#  DEPRECATED PARAMETERS
-#
 # [*root_grant*]
 #   (optional) Permissions to grant "root" user.
 #   Defaults to $::os_service_default.
@@ -82,8 +72,18 @@
 #   (optional) Default password Length for root password.
 #   Defaults to $::os_service_default.
 #
+# [*backup_aes_cbc_key*]
+#   (optional) Default OpenSSL aes_cbc key
+#   Defaults to $::os_service_default.
+#
+#  DEPRECATED PARAMETERS
+#
 # [*control_exchange*]
 #   (Optional) Moved to init.pp. The default exchange to scope topics.
+#   Defaults to undef.
+#
+# [*auth_url*]
+#   (optional) Authentication URL.
 #   Defaults to undef.
 #
 class trove::guestagent(
@@ -95,7 +95,6 @@ class trove::guestagent(
   $log_dir                 = '/var/log/trove',
   $use_syslog              = $::os_service_default,
   $log_facility            = $::os_service_default,
-  $auth_url                = 'http://localhost:5000/v3',
   $swift_url               = $::os_service_default,
   $swift_service_type      = $::os_service_default,
   $default_transport_url   = $::trove::default_transport_url,
@@ -106,21 +105,20 @@ class trove::guestagent(
   $backup_aes_cbc_key      = $::os_service_default,
   #Deprecated
   $control_exchange        = undef,
+  $auth_url                = undef,
 ) inherits trove {
 
   include trove::deps
   include trove::params
+  include trove::guestagent::service_credentials
 
   if $control_exchange {
     warning("control_exchange parameter is deprecated. Please use \
 trove::control_exchange instead.")
   }
 
-  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
-
   # basic service config
   trove_guestagent_config {
-    'DEFAULT/trove_auth_url':          value => $trove_auth_url;
     'DEFAULT/swift_url':               value => $swift_url;
     'DEFAULT/swift_service_type':      value => $swift_service_type;
     'DEFAULT/root_grant':              value => $root_grant;
@@ -133,14 +131,6 @@ trove::control_exchange instead.")
     transport_url        => $default_transport_url,
     control_exchange     => $::trove::control_exchange,
     rpc_response_timeout => $::trove::rpc_response_timeout,
-  }
-
-  # region name
-  if $::trove::os_region_name {
-    trove_guestagent_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
-  }
-  else {
-    trove_guestagent_config { 'DEFAULT/os_region_name': ensure => absent }
   }
 
   oslo::messaging::notifications { 'trove_guestagent_config':

@@ -119,16 +119,14 @@ class trove::api(
   include trove::db
   include trove::db::sync
   include trove::params
+  include trove::api::service_credentials
 
   # basic service config
   trove_config {
-    'DEFAULT/bind_host':                    value => $bind_host;
-    'DEFAULT/bind_port':                    value => $bind_port;
-    'DEFAULT/backlog':                      value => $backlog;
-    'DEFAULT/trove_api_workers':            value => $workers;
-    'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
-    'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
-    'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
+    'DEFAULT/bind_host':         value => $bind_host;
+    'DEFAULT/bind_port':         value => $bind_port;
+    'DEFAULT/backlog':           value => $backlog;
+    'DEFAULT/trove_api_workers': value => $workers;
   }
 
   if $::trove::single_tenant_mode {
@@ -154,11 +152,6 @@ class trove::api(
 
   if $auth_strategy == 'keystone' {
     include trove::keystone::authtoken
-
-    $trove_auth_url = "${regsubst($::trove::keystone::authtoken::www_authenticate_uri, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
-    trove_config {
-      'DEFAULT/trove_auth_url' : value => $trove_auth_url;
-    }
   }
 
   # SSL Options
@@ -201,14 +194,6 @@ class trove::api(
 
   resources { 'trove_config':
     purge => $purge_config,
-  }
-
-  # region name
-  if $::trove::os_region_name {
-    trove_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
-  }
-  else {
-    trove_config {'DEFAULT/os_region_name': ensure => absent }
   }
 
   # services type

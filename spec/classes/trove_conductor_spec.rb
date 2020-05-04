@@ -7,8 +7,16 @@ describe 'trove::conductor' do
     context 'with default parameters' do
 
       let :pre_condition do
-        "class { 'trove':
-         nova_proxy_admin_pass => 'verysecrete'}"
+        "class { 'trove': }
+         class { 'trove::conductor::service_credentials':
+           password => 'verysecrete',
+         }"
+      end
+
+      it 'includes required classes' do
+        is_expected.to contain_class('trove::deps')
+        is_expected.to contain_class('trove::params')
+        is_expected.to contain_class('trove::conductor::service_credentials')
       end
 
       it 'installs trove-conductor package and service' do
@@ -26,9 +34,6 @@ describe 'trove::conductor' do
       end
 
       it 'configures trove-conductor with default parameters' do
-        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        is_expected.to contain_trove_conductor_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_conductor_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_conductor_config('DEFAULT/control_exchange').with_value('trove')
@@ -60,8 +65,10 @@ describe 'trove::conductor' do
       context 'with single tenant mode enabled' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
              single_tenant_mode    => 'true'}
+           class { 'trove::conductor::service_credentials':
+             password => 'verysecrete',
+           }
            class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
@@ -75,8 +82,9 @@ describe 'trove::conductor' do
 
       context 'when using a single RabbitMQ server' do
         let :pre_condition do
-          "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
+          "class { 'trove': }
+           class { 'trove::conductor::service_credentials':
+             password => 'verysecrete',
            }"
         end
         it 'configures trove-conductor with RabbitMQ' do
@@ -88,9 +96,11 @@ describe 'trove::conductor' do
       context 'when using a single RabbitMQ server with enable ha options' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             rabbit_ha_queues      => 'true',
-             amqp_durable_queues   => 'true',
+             rabbit_ha_queues    => 'true',
+             amqp_durable_queues => 'true',
+           }
+           class { 'trove::conductor::service_credentials':
+             password => 'verysecrete',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
@@ -102,8 +112,10 @@ describe 'trove::conductor' do
       context 'when using multiple RabbitMQ servers' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             rabbit_ha_queues      => true,
+             rabbit_ha_queues => true,
+           }
+           class { 'trove::conductor::service_credentials':
+             password => 'verysecrete',
            }"
         end
         it 'configures trove-conductor with RabbitMQ' do
@@ -114,8 +126,11 @@ describe 'trove::conductor' do
       context 'when using MySQL' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
+             database_connection => 'mysql://trove:pass@10.0.0.1/trove'
+           }
+           class { 'trove::conductor::service_credentials':
+             password => 'verysecrete',
+           }"
         end
         it 'configures trove-conductor with RabbitMQ' do
           is_expected.to contain_trove_conductor_config('database/connection').with_value('mysql://trove:pass@10.0.0.1/trove')
@@ -148,8 +163,11 @@ describe 'trove::conductor' do
     context 'with SSL enabled without kombu' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => true}"
+           rabbit_use_ssl        => true
+         }
+         class { 'trove::conductor::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -166,8 +184,11 @@ describe 'trove::conductor' do
     context 'with SSL disabled' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => false}"
+           rabbit_use_ssl        => false
+         }
+         class { 'trove::conductor::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -201,8 +222,10 @@ describe 'trove::conductor' do
 
     context 'with amqp messaging' do
       let :pre_condition do
-        "class { 'trove' :
-           nova_proxy_admin_pass => 'verysecrete'}"
+        "class { 'trove' : }
+         class { 'trove::conductor::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do

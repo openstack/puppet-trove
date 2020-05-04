@@ -196,17 +196,6 @@
 #   (optional) URL without the tenant segment.
 #   Defaults to false.
 #
-# [*nova_proxy_admin_user*]
-#   (optional) Admin username used to connect to nova.
-#   Defaults to 'admin'
-#
-# [*nova_proxy_admin_pass*]
-#   (required) Admin password used to connect to nova.
-#
-# [*nova_proxy_admin_tenant_name*]
-#   (optional) Admin tenant name used to connect to nova.
-#   Defaults to 'admin'
-#
 # [*rpc_response_timeout*]
 #  (Optional) Seconds to wait for a response from a call.
 #  Defaults to $::os_service_default
@@ -226,13 +215,6 @@
 # [*neutron_url*]
 #   (optional) Neutron URL without the tenant segment.
 #   Defaults to false.
-#
-# [*os_region_name*]
-#   (optional) Sets the os_region_name flag. For environments with
-#   more than one endpoint per service. If you don't set this and
-#   you have multiple endpoints, you will get Ambiguous Endpoint
-#   exceptions in the trove API service.
-#   Defaults to undef.
 #
 # [*nova_compute_service_type*]
 #   (optional) Nova service type to use when searching catalog.
@@ -296,8 +278,26 @@
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to: undef.
 #
+# [*nova_proxy_admin_user*]
+#   (optional) Admin username used to connect to nova.
+#   Defaults to undef
+#
+# [*nova_proxy_admin_pass*]
+#   (optional) Admin password used to connect to nova.
+#   Defaults to undef
+#
+# [*nova_proxy_admin_tenant_name*]
+#   (optional) Admin tenant name used to connect to nova.
+#   Defaults to undef
+#
+# [*os_region_name*]
+#   (optional) Sets the os_region_name flag. For environments with
+#   more than one endpoint per service. If you don't set this and
+#   you have multiple endpoints, you will get Ambiguous Endpoint
+#   exceptions in the trove API service.
+#   Defaults to undef.
+#
 class trove(
-  $nova_proxy_admin_pass,
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
   $notification_driver          = $::os_service_default,
@@ -337,14 +337,11 @@ class trove(
   $database_max_overflow        = undef,
   $single_tenant_mode           = false,
   $nova_compute_url             = false,
-  $nova_proxy_admin_user        = 'admin',
-  $nova_proxy_admin_tenant_name = 'admin',
   $rpc_response_timeout         = $::os_service_default,
   $control_exchange             = 'trove',
   $cinder_url                   = false,
   $swift_url                    = false,
   $neutron_url                  = false,
-  $os_region_name               = undef,
   $nova_compute_service_type    = 'compute',
   $cinder_service_type          = 'volumev2',
   $swift_service_type           = 'object-store',
@@ -361,6 +358,10 @@ class trove(
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
   $database_min_pool_size       = undef,
+  $nova_proxy_admin_user        = undef,
+  $nova_proxy_admin_pass        = undef,
+  $nova_proxy_admin_tenant_name = undef,
+  $os_region_name               = undef,
 ) {
 
   include trove::deps

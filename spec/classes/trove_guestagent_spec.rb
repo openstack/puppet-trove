@@ -8,8 +8,17 @@ describe 'trove::guestagent' do
 
       let :pre_condition do
         "class { 'trove':
-         os_region_name        => 'RegionOne',
-         nova_proxy_admin_pass => 'verysecrete'}"
+           nova_proxy_admin_pass => 'verysecrete'
+         }
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
+      end
+
+      it 'includes required classes' do
+        is_expected.to contain_class('trove::deps')
+        is_expected.to contain_class('trove::params')
+        is_expected.to contain_class('trove::guestagent::service_credentials')
       end
 
       it 'installs trove-guestagent package and service' do
@@ -27,7 +36,6 @@ describe 'trove::guestagent' do
       end
 
       it 'configures trove-guestagent with default parameters' do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
         is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
@@ -64,6 +72,9 @@ describe 'trove::guestagent' do
         let :pre_condition do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
+           }
+           class { 'trove::guestagent::service_credentials':
+             password => 'verysectrete',
            }"
         end
         it 'configures trove-guestagent with RabbitMQ' do
@@ -78,6 +89,9 @@ describe 'trove::guestagent' do
              rabbit_ha_queues            => 'true',
              rabbit_heartbeat_in_pthread => 'true',
              amqp_durable_queues         => 'true',
+           }
+           class { 'trove::guestagent::service_credentials':
+             password => 'verysectrete',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
@@ -92,6 +106,9 @@ describe 'trove::guestagent' do
           "class { 'trove':
              nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => true,
+           }
+           class { 'trove::guestagent::service_credentials':
+             password => 'verysectrete',
            }"
         end
         it 'configures trove-guestagent with RabbitMQ' do
@@ -105,7 +122,11 @@ describe 'trove::guestagent' do
              nova_proxy_admin_pass => 'verysecrete',
              default_transport_url => 'rabbit://user:pass@host:1234/virt',
              rpc_response_timeout  => '120',
-             control_exchange      => 'openstack',}"
+             control_exchange      => 'openstack',
+           }
+           class { 'trove::guestagent::service_credentials':
+             password => 'verysectrete',
+           }"
         end
         it 'configures trove-guestagent with DEFAULT/transport_url' do
           is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt')
@@ -119,18 +140,21 @@ describe 'trove::guestagent' do
     context 'with custom parameters' do
       let :pre_condition do
         "class { 'trove':
-         nova_proxy_admin_pass => 'verysecrete'}"
+           nova_proxy_admin_pass => 'verysecrete'
+         }
+         class { 'trove::guestagent::service_credentials':
+          password => 'verysectrete',
+         }"
       end
 
       let :params do
-        { :auth_url           => "http://10.0.0.1:5000/",
+        {
           :swift_url          => "http://10.0.0.1:8080/v1/AUTH_",
           :swift_service_type => 'object-store',
           :rabbit_use_ssl     => 'true'
         }
       end
       it 'configures trove-guestagent with custom parameters' do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/trove_auth_url').with_value('http://10.0.0.1:5000/v3')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
