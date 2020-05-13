@@ -27,8 +27,6 @@ describe 'trove::taskmanager' do
 
       let :pre_condition do
         "class { 'trove':
-         nova_proxy_admin_pass      => 'verysecrete',
-         os_region_name             => 'RegionOne',
          nova_compute_service_type  => 'compute',
          cinder_service_type        => 'volume',
          swift_service_type         => 'object-store',
@@ -40,7 +38,17 @@ describe 'trove::taskmanager' do
          trove_endpoint_type        => '<SERVICE DEFAULT>',
          glance_endpoint_type       => '<SERVICE DEFAULT>',
          neutron_endpoint_type      => '<SERVICE DEFAULT>',
+         }
+         class { 'trove::taskmanager::service_credentials':
+           password    => 'verysecrete',
+           region_name => 'RegionOne',
          }"
+      end
+
+      it 'includes required classes' do
+        is_expected.to contain_class('trove::deps')
+        is_expected.to contain_class('trove::params')
+        is_expected.to contain_class('trove::taskmanager::service_credentials')
       end
 
       it 'installs trove-taskmanager package and service' do
@@ -58,11 +66,7 @@ describe 'trove::taskmanager' do
       end
 
       it 'configures trove-taskmanager with default parameters' do
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_user').with_value('admin')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_pass').with_value('verysecrete')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_proxy_admin_tenant_name').with_value('admin')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/default_neutron_networks').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_taskmanager_config('DEFAULT/os_region_name').with_value('RegionOne')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/cinder_service_type').with_value('volume')
         is_expected.to contain_trove_taskmanager_config('DEFAULT/swift_service_type').with_value('object-store')
@@ -105,10 +109,13 @@ describe 'trove::taskmanager' do
 
       context 'when set use_guestagent_template to false' do
         let :pre_condition do
-           "class { 'trove':
-              nova_proxy_admin_pass => 'verysecrete',}
-            class { 'trove::taskmanager':
-              use_guestagent_template => false,}"
+          "class { 'trove': }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
+           }
+           class { 'trove::taskmanager':
+             use_guestagent_template => false,
+           }"
         end
         it 'configures trove-taskmanager with trove::guestagent' do
           is_expected.to contain_class('trove::guestagent').with(
@@ -121,8 +128,11 @@ describe 'trove::taskmanager' do
       context 'with single tenant mode enabled' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             single_tenant_mode    => 'true'}
+             single_tenant_mode    => 'true'
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
+           }
            class { 'trove::keystone::authtoken':
              password => 'a_big_secret',
            }"
@@ -136,8 +146,9 @@ describe 'trove::taskmanager' do
 
       context 'when using a single RabbitMQ server' do
         let :pre_condition do
-          "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
+          "class { 'trove': }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
            }
           "
         end
@@ -153,9 +164,11 @@ describe 'trove::taskmanager' do
       context 'when using a single RabbitMQ server with enable rabbbit ha options' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             rabbit_ha_queues      => 'true',
-             amqp_durable_queues   => 'true',
+             rabbit_ha_queues    => 'true',
+             amqp_durable_queues => 'true',
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
@@ -171,8 +184,10 @@ describe 'trove::taskmanager' do
       context 'when using multiple RabbitMQ servers' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             rabbit_ha_queues      => 'true',
+             rabbit_ha_queues => 'true',
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
            }"
         end
         it 'configures trove-taskmanager with RabbitMQ' do
@@ -186,8 +201,11 @@ describe 'trove::taskmanager' do
       context 'when using MySQL' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             database_connection   => 'mysql://trove:pass@10.0.0.1/trove'}"
+             database_connection => 'mysql://trove:pass@10.0.0.1/trove'
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
+           }"
         end
         it 'configures trove-taskmanager with RabbitMQ' do
           is_expected.to contain_trove_taskmanager_config('database/connection').with_value('mysql://trove:pass@10.0.0.1/trove')
@@ -197,8 +215,11 @@ describe 'trove::taskmanager' do
       context 'when using Neutron' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass    => 'verysecrete',
-             use_neutron              => true}
+             use_neutron => true
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
+           }
            class { 'trove::taskmanager':
              default_neutron_networks => 'trove_service',
            }
@@ -220,8 +241,11 @@ describe 'trove::taskmanager' do
       context 'when using Nova Network' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-             use_neutron           => false}"
+             use_neutron           => false
+           }
+           class { 'trove::taskmanager::service_credentials':
+             password => 'verysecrete',
+           }"
 
         end
 
@@ -238,12 +262,15 @@ describe 'trove::taskmanager' do
     context 'with SSL enabled with kombu' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
            rabbit_use_ssl     => true,
            kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
            kombu_ssl_certfile => '/path/to/ssl/cert/file',
            kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-           kombu_ssl_version  => 'TLSv1'}"
+           kombu_ssl_version  => 'TLSv1'
+         }
+         class { 'trove::taskmanager::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -260,8 +287,11 @@ describe 'trove::taskmanager' do
     context 'with SSL enabled without kombu' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => true}"
+           rabbit_use_ssl => true
+         }
+         class { 'trove::taskmanager::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -278,8 +308,11 @@ describe 'trove::taskmanager' do
     context 'with SSL disabled' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => false}"
+           rabbit_use_ssl  => false
+         }
+         class { 'trove::taskmanager::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -296,11 +329,14 @@ describe 'trove::taskmanager' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass      => 'verysecrete',
            default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
            rpc_response_timeout       => '120',
            control_exchange           => 'openstack',
-           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
+           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673'
+         }
+         class { 'trove::taskmanager::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do
@@ -313,8 +349,10 @@ describe 'trove::taskmanager' do
 
     context 'with amqp messaging' do
       let :pre_condition do
-        "class { 'trove' :
-           nova_proxy_admin_pass => 'verysecrete'}"
+        "class { 'trove' : }
+         class { 'trove::taskmanager::service_credentials':
+           password => 'verysecrete',
+         }"
       end
 
       it do

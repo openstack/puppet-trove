@@ -107,6 +107,7 @@ class trove::taskmanager(
 
   include trove::deps
   include trove::params
+  include trove::taskmanager::service_credentials
 
   if $default_neutron_networks {
     warning("trove::taskmanager::default_neutron_networks is deprecated and will be removed in \
@@ -135,23 +136,9 @@ the future release. Please use trove::default_neutron_networks instead.")
     }
   }
 
-  $trove_auth_url = "${regsubst($auth_url, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
-
   # basic service config
   trove_taskmanager_config {
-    'DEFAULT/trove_auth_url':               value => $trove_auth_url;
-    'DEFAULT/nova_proxy_admin_user':        value => $::trove::nova_proxy_admin_user;
-    'DEFAULT/nova_proxy_admin_pass':        value => $::trove::nova_proxy_admin_pass;
-    'DEFAULT/nova_proxy_admin_tenant_name': value => $::trove::nova_proxy_admin_tenant_name;
-    'DEFAULT/taskmanager_manager':          value => $taskmanager_manager;
-  }
-
-  # region name
-  if $::trove::os_region_name {
-    trove_taskmanager_config { 'DEFAULT/os_region_name': value => $::trove::os_region_name }
-  }
-  else {
-    trove_taskmanager_config {'DEFAULT/os_region_name': ensure => absent }
+    'DEFAULT/taskmanager_manager': value => $taskmanager_manager;
   }
 
   # services type

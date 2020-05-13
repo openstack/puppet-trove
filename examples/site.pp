@@ -19,7 +19,22 @@ class { 'trove::db::mysql':
 class { 'trove':
   database_connection   => 'mysql://trove:secrete@10.0.0.1/trove?charset=utf8',
   default_transport_url => 'rabbit://trove:an_even_bigger_secret@10.0.0.1:5672/trove',
-  nova_proxy_admin_pass => 'novapass',
+}
+
+class { 'trove::api::service_credentials':
+  password => 'verysecrete',
+}
+
+class { 'trove::conductor::service_credentials':
+  password => 'verysecrete',
+}
+
+class { 'trove::task_manager::service_credentials':
+  password => 'verysecrete',
+}
+
+class { 'trove::guestagent::service_credentials':
+  password => 'verysecrete',
 }
 
 class { 'trove::api':

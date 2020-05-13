@@ -1,0 +1,29 @@
+---
+features:
+  - |
+    The following classes have been added to set parameters to define service
+    credentials.
+
+    - ``trove::api::service_credentials``
+    - ``trove::conductor::service_credentials``
+    - ``trove::guestagent::service_credentials``
+    - ``trove::taskmanager::service_credentials``
+deprecations:
+  - |
+    The following parameters in ``trove`` class has been deprecated and will
+    be removed in a future release. Use the parameters in ``trove::auth`` class
+    to set required parameters for keystone v3 auth.
+
+    - ``nova_proxy_admin_user``
+    - ``nova_proxy_admin_pass``
+    - ``nova_proxy_admin_tenant_name``
+    - ``os_region_name``
+
+  - |
+    The auto detection of auth_url parameter from www_authenticate_uri is
+    deprecated and will be removed in a future release. Please set
+    auth_url parameter before the detection is removed.
+
+  - |
+    The ``trove::guestagent::auth_url`` parmaeter has been deprecated. Use
+    ``trove::taskmanager::service_credentials::auth_url`` instead.
