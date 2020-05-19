@@ -27,12 +27,12 @@ describe 'trove::db::mysql' do
   end
 
   let :params do
-    { :dbname        => 'trove',
-      :password      => 's3cr3t',
-      :user          => 'trove',
-      :charset       => 'utf8',
-      :collate       => 'utf8_general_ci',
-      :host          => '127.0.0.1',
+    { :dbname   => 'trove',
+      :password => 'trovepass',
+      :user     => 'trove',
+      :charset  => 'utf8',
+      :collate  => 'utf8_general_ci',
+      :host     => '127.0.0.1',
     }
   end
 
@@ -47,7 +47,7 @@ describe 'trove::db::mysql' do
       is_expected.to contain_openstacklib__db__mysql('trove').with(
         :user          => params[:user],
         :dbname        => params[:dbname],
-        :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+        :password      => params[:password],
         :host          => params[:host],
         :charset       => params[:charset]
       )
@@ -56,7 +56,7 @@ describe 'trove::db::mysql' do
     context 'overriding allowed_hosts param to array' do
       before :each do
         params.merge!(
-          :allowed_hosts  => ['127.0.0.1','%']
+          :allowed_hosts => ['127.0.0.1','%']
         )
       end
 
@@ -64,7 +64,7 @@ describe 'trove::db::mysql' do
         is_expected.to contain_openstacklib__db__mysql('trove').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
-          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :password      => params[:password],
           :host          => params[:host],
           :charset       => params[:charset],
           :allowed_hosts => ['127.0.0.1','%']
@@ -82,7 +82,7 @@ describe 'trove::db::mysql' do
         is_expected.to contain_openstacklib__db__mysql('trove').with(
           :user          => params[:user],
           :dbname        => params[:dbname],
-          :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
+          :password      => params[:password],
           :host          => params[:host],
           :charset       => params[:charset],
           :allowed_hosts => '192.168.1.1'
