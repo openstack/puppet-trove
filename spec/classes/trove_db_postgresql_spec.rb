@@ -4,7 +4,7 @@ describe 'trove::db::postgresql' do
 
   shared_examples_for 'trove::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'trovepass' }
     end
 
     let :pre_condition do
@@ -16,9 +16,12 @@ describe 'trove::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('trove').with(
-        :user     => 'trove',
-        :password => 'md5e12ef276d200761a0808f17a5b076451'
+      it { is_expected.to contain_openstacklib__db__postgresql('trove').with(
+        :user       => 'trove',
+        :password   => 'trovepass',
+        :dbname     => 'trove',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 
