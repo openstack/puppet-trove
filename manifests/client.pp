@@ -43,6 +43,6 @@ class trove::client (
     tag    => 'openstack',
   }
 
-  include '::openstacklib::openstackclient'
+  include openstacklib::openstackclient
 
 }

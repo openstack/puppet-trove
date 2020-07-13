@@ -121,8 +121,8 @@ the future release. Please use trove::default_neutron_networks instead.")
 
   if $::trove::database_connection {
     if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      require '::mysql::bindings'
-      require '::mysql::bindings::python'
+      require mysql::bindings
+      require mysql::bindings::python
     } elsif($::trove::database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
 
     } elsif($::trove::database_connection =~ /sqlite:\/\//) {
@@ -257,7 +257,7 @@ Please configure options directly with the trove::guestagent class using hiera."
         require => Anchor['trove::install::end'],
       }
     } else {
-      class {'::trove::guestagent':
+      class {'trove::guestagent':
         enabled        => false,
         manage_service => false,
       }
