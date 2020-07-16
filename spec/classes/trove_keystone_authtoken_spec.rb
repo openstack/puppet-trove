@@ -43,6 +43,7 @@ describe 'trove::keystone::authtoken' do
         is_expected.to contain_trove_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('keystone_authtoken/token_cache_time').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('keystone_authtoken/service_token_roles_required').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('keystone_authtoken/interface').with_value('<SERVICE DEFAULT>')
       end
     end
 
@@ -82,6 +83,7 @@ describe 'trove::keystone::authtoken' do
           :region_name                          => 'region2',
           :token_cache_time                     => '301',
           :service_token_roles_required         => false,
+          :interface                            => 'internal',
         })
       end
 
@@ -118,6 +120,7 @@ describe 'trove::keystone::authtoken' do
         is_expected.to contain_trove_config('keystone_authtoken/region_name').with_value(params[:region_name])
         is_expected.to contain_trove_config('keystone_authtoken/token_cache_time').with_value(params[:token_cache_time])
         is_expected.to contain_trove_config('keystone_authtoken/service_token_roles_required').with_value(params[:service_token_roles_required])
+        is_expected.to contain_trove_config('keystone_authtoken/interface').with_value(params[:interface])
       end
 
       it 'installs python memcache package' do
