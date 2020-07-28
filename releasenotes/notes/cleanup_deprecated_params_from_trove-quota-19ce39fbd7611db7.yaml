@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters have been removed. The new per_tenant
+    parameters should be used instead.
+
+    - ``trove::quota::max_instances_per_user``
+    - ``trove::quota::max_volumes_per_user``
+    - ``trove::quota::max_backups_per_user``
