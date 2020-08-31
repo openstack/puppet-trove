@@ -15,11 +15,10 @@ puppet-trove
 3. [Setup - The basics of getting started with trove](#setup)
 4. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
 5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Beaker-Rspec - Beaker-rspec tests for the project](#beaker-rspec)
-7. [Development - Guide for contributing to the module](#development)
-8. [Contributors - Those with commits](#contributors)
-9. [Release Notes - Release notes for the project](#release-notes)
-10. [Repository - The project source code repository](#repository)
+6. [Development - Guide for contributing to the module](#development)
+7. [Contributors - Those with commits](#contributors)
+8. [Release Notes - Release notes for the project](#release-notes)
+9. [Repository - The project source code repository](#repository)
 
 Overview
 --------
@@ -170,18 +169,6 @@ Security
 For security reasons, a separate in-cloud RabbitMQ cluster should be set up for trove to use. The reason for this is that the guest agent needs to communicate with RabbitMQ, so it is not advisable to give instances access to the same RabbitMQ server that the core OpenStack services are using for communication.
 
 Please note that puppet-trove cannot check if this rule is being followed, so it is the deployer's responsibility to do it.
-
-Beaker-Rspec
-------------
-
-This module has beaker-rspec tests
-
-To run:
-
-```shell
-bundle install
-bundle exec rspec spec/acceptance
-```
 
 Development
 -----------
