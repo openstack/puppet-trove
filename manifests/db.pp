@@ -72,9 +72,6 @@ class trove::db (
   $database_retry_interval_real          = pick($::trove::database_retry_interval, $database_retry_interval)
   $database_max_overflow_real            = pick($::trove::database_max_overflow, $database_max_overflow)
 
-  validate_legacy(Oslo::Dbconn, 'validate_re', $database_connection_real,
-    ['^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?'])
-
   oslo::db { 'trove_config':
     connection              => $database_connection_real,
     connection_recycle_time => $database_connection_recycle_time_real,
