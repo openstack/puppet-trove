@@ -37,6 +37,7 @@ describe 'trove::db::mysql' do
   end
 
   shared_examples_for 'trove mysql database' do
+    it { should contain_class('trove::deps') }
 
     context 'when omiting the required parameter password' do
       before { params.delete(:password) }
