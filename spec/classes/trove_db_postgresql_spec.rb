@@ -16,6 +16,8 @@ describe 'trove::db::postgresql' do
         req_params
       end
 
+      it { is_expected.to contain_class('trove::deps') }
+
       it { is_expected.to contain_openstacklib__db__postgresql('trove').with(
         :user       => 'trove',
         :password   => 'trovepass',
