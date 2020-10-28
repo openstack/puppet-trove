@@ -65,7 +65,7 @@
             "version_requirement": ">= 6.0.0 < 7.0.0"
         }
     ],
-    "source": "git://github.com/openstack/puppet-trove.git",
+    "source": "https://opendev.org/openstack/puppet-trove.git",
     "summary": "Puppet module for OpenStack Trove",
     "version": "18.0.0"
 }
