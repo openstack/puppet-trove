@@ -146,22 +146,21 @@ class trove::conductor(
   }
 
   oslo::messaging::amqp { 'trove_conductor_config':
-    server_request_prefix  => $::trove::amqp_server_request_prefix,
-    broadcast_prefix       => $::trove::amqp_broadcast_prefix,
-    group_request_prefix   => $::trove::amqp_group_request_prefix,
-    container_name         => $::trove::amqp_container_name,
-    idle_timeout           => $::trove::amqp_idle_timeout,
-    trace                  => $::trove::amqp_trace,
-    ssl_ca_file            => $::trove::amqp_ssl_ca_file,
-    ssl_cert_file          => $::trove::amqp_ssl_cert_file,
-    ssl_key_file           => $::trove::amqp_ssl_key_file,
-    ssl_key_password       => $::trove::amqp_ssl_key_password,
-    allow_insecure_clients => $::trove::amqp_allow_insecure_clients,
-    sasl_mechanisms        => $::trove::amqp_sasl_mechanisms,
-    sasl_config_dir        => $::trove::amqp_sasl_config_dir,
-    sasl_config_name       => $::trove::amqp_sasl_config_name,
-    username               => $::trove::amqp_username,
-    password               => $::trove::amqp_password,
+    server_request_prefix => $::trove::amqp_server_request_prefix,
+    broadcast_prefix      => $::trove::amqp_broadcast_prefix,
+    group_request_prefix  => $::trove::amqp_group_request_prefix,
+    container_name        => $::trove::amqp_container_name,
+    idle_timeout          => $::trove::amqp_idle_timeout,
+    trace                 => $::trove::amqp_trace,
+    ssl_ca_file           => $::trove::amqp_ssl_ca_file,
+    ssl_cert_file         => $::trove::amqp_ssl_cert_file,
+    ssl_key_file          => $::trove::amqp_ssl_key_file,
+    ssl_key_password      => $::trove::amqp_ssl_key_password,
+    sasl_mechanisms       => $::trove::amqp_sasl_mechanisms,
+    sasl_config_dir       => $::trove::amqp_sasl_config_dir,
+    sasl_config_name      => $::trove::amqp_sasl_config_name,
+    username              => $::trove::amqp_username,
+    password              => $::trove::amqp_password,
   }
 
   oslo::log { 'trove_conductor_config':
