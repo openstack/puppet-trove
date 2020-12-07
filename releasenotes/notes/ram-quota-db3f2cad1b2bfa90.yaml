@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Support new `max_ram_per_tenant` quota option. Specified in MB, the default
+    is -1 (unlimited)

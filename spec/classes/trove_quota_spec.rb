@@ -7,6 +7,8 @@ describe 'trove::quota' do
       it 'contains default values' do
         is_expected.to contain_trove_config('DEFAULT/max_instances_per_tenant').with(
           :value => 5)
+        is_expected.to contain_trove_config('DEFAULT/max_ram_per_tenant').with(
+          :value => -1)
         is_expected.to contain_trove_config('DEFAULT/max_accepted_volume_size').with(
           :value => 5)
         is_expected.to contain_trove_config('DEFAULT/max_volumes_per_tenant').with(
@@ -21,6 +23,7 @@ describe 'trove::quota' do
     context 'with overridden parameters' do
       let :params do
         { :max_instances_per_tenant => 10,
+          :max_ram_per_tenant       => 10,
           :max_accepted_volume_size => 10,
           :max_volumes_per_tenant   => 100,
           :max_backups_per_tenant   => 100,
@@ -28,6 +31,8 @@ describe 'trove::quota' do
       end
       it 'contains overrided values' do
         is_expected.to contain_trove_config('DEFAULT/max_instances_per_tenant').with(
+          :value => 10)
+        is_expected.to contain_trove_config('DEFAULT/max_ram_per_tenant').with(
           :value => 10)
         is_expected.to contain_trove_config('DEFAULT/max_accepted_volume_size').with(
           :value => 10)
