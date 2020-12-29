@@ -20,12 +20,12 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the trove policy.json file
-#   Defaults to /etc/trove/policy.json
+#   (Optional) Path to the trove policy.yaml file
+#   Defaults to /etc/trove/policy.yaml
 #
 class trove::policy (
   $policies    = {},
-  $policy_path = '/etc/trove/policy.json',
+  $policy_path = '/etc/trove/policy.yaml',
 ) {
 
   include trove::deps
@@ -34,9 +34,10 @@ class trove::policy (
   validate_legacy(Hash, 'validate_hash', $policies)
 
   Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::trove::params::group,
+    file_path   => $policy_path,
+    file_user   => 'root',
+    file_group  => $::trove::params::group,
+    file_format => 'yaml',
   }
 
   create_resources('openstacklib::policy::base', $policies)
