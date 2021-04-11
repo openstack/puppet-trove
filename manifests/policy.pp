@@ -32,11 +32,16 @@
 #   (Optional) Path to the trove policy.yaml file
 #   Defaults to /etc/trove/policy.yaml
 #
+# [*policy_dirs*]
+#   (Optional) Path to the trove policy folder
+#   Defaults to $::os_service_default
+#
 class trove::policy (
   $enforce_scope        = $::os_service_default,
   $enforce_new_defaults = $::os_service_default,
   $policies             = {},
   $policy_path          = '/etc/trove/policy.yaml',
+  $policy_dirs          = $::os_service_default,
 ) {
 
   include trove::deps
@@ -56,7 +61,8 @@ class trove::policy (
   oslo::policy { 'trove_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
-    policy_file          => $policy_path
+    policy_file          => $policy_path,
+    policy_dirs          => $policy_dirs,
   }
 
 }

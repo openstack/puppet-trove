@@ -7,6 +7,7 @@ describe 'trove::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_path          => '/etc/trove/policy.yaml',
+        :policy_dirs          => '/etc/trove/policy.d',
         :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -28,6 +29,7 @@ describe 'trove::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_file          => '/etc/trove/policy.yaml',
+        :policy_dirs          => '/etc/trove/policy.d',
       )
     end
   end
