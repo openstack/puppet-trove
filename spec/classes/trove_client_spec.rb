@@ -59,15 +59,7 @@ describe 'trove::client' do
         when 'Debian'
           { :client_package_name => 'python3-troveclient' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :client_package_name => 'python3-troveclient' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :client_package_name => 'python3-troveclient' }
-            else
-              { :client_package_name => 'python-troveclient' }
-            end
-          end
+          { :client_package_name => 'python3-troveclient' }
         end
       end
 

@@ -4,9 +4,8 @@
 #
 class trove::params {
   include openstacklib::defaults
-  $pyvers = $::openstacklib::defaults::pyvers
 
-  $client_package_name = "python${pyvers}-troveclient"
+  $client_package_name = 'python3-troveclient'
   $group               = 'trove'
 
   case $::osfamily {
