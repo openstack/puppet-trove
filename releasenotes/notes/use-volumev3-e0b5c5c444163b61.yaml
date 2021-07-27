@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Default value of the ``trove::cinder_api_version`` has been updated from
+    ``volumev2`` to ``volumev3`` to use current Block Storage API v3 instead of
+    deprecated Block Storage API v3.
