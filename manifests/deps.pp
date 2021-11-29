@@ -45,7 +45,7 @@ class trove::deps {
   # policy config should occur in the config block also as soon as
   # puppet-trove supports it. Leave commented out for now.
   Anchor['trove::config::begin']
-  -> Openstacklib::Policy::Base<||>
+  -> Openstacklib::Policy<||>
   ~> Anchor['trove::config::end']
 
   # all db settings should be applied and all packages should be installed
