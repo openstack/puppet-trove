@@ -38,10 +38,6 @@
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
 #
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v3'.
-#
 # [*conductor_manager*]
 #   (optional) Trove conductor manager.
 #   Defaults to 'trove.conductor.manager.Manager'.
@@ -58,6 +54,12 @@
 #   (optional) If False doesn't trace SQL requests.
 #   Default: $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*auth_url*]
+#   (optional) Authentication URL.
+#   Defaults to undef
+#
 class trove::conductor(
   $enabled           = true,
   $manage_service    = true,
@@ -67,11 +69,12 @@ class trove::conductor(
   $log_dir           = '/var/log/trove',
   $use_syslog        = $::os_service_default,
   $log_facility      = $::os_service_default,
-  $auth_url          = 'http://localhost:5000/v3',
   $conductor_manager = 'trove.conductor.manager.Manager',
   $workers           = $::os_workers,
   $enable_profiler   = $::os_service_default,
   $trace_sqlalchemy  = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $auth_url          = undef
 ) inherits trove {
 
   include trove::deps

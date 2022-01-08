@@ -60,13 +60,15 @@
 #   (optional) Syslog facility to receive log lines.
 #   Defaults to 'LOG_USER'.
 #
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to 'http://localhost:5000/v3'.
-#
 # [*guestagent_config_file*]
 #   (optional) Trove guest agent configuration file.
 #   Defaults to '/etc/trove/trove-guestagent.conf'.
+#
+# [*taskmanager_manager*]
+#   Trove taskmanager entry point.
+#   Defaults to 'trove.taskmanager.manager.Manager'.
+#
+# DEPRECATED OPTIONS
 #
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
@@ -76,15 +78,13 @@
 #   (optional) Message queue name the Taskmanager will listen to.
 #   Defaults to 'taskmanager'.
 #
-# [*taskmanager_manager*]
-#   Trove taskmanager entry point.
-#   Defaults to 'trove.taskmanager.manager.Manager'.
-#
-# DEPRECATED OPTIONS
-#
 # [*use_guestagent_template*]
 #   (optional) Use template to provision trove guest agent configuration file.
 #   Defaults to true.
+#
+# [*auth_url*]
+#   (optional) Authentication URL.
+#   Defaults to undef
 #
 class trove::taskmanager(
   $enabled                  = true,
@@ -95,7 +95,6 @@ class trove::taskmanager(
   $use_syslog               = $::os_service_default,
   $guest_log_file           = '/var/log/trove/trove-guestagent.log',
   $log_facility             = $::os_service_default,
-  $auth_url                 = 'http://localhost:5000/v3',
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
@@ -103,6 +102,7 @@ class trove::taskmanager(
   $default_neutron_networks = undef,
   $taskmanager_queue        = undef,
   $use_guestagent_template  = true,
+  $auth_url                 = undef,
 ) inherits trove {
 
   include trove::deps
