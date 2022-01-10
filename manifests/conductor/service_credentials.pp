@@ -30,7 +30,7 @@
 #
 class trove::conductor::service_credentials (
   $password            = $::os_service_default,
-  $auth_url            = undef,
+  $auth_url            = 'http://127.0.0.1:5000/v3',
   $region_name         = 'RegionOne',
   $username            = 'trove',
   $project_name        = 'services',
@@ -40,13 +40,7 @@ class trove::conductor::service_credentials (
 
   include trove::deps
 
-  if $auth_url == undef {
-    warning('The auto detection of auth_url from www_authenticate_uri will be \
-removed in a future release. Please set trove::conductor::service_credentials::auth_url .')
-    $auth_url_base = pick($::trove::keystone::authtoken::www_authenticate_uri, 'http://127.0.0.1:5000/v3')
-  } else {
-    $auth_url_base = $auth_url
-  }
+  $auth_url_base = pick($::trove::conductor::auth_url, $auth_url)
   $auth_url_real = "${regsubst($auth_url_base, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
 
   $username_real      = pick($::trove::nova_proxy_admin_user, $username)

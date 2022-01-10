@@ -1,0 +1,17 @@
+---
+deprecations:
+  - |
+    The ``trove::taskmanager::auth_url parameter has been deprecated. Use
+    the ``trove::taskmanager::service_credentials::auth_url`` parameter
+    instead.
+
+  - |
+    The ``trove::conductor::auth_url parameter has been deprecated. Use
+    the ``trove::conductor::service_credentials::auth_url`` parameter
+    instead.
+
+fixes:
+  - |
+    Now the ``trove::taskmanager::auth_url`` parameter and
+    the ``trove:conductor::auth_url`` parameter take effect and are used to
+    define value of ``[service_credentials] auth_url`` parameter.
