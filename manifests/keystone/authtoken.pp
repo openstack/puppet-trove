@@ -182,6 +182,11 @@
 #   true/false
 #   Defaults to $::os_service_default.
 #
+# [*service_type*]
+#  (Optional) The name or type of the service as it appears in the service
+#  catalog. This is used to validate tokens that have restricted access rules.
+#  Defaults to $::os_service_default.
+#
 # [*interface*]
 #  (Optional) Interface to use for the Identity API endpoint. Valid values are
 #  "public", "internal" or "admin".
@@ -222,6 +227,7 @@ class trove::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
   $service_token_roles            = $::os_service_default,
   $service_token_roles_required   = $::os_service_default,
+  $service_type                   = $::os_service_default,
   $interface                      = $::os_service_default,
 ) {
 
@@ -266,6 +272,7 @@ class trove::keystone::authtoken(
     token_cache_time               => $token_cache_time,
     service_token_roles            => $service_token_roles,
     service_token_roles_required   => $service_token_roles_required,
+    service_type                   => $service_type,
     interface                      => $interface,
   }
 }

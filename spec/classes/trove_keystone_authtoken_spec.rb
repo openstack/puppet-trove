@@ -46,6 +46,7 @@ describe 'trove::keystone::authtoken' do
           :token_cache_time               => '<SERVICE DEFAULT>',
           :service_token_roles            => '<SERVICE DEFAULT>',
           :service_token_roles_required   => '<SERVICE DEFAULT>',
+          :service_type                   => '<SERVICE DEFAULT>',
           :interface                      => '<SERVICE DEFAULT>',
         )
       end
@@ -88,6 +89,7 @@ describe 'trove::keystone::authtoken' do
           :token_cache_time               => '301',
           :service_token_roles            => ['service'],
           :service_token_roles_required   => false,
+          :service_type                   => 'identity',
           :interface                      => 'internal',
         })
       end
@@ -128,6 +130,7 @@ describe 'trove::keystone::authtoken' do
           :token_cache_time               => '301',
           :service_token_roles            => ['service'],
           :service_token_roles_required   => false,
+          :service_type                   => 'identity',
           :interface                      => 'internal',
         )
       end
