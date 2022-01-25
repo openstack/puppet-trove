@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    The ``system_scope`` parameter has been added to
+    the ``trove::keystone::authtoken`` class.
+
+  - |
+    The ``trove::keystone::auth`` class now supports customizing roles assigned
+    to the trove service user.
+
+  - |
+    The ``trove::keystone::auth`` class now supports defining assignmet of
+    system-scoped roles to the trove service user.

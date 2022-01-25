@@ -28,6 +28,10 @@
 #   (Optional) Name of domain for $project_name
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*insecure*]
 #   (Optional) If true, explicitly allow TLS without checking server cert
 #   against any certificate authorities.  WARNING: not recommended.  Use with
@@ -199,6 +203,7 @@ class trove::keystone::authtoken(
   $project_name                   = 'services',
   $user_domain_name               = 'Default',
   $project_domain_name            = 'Default',
+  $system_scope                   = $::os_service_default,
   $insecure                       = $::os_service_default,
   $auth_section                   = $::os_service_default,
   $auth_type                      = 'password',
@@ -241,6 +246,7 @@ class trove::keystone::authtoken(
     username                       => $username,
     password                       => $password,
     project_name                   => $project_name,
+    system_scope                   => $system_scope,
     auth_url                       => $auth_url,
     www_authenticate_uri           => $www_authenticate_uri,
     auth_version                   => $auth_version,

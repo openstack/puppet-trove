@@ -36,6 +36,18 @@
 #   (Optional) Tenant for Trove user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to trove user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to trove user.
+#   Defaults to []
+#
 # [*configure_endpoint*]
 #   (Optional) Should Trove endpoint be configured?
 #   Defaults to true.
@@ -92,6 +104,9 @@ class trove::keystone::auth (
   $auth_name           = 'trove',
   $email               = 'trove@localhost',
   $tenant              = 'services',
+  $roles               = ['admin'],
+  $system_scope        = 'all',
+  $system_roles        = [],
   $configure_user      = true,
   $configure_user_role = true,
   $configure_endpoint  = true,
@@ -123,6 +138,9 @@ class trove::keystone::auth (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     internal_url        => $internal_url,
     admin_url           => $admin_url,
