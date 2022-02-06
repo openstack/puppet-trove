@@ -121,10 +121,7 @@ class trove::keystone::auth (
 
   include trove::deps
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| tag == 'trove-service' |>
-
-  Keystone_endpoint<| title == "${region}/${service_name}::${service_type}" |>
-  ~> Service <| tag == 'trove-service' |>
+  Keystone::Resource::Service_identity['trove'] -> Anchor['trove::service::end']
 
   keystone::resource::service_identity { 'trove':
     configure_user      => $configure_user,
