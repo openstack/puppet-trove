@@ -38,12 +38,6 @@
 #   Cluster (NDB).
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_min_pool_size*]
-#   Minimum number of SQL connections to keep open in a pool.
-#   (Optional) Defaults to undef.
-#
 class trove::db (
   $database_connection              = 'sqlite:////var/lib/trove/trove.sqlite',
   $database_connection_recycle_time = $::os_service_default,
@@ -53,15 +47,9 @@ class trove::db (
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
   $mysql_enable_ndb                 = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $database_min_pool_size           = undef,
 ) {
 
   include trove::deps
-
-  if $::trove::database_min_pool_size or $database_min_pool_size {
-    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
-  }
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use trove::<myparam> if trove::db::<myparam> isn't specified.

@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``trove::db::database_min_pool_size`` parameter and
+    the ``trove::database_min_pool_size`` parameter have been removed.
