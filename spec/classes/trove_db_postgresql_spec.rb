@@ -37,7 +37,10 @@ describe 'trove::db::postgresql' do
         facts.merge(OSDefaults.get_facts())
       end
 
-      it_configures 'trove::db::postgresql'
+      # TODO(tkajinam): Remove this once puppet-postgresql supports CentOS 9
+      unless facts[:osfamily] == 'RedHat' and facts[:operatingsystemmajrelease].to_i >= 9
+        it_configures 'trove::db::postgresql'
+      end
     end
   end
 
