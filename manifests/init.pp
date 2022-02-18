@@ -293,10 +293,6 @@
 #   exceptions in the trove API service.
 #   Defaults to undef.
 #
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
-#
 class trove(
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
@@ -361,17 +357,11 @@ class trove(
   $nova_proxy_admin_pass        = undef,
   $nova_proxy_admin_tenant_name = undef,
   $os_region_name               = undef,
-  $amqp_allow_insecure_clients  = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future release.')
-  }
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
