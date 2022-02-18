@@ -270,10 +270,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
 # [*nova_proxy_admin_user*]
 #   (optional) Admin username used to connect to nova.
 #   Defaults to undef
@@ -352,7 +348,6 @@ class trove(
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
-  $database_min_pool_size       = undef,
   $nova_proxy_admin_user        = undef,
   $nova_proxy_admin_pass        = undef,
   $nova_proxy_admin_tenant_name = undef,
