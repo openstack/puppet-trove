@@ -77,14 +77,14 @@ define trove::generic_service(
       } else {
         $service_ensure = 'stopped'
       }
-    }
 
-    service { $trove_title:
-      ensure    => $service_ensure,
-      name      => $service_name,
-      enable    => $enabled,
-      hasstatus => true,
-      tag       => 'trove-service',
+      service { $trove_title:
+        ensure    => $service_ensure,
+        name      => $service_name,
+        enable    => $enabled,
+        hasstatus => true,
+        tag       => 'trove-service',
+      }
     }
   }
 }
