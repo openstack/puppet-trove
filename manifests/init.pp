@@ -256,13 +256,9 @@
 #   (optional) Service endpoint type to use when searching catalog.
 #   Defaults to $::os_service_default
 #
-# [*use_neutron*]
-#   (optional) Use Neutron
-#   Defaults to true
-#
 # [*default_neutron_networks*]
 #   (optional) The network that trove will attach by default.
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 # [*package_ensure*]
 #   (optional) The state of the package.
@@ -288,6 +284,10 @@
 #   you have multiple endpoints, you will get Ambiguous Endpoint
 #   exceptions in the trove API service.
 #   Defaults to undef.
+#
+# [*use_neutron*]
+#   (optional) Use Neutron
+#   Defaults to undef
 #
 class trove(
   $default_transport_url        = $::os_service_default,
@@ -344,7 +344,6 @@ class trove(
   $glance_endpoint_type         = $::os_service_default,
   $trove_endpoint_type          = $::os_service_default,
   $neutron_endpoint_type        = $::os_service_default,
-  $use_neutron                  = true,
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
@@ -352,11 +351,16 @@ class trove(
   $nova_proxy_admin_pass        = undef,
   $nova_proxy_admin_tenant_name = undef,
   $os_region_name               = undef,
+  $use_neutron                  = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
+
+  if $use_neutron != undef {
+    warning('The trove::use_neutron parameter has been deprecated and has no effect.')
+  }
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
@@ -426,18 +430,10 @@ class trove(
     }
   }
 
-  if $use_neutron {
-    trove_config {
-      'DEFAULT/network_label_regex':         value => '.*';
-      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
-      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
-    }
-  } else {
-    trove_config {
-      'DEFAULT/network_label_regex':         value => '^private$';
-      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
-      'DEFAULT/default_neutron_networks':    ensure => absent;
-    }
+  trove_config {
+    'DEFAULT/network_label_regex':      value => '.*';
+    'DEFAULT/network_driver':           value => 'trove.network.neutron.NeutronDriver';
+    'DEFAULT/default_neutron_networks': value => $default_neutron_networks;
   }
 
   oslo::messaging::default { 'trove_config':

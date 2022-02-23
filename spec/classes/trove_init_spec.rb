@@ -130,22 +130,6 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
       end
     end
-
-    context 'when using Nova Network' do
-      let :params do
-        { :use_neutron => false }
-      end
-
-      it 'configures trove to use the Nova Network network driver' do
-        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_ensure('absent')
-        is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
-      end
-
-      it 'configures trove to use the "private" network label' do
-        is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('^private$')
-      end
-    end
-
   end
 
   on_supported_os({
