@@ -3,7 +3,7 @@ Puppet::Type.newtype(:trove_conductor_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from /etc/trove/trove-conductor.conf'
+    desc 'Section/setting name to manage from /etc/trove/trove-conductor.conf (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

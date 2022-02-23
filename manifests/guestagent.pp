@@ -106,7 +106,7 @@ class trove::guestagent(
   #Deprecated
   $control_exchange        = undef,
   $auth_url                = undef,
-) inherits trove {
+) {
 
   include trove::deps
   include trove::params

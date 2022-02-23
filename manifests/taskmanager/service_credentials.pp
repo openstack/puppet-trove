@@ -1,3 +1,4 @@
+# DEPRECATED !!
 # The trove::taskmanager::service_credentials class helps configure auth settings
 #
 # == Parameters
@@ -40,26 +41,5 @@ class trove::taskmanager::service_credentials (
 
   include trove::deps
 
-  $auth_url_base = pick($::trove::taskmanager::auth_url, $auth_url)
-  $auth_url_real = "${regsubst($auth_url_base, '(\/v3$|\/v2.0$|\/$)', '')}/v3"
-
-  $username_real      = pick($::trove::nova_proxy_admin_user, $username)
-  $password_real      = pick($::trove::nova_proxy_admin_pass, $password)
-  $project_name_real  = pick($::trove::nova_proxy_tenant_name, $project_name)
-  $region_name_real   = pick($::trove::os_region_name, $region_name)
-
-  if is_service_default($password_real) {
-    fail('trove::taskmanager::service_credentials::password should be set')
-  }
-
-  trove_taskmanager_config {
-    'service_credentials/auth_url':            value => $auth_url_real;
-    'service_credentials/username':            value => $username_real;
-    'service_credentials/password':            value => $password_real, secret => true;
-    'service_credentials/project_name':        value => $project_name_real;
-    'service_credentials/project_domain_name': value => $project_domain_name;
-    'service_credentials/user_domain_name':    value => $user_domain_name;
-    'service_credentials/region_name':         value => $region_name_real;
-  }
-
+  warning('The trove::conductor::service_credentials class has been deprecated and has no effect.')
 }
