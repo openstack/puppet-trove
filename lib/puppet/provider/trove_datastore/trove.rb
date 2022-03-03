@@ -9,16 +9,16 @@ Puppet::Type.type(:trove_datastore).provide(
     Trove provider to manage datastore type.
   EOT
 
-  commands :trove => "trove"
-
   mk_resource_methods
 
+  @credentials = Puppet::Provider::Openstack::CredentialsV3.new
+
   def self.instances
-    list_trove_resources("datastore").collect do |attrs|
+    request('datastore', 'list').collect do |attrs|
       new(
-        :ensure         => :present,
-        :name           => attrs["name"],
-        :id             => attrs["id"]
+        :ensure => :present,
+        :name   => attrs[:name],
+        :id     => attrs[:id]
       )
     end
   end

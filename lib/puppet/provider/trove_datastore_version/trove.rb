@@ -9,9 +9,9 @@ Puppet::Type.type(:trove_datastore_version).provide(
     Trove provider to manage datastore version type.
   EOT
 
-  commands :trove => "trove"
-
   mk_resource_methods
+
+  @credentials = Puppet::Provider::Openstack::CredentialsV3.new
 
   def self.prefetch(resource)
     @datastore_version_hash = nil
@@ -30,7 +30,7 @@ Puppet::Type.type(:trove_datastore_version).provide(
   end
 
   def exists?
-    datastore_version_hash(resource[:datastore])[resource[:name]]
+    datastore_version_hash(@resource[:datastore])[@resource[:name]]
   end
 
   def create
@@ -49,12 +49,12 @@ Puppet::Type.type(:trove_datastore_version).provide(
 
   private
 
-    def self.build_datastore_version_hash(datastore)
-      dvs = {}
-      list_trove_resources("datastore-version", datastore).collect do |attrs|
-        dvs[attrs["name"]] = attrs
-      end
-      dvs
+  def self.build_datastore_version_hash(datastore)
+    dvs = {}
+    request('datastore version', 'list', datastore).each do |attrs|
+      dvs[attrs[:name]] = attrs
     end
+    dvs
+  end
 
 end
