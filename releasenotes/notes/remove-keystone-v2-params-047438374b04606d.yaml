@@ -1,0 +1,18 @@
+---
+upgrade:
+  - |
+    The following deprecated parameters of the ``trove`` class have been
+    removed.
+
+    - ``nova_proxy_admin_user``
+    - ``nova_proxy_admin_pass``
+    - ``nova_proxy_tenant_name``
+    - ``os_region_name``
+
+  - |
+    Now the ``trove::api::service_credentials`` class no longer looks up
+    the ``auth_url`` parameter from the ``trove::keystone::authtoken`` class.
+    The parameter should be defined properly.
+
+  - |
+    The ``trove::guestagent::auth_url`` parameter has been removed.

@@ -7,9 +7,7 @@ describe 'trove::guestagent' do
     context 'with default parameters' do
 
       let :pre_condition do
-        "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete'
-         }
+        "class { 'trove': }
          class { 'trove::guestagent::service_credentials':
            password => 'verysectrete',
          }"
@@ -70,9 +68,7 @@ describe 'trove::guestagent' do
 
       context 'when using a single RabbitMQ server' do
         let :pre_condition do
-          "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
-           }
+          "class { 'trove': }
            class { 'trove::guestagent::service_credentials':
              password => 'verysectrete',
            }"
@@ -85,7 +81,6 @@ describe 'trove::guestagent' do
       context 'when using a single RabbitMQ server with enable ha options' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass       => 'verysecrete',
              rabbit_ha_queues            => 'true',
              rabbit_heartbeat_in_pthread => 'true',
              amqp_durable_queues         => 'true',
@@ -104,7 +99,6 @@ describe 'trove::guestagent' do
       context 'when using multiple RabbitMQ servers' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
              rabbit_ha_queues      => true,
            }
            class { 'trove::guestagent::service_credentials':
@@ -119,7 +113,6 @@ describe 'trove::guestagent' do
       context 'when using default transport url' do
         let :pre_condition do
           "class { 'trove':
-             nova_proxy_admin_pass => 'verysecrete',
              default_transport_url => 'rabbit://user:pass@host:1234/virt',
              rpc_response_timeout  => '120',
              control_exchange      => 'openstack',
@@ -139,9 +132,7 @@ describe 'trove::guestagent' do
 
     context 'with custom parameters' do
       let :pre_condition do
-        "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete'
-         }
+        "class { 'trove': }
          class { 'trove::guestagent::service_credentials':
           password => 'verysectrete',
          }"
@@ -166,12 +157,14 @@ describe 'trove::guestagent' do
     context 'with SSL enabled with kombu' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
            rabbit_use_ssl     => true,
            kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
            kombu_ssl_certfile => '/path/to/ssl/cert/file',
            kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-           kombu_ssl_version  => 'TLSv1'}"
+           kombu_ssl_version  => 'TLSv1'}
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
       end
 
       it do
@@ -188,8 +181,11 @@ describe 'trove::guestagent' do
     context 'with SSL enabled without kombu' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => true}"
+           rabbit_use_ssl => true
+         }
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
       end
 
       it do
@@ -206,8 +202,11 @@ describe 'trove::guestagent' do
     context 'with SSL disabled' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass => 'verysecrete',
-           rabbit_use_ssl        => false}"
+           rabbit_use_ssl => false
+         }
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
       end
 
       it do
@@ -224,11 +223,14 @@ describe 'trove::guestagent' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           nova_proxy_admin_pass      => 'verysecrete',
            default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
            rpc_response_timeout       => '60',
            control_exchange           => 'exchange',
-           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673' }"
+           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673'
+         }
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
       end
 
       it do
@@ -241,8 +243,10 @@ describe 'trove::guestagent' do
 
     context 'with amqp messaging' do
       let :pre_condition do
-        "class { 'trove' :
-           nova_proxy_admin_pass => 'verysecrete'}"
+        "class { 'trove' : }
+         class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
       end
 
       it do

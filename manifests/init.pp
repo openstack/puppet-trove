@@ -241,25 +241,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*nova_proxy_admin_user*]
-#   (optional) Admin username used to connect to nova.
-#   Defaults to undef
-#
-# [*nova_proxy_admin_pass*]
-#   (optional) Admin password used to connect to nova.
-#   Defaults to undef
-#
-# [*nova_proxy_admin_tenant_name*]
-#   (optional) Admin tenant name used to connect to nova.
-#   Defaults to undef
-#
-# [*os_region_name*]
-#   (optional) Sets the os_region_name flag. For environments with
-#   more than one endpoint per service. If you don't set this and
-#   you have multiple endpoints, you will get Ambiguous Endpoint
-#   exceptions in the trove API service.
-#   Defaults to undef.
-#
 # [*use_neutron*]
 #   (optional) Use Neutron
 #   Defaults to undef
@@ -341,10 +322,6 @@ class trove(
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
-  $nova_proxy_admin_user        = undef,
-  $nova_proxy_admin_pass        = undef,
-  $nova_proxy_admin_tenant_name = undef,
-  $os_region_name               = undef,
   $use_neutron                  = undef,
   $database_connection          = undef,
   $database_idle_timeout        = undef,

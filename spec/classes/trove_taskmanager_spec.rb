@@ -51,6 +51,12 @@ describe 'trove::taskmanager' do
     end
 
     context 'when set use_guestagent_template to false' do
+      let :pre_condition do
+        "class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
+      end
+
       let :params do
         { :use_guestagent_template => false }
       end

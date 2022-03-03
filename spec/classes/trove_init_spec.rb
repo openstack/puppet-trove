@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'trove' do
 
   let :params do
-    { :nova_proxy_admin_pass     => 'passw0rd',
+    { 
       :nova_compute_url          => 'http://localhost:8774/v2',
       :cinder_url                => 'http://localhost:8776/v1',
       :swift_url                 => 'http://localhost:8080/v1/AUTH_',

@@ -82,10 +82,6 @@
 #   (Optional) Moved to init.pp. The default exchange to scope topics.
 #   Defaults to undef.
 #
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to undef.
-#
 class trove::guestagent(
   $enabled                 = true,
   $manage_service          = true,
@@ -105,7 +101,6 @@ class trove::guestagent(
   $backup_aes_cbc_key      = $::os_service_default,
   #Deprecated
   $control_exchange        = undef,
-  $auth_url                = undef,
 ) {
 
   include trove::deps

@@ -25,7 +25,7 @@ describe 'trove::guestagent::service_credentials' do
       end
 
       it 'configures service credentials with default parameters' do
-        is_expected.to contain_trove_guestagent_config('service_credentials/auth_url').with_value('http://127.0.0.1:5000/v3')
+        is_expected.to contain_trove_guestagent_config('service_credentials/auth_url').with_value('http://127.0.0.1:5000')
         is_expected.to contain_trove_guestagent_config('service_credentials/username').with_value('trove')
         is_expected.to contain_trove_guestagent_config('service_credentials/password').with_value('verysecrete').with_secret(true)
         is_expected.to contain_trove_guestagent_config('service_credentials/project_name').with_value('services')
@@ -38,7 +38,7 @@ describe 'trove::guestagent::service_credentials' do
     context 'when overriding defaults' do
       let :params do
         {
-          :auth_url            => 'http://127.0.0.1:5000/v3',
+          :auth_url            => 'http://localhost:5000',
           :password            => 'verysecrete',
           :username            => 'trove2',
           :project_name        => 'services2',
@@ -49,7 +49,7 @@ describe 'trove::guestagent::service_credentials' do
       end
 
       it 'configures service credentials with default parameters' do
-        is_expected.to contain_trove_guestagent_config('service_credentials/auth_url').with_value('http://127.0.0.1:5000/v3')
+        is_expected.to contain_trove_guestagent_config('service_credentials/auth_url').with_value('http://localhost:5000')
         is_expected.to contain_trove_guestagent_config('service_credentials/username').with_value('trove2')
         is_expected.to contain_trove_guestagent_config('service_credentials/project_name').with_value('services2')
         is_expected.to contain_trove_guestagent_config('service_credentials/region_name').with_value('RegionTwo')
