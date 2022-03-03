@@ -29,6 +29,10 @@
 #   (optional) the keystone user domain name for trove services
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (optional) Scope for system operations.
+#   Defaults to $::os_service_default
+#
 class trove::guestagent::service_credentials (
   $password,
   $auth_url            = 'http://127.0.0.1:5000',
@@ -37,17 +41,27 @@ class trove::guestagent::service_credentials (
   $project_name        = 'services',
   $project_domain_name = 'Default',
   $user_domain_name    = 'Default',
+  $system_scope        = $::os_service_default,
 ) {
 
   include trove::deps
+
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
 
   trove_guestagent_config {
     'service_credentials/auth_url':            value => $auth_url;
     'service_credentials/username':            value => $username;
     'service_credentials/password':            value => $password, secret => true;
-    'service_credentials/project_name':        value => $project_name;
-    'service_credentials/project_domain_name': value => $project_domain_name;
+    'service_credentials/project_name':        value => $project_name_real;
+    'service_credentials/project_domain_name': value => $project_domain_name_real;
     'service_credentials/user_domain_name':    value => $user_domain_name;
+    'service_credentials/system_scope':        value => $system_scope;
     'service_credentials/region_name':         value => $region_name;
   }
 

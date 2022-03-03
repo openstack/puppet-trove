@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The new ``system_scope`` parameter has been added to the following classes.
+
+    - ``trove::api::service_credentials``
+    - ``trove::guestagent::service_credentials``
