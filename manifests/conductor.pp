@@ -16,28 +16,6 @@
 #   (optional) The state of the trove conductor package
 #   Defaults to 'present'
 #
-# [*debug*]
-#   (optional) Rather to log the trove api service at debug level.
-#   Default: false
-#
-# [*log_file*]
-#   (optional) The path of file used for logging
-#   If set to $::os_service_default, it will not log to any file.
-#   Default: /var/log/trove/trove-conductor.log
-#
-# [*log_dir*]
-#    (optional) directory to which trove logs are sent.
-#    If set to $::os_service_default, it will not log to any directory.
-#    Defaults to '/var/log/trove'
-#
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to $::os_service_default
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines.
-#   Defaults to 'LOG_USER'.
-#
 # [*conductor_manager*]
 #   (optional) Trove conductor manager.
 #   Defaults to 'trove.conductor.manager.Manager'.
@@ -60,118 +38,65 @@
 #   (optional) Authentication URL.
 #   Defaults to undef
 #
+# [*debug*]
+#   (optional) Rather to log the trove api service at debug level.
+#   Default: undef
+#
+# [*log_file*]
+#   (optional) The path of file used for logging
+#   If set to $::os_service_default, it will not log to any file.
+#   Default: undef
+#
+# [*log_dir*]
+#    (optional) directory to which trove logs are sent.
+#    If set to $::os_service_default, it will not log to any directory.
+#    Defaults undef
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to undef
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines.
+#   Defaults to undef
+#
 class trove::conductor(
   $enabled           = true,
   $manage_service    = true,
   $package_ensure    = 'present',
-  $debug             = $::os_service_default,
-  $log_file          = '/var/log/trove/trove-conductor.log',
-  $log_dir           = '/var/log/trove',
-  $use_syslog        = $::os_service_default,
-  $log_facility      = $::os_service_default,
   $conductor_manager = 'trove.conductor.manager.Manager',
   $workers           = $::os_workers,
   $enable_profiler   = $::os_service_default,
   $trace_sqlalchemy  = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $auth_url          = undef
-) inherits trove {
+  $auth_url          = undef,
+  $debug             = undef,
+  $log_file          = undef,
+  $log_dir           = undef,
+  $use_syslog        = undef,
+  $log_facility      = undef,
+) {
 
   include trove::deps
   include trove::params
-  include trove::conductor::service_credentials
 
-  if $::trove::database_connection {
-    if($::trove::database_connection =~ /mysql:\/\/\S+:\S+@\S+\/\S+/) {
-      require mysql::bindings
-      require mysql::bindings::python
-    } elsif($::trove::database_connection =~ /postgresql:\/\/\S+:\S+@\S+\/\S+/) {
-
-    } elsif($::trove::database_connection =~ /sqlite:\/\//) {
-
-    } else {
-      fail("Invalid db connection ${::trove::database_connection}")
-    }
-    trove_conductor_config {
-      'database/connection':   value => $::trove::database_connection;
-      'database/idle_timeout': value => $::trove::database_idle_timeout;
-    }
+  # Remove individual config files so that we do not leave any parameters
+  # configured by older version
+  file { '/etc/trove/trove-conductor.conf':
+    ensure  => absent,
+    require => Anchor['trove::config::begin'],
+    notify  => Anchor['trove::config::end']
   }
 
   # basic service config
-  trove_conductor_config {
+  trove_config {
     'DEFAULT/trove_conductor_workers': value => $workers;
   }
 
   # profiler config
-  trove_conductor_config {
+  trove_config {
     'profiler/enabled':          value => $enable_profiler;
     'profiler/trace_sqlalchemy': value => $trace_sqlalchemy;
-  }
-
-  if $::trove::single_tenant_mode {
-    trove_conductor_config {
-      'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
-      'DEFAULT/remote_cinder_client':  value => 'trove.common.single_tenant_remote.cinder_client_trove_admin';
-      'DEFAULT/remote_neutron_client': value => 'trove.common.single_tenant_remote.neutron_client_trove_admin';
-    }
-  }
-  else {
-    trove_conductor_config {
-      'DEFAULT/remote_nova_client':    ensure => absent;
-      'DEFAULT/remote_cinder_client':  ensure => absent;
-      'DEFAULT/remote_neutron_client': ensure => absent;
-    }
-  }
-
-  oslo::messaging::default { 'trove_conductor_config':
-    transport_url        => $::trove::default_transport_url,
-    control_exchange     => $::trove::control_exchange,
-    rpc_response_timeout => $::trove::rpc_response_timeout,
-  }
-
-  oslo::messaging::notifications { 'trove_conductor_config':
-    transport_url => $::trove::notification_transport_url,
-    driver        => $::trove::notification_driver,
-    topics        => $::trove::notification_topics
-  }
-
-  oslo::messaging::rabbit {'trove_conductor_config':
-    rabbit_ha_queues        => $::trove::rabbit_ha_queues,
-    rabbit_use_ssl          => $::trove::rabbit_use_ssl,
-    kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
-    kombu_failover_strategy => $::trove::kombu_failover_strategy,
-    amqp_durable_queues     => $::trove::amqp_durable_queues,
-    kombu_ssl_ca_certs      => $::trove::kombu_ssl_ca_certs,
-    kombu_ssl_certfile      => $::trove::kombu_ssl_certfile,
-    kombu_ssl_keyfile       => $::trove::kombu_ssl_keyfile,
-    kombu_ssl_version       => $::trove::kombu_ssl_version
-  }
-
-  oslo::messaging::amqp { 'trove_conductor_config':
-    server_request_prefix => $::trove::amqp_server_request_prefix,
-    broadcast_prefix      => $::trove::amqp_broadcast_prefix,
-    group_request_prefix  => $::trove::amqp_group_request_prefix,
-    container_name        => $::trove::amqp_container_name,
-    idle_timeout          => $::trove::amqp_idle_timeout,
-    trace                 => $::trove::amqp_trace,
-    ssl_ca_file           => $::trove::amqp_ssl_ca_file,
-    ssl_cert_file         => $::trove::amqp_ssl_cert_file,
-    ssl_key_file          => $::trove::amqp_ssl_key_file,
-    ssl_key_password      => $::trove::amqp_ssl_key_password,
-    sasl_mechanisms       => $::trove::amqp_sasl_mechanisms,
-    sasl_config_dir       => $::trove::amqp_sasl_config_dir,
-    sasl_config_name      => $::trove::amqp_sasl_config_name,
-    username              => $::trove::amqp_username,
-    password              => $::trove::amqp_password,
-  }
-
-  oslo::log { 'trove_conductor_config':
-    debug               => $debug,
-    log_file            => $log_file,
-    log_dir             => $log_dir,
-    use_syslog          => $use_syslog,
-    syslog_log_facility => $log_facility
   }
 
   trove::generic_service { 'conductor':

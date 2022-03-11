@@ -3,7 +3,7 @@ Puppet::Type.newtype(:trove_taskmanager_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from /etc/trove/trove-taskmanager.conf'
+    desc 'Section/setting name to manage from /etc/trove/trove-taskmanager.conf (DEPRECATED)'
     newvalues(/\S+\/\S+/)
   end
 

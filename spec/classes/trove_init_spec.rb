@@ -40,6 +40,58 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
         is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
         is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
+        is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volumev3')
+        is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
+        is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
+        is_expected.to contain_trove_config('DEFAULT/glance_service_type').with_value('image')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/cinder_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/swift_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/trove_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/neutron_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/glance_endpoint_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
+        is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_ensure('absent')
+        is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_ensure('absent')
+        is_expected.to contain_oslo__messaging__default('trove_config').with(
+          :transport_url        => '<SERVICE DEFAULT>',
+          :rpc_response_timeout => '<SERVICE DEFAULT>',
+          :control_exchange     => 'trove'
+        )
+        is_expected.to contain_oslo__messaging__rabbit('trove_config').with(
+          :rabbit_ha_queues        => '<SERVICE DEFAULT>',
+          :rabbit_use_ssl          => '<SERVICE DEFAULT>',
+          :kombu_reconnect_delay   => '<SERVICE DEFAULT>',
+          :kombu_failover_strategy => '<SERVICE DEFAULT>',
+          :amqp_durable_queues     => '<SERVICE DEFAULT>',
+          :kombu_ssl_ca_certs      => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile      => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile       => '<SERVICE DEFAULT>',
+          :kombu_ssl_version       => '<SERVICE DEFAULT>',
+        )
+        is_expected.to contain_oslo__messaging__amqp('trove_config').with(
+          :server_request_prefix => '<SERVICE DEFAULT>',
+          :broadcast_prefix      => '<SERVICE DEFAULT>',
+          :group_request_prefix  => '<SERVICE DEFAULT>',
+          :container_name        => '<SERVICE DEFAULT>',
+          :idle_timeout          => '<SERVICE DEFAULT>',
+          :trace                 => '<SERVICE DEFAULT>',
+          :ssl_ca_file           => '<SERVICE DEFAULT>',
+          :ssl_cert_file         => '<SERVICE DEFAULT>',
+          :ssl_key_file          => '<SERVICE DEFAULT>',
+          :sasl_mechanisms       => '<SERVICE DEFAULT>',
+          :sasl_config_dir       => '<SERVICE DEFAULT>',
+          :sasl_config_name      => '<SERVICE DEFAULT>',
+          :username              => '<SERVICE DEFAULT>',
+          :password              => '<SERVICE DEFAULT>',
+        )
+        is_expected.to contain_oslo__messaging__notifications('trove_config').with(
+          :transport_url => '<SERVICE DEFAULT>',
+          :driver        => '<SERVICE DEFAULT>',
+          :topics        => '<SERVICE DEFAULT>'
+        )
       }
 
       it 'installs common package' do
@@ -50,6 +102,50 @@ describe 'trove' do
         )
       end
     end
+
+    context 'with single tenant mode enabled' do
+      let :params do
+        { :single_tenant_mode => true }
+      end
+
+      it 'single tenant client values are set' do
+        is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_value('trove.common.single_tenant_remote.nova_client_trove_admin')
+        is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_value('trove.common.single_tenant_remote.cinder_client_trove_admin')
+        is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_value('trove.common.single_tenant_remote.neutron_client_trove_admin')
+      end
+    end
+
+    context 'when using Neutron' do
+      let :params do
+        { :use_neutron              => true,
+          :default_neutron_networks => 'trove_service' }
+      end
+
+      it 'configures trove to use the Neutron network driver' do
+        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
+        is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+      end
+
+      it 'configures trove to use any network label' do
+        is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
+      end
+    end
+
+    context 'when using Nova Network' do
+      let :params do
+        { :use_neutron => false }
+      end
+
+      it 'configures trove to use the Nova Network network driver' do
+        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_ensure('absent')
+        is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.nova.NovaNetwork')
+      end
+
+      it 'configures trove to use the "private" network label' do
+        is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('^private$')
+      end
+    end
+
   end
 
   on_supported_os({

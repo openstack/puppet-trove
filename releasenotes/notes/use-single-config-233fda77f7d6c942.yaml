@@ -1,0 +1,35 @@
+---
+upgrade:
+  - |
+    Now this modules no longer use ``trove-conductor.conf`` and
+    ``trove-taskmanager.conf``. The parameters previously added to these files
+    are now added to the base ``trove.conf``.
+
+deprecations:
+  - |
+    The following parameters have been deprecated and have no effect now.
+
+    - ``trove::config::trove_taskmanager_config``
+    - ``trove::config::trove_conductor_config``
+
+  - |
+    The following classes have been deprecated and have no effect now.
+
+    - ``trove::conductor::service_credentials``
+    - ``trove::taskmanager::service_credentials``
+
+  - |
+    The following parameters of the ``trove::conductor`` class and
+    the ``trove::taskmanager`` class have been deprecated and have no effect.
+
+    - ``debug``
+    - ``log_file``
+    - ``log_dir``
+    - ``use_syslog``
+    - ``log_facility``
+
+  - |
+    The following resource types have been deprecated.
+
+    - ``trove_conductor``
+    - ``trove_taskmanager``

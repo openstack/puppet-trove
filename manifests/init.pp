@@ -337,7 +337,7 @@ class trove(
   $cinder_service_type          = 'volumev3',
   $swift_service_type           = 'object-store',
   $neutron_service_type         = 'network',
-  $glance_service_type         = 'image',
+  $glance_service_type          = 'image',
   $nova_compute_endpoint_type   = $::os_service_default,
   $cinder_endpoint_type         = $::os_service_default,
   $swift_endpoint_type          = $::os_service_default,
@@ -390,5 +390,95 @@ class trove(
     ensure => $package_ensure,
     name   => $::trove::params::common_package_name,
     tag    => ['openstack', 'trove-package'],
+  }
+
+  # services type
+  trove_config {
+    'DEFAULT/nova_compute_service_type': value => $nova_compute_service_type;
+    'DEFAULT/cinder_service_type':       value => $cinder_service_type;
+    'DEFAULT/neutron_service_type':      value => $neutron_service_type;
+    'DEFAULT/glance_service_type':       value => $glance_service_type;
+    'DEFAULT/swift_service_type':        value => $swift_service_type;
+  }
+
+  # endpoint type
+  trove_config {
+    'DEFAULT/nova_compute_endpoint_type': value => $nova_compute_endpoint_type;
+    'DEFAULT/cinder_endpoint_type':       value => $cinder_endpoint_type;
+    'DEFAULT/neutron_endpoint_type':      value => $neutron_endpoint_type;
+    'DEFAULT/swift_endpoint_type':        value => $swift_endpoint_type;
+    'DEFAULT/glance_endpoint_type':       value => $glance_endpoint_type;
+    'DEFAULT/trove_endpoint_type':        value => $trove_endpoint_type;
+  }
+
+  if $single_tenant_mode {
+    trove_config {
+      'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
+      'DEFAULT/remote_cinder_client':  value => 'trove.common.single_tenant_remote.cinder_client_trove_admin';
+      'DEFAULT/remote_neutron_client': value => 'trove.common.single_tenant_remote.neutron_client_trove_admin';
+    }
+  }
+  else {
+    trove_config {
+      'DEFAULT/remote_nova_client':    ensure => absent;
+      'DEFAULT/remote_cinder_client':  ensure => absent;
+      'DEFAULT/remote_neutron_client': ensure => absent;
+    }
+  }
+
+  if $use_neutron {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '.*';
+      'DEFAULT/network_driver':              value => 'trove.network.neutron.NeutronDriver';
+      'DEFAULT/default_neutron_networks':    value => $default_neutron_networks;
+    }
+  } else {
+    trove_config {
+      'DEFAULT/network_label_regex':         value => '^private$';
+      'DEFAULT/network_driver':              value => 'trove.network.nova.NovaNetwork';
+      'DEFAULT/default_neutron_networks':    ensure => absent;
+    }
+  }
+
+  oslo::messaging::default { 'trove_config':
+    transport_url        => $default_transport_url,
+    control_exchange     => $control_exchange,
+    rpc_response_timeout => $rpc_response_timeout,
+  }
+
+  oslo::messaging::notifications { 'trove_config':
+    transport_url => $notification_transport_url,
+    driver        => $notification_driver,
+    topics        => $notification_topics
+  }
+
+  oslo::messaging::rabbit { 'trove_config':
+    rabbit_ha_queues        => $rabbit_ha_queues,
+    rabbit_use_ssl          => $rabbit_use_ssl,
+    kombu_reconnect_delay   => $kombu_reconnect_delay,
+    kombu_failover_strategy => $kombu_failover_strategy,
+    amqp_durable_queues     => $amqp_durable_queues,
+    kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
+    kombu_ssl_certfile      => $kombu_ssl_certfile,
+    kombu_ssl_keyfile       => $kombu_ssl_keyfile,
+    kombu_ssl_version       => $kombu_ssl_version
+  }
+
+  oslo::messaging::amqp { 'trove_config':
+    server_request_prefix => $amqp_server_request_prefix,
+    broadcast_prefix      => $amqp_broadcast_prefix,
+    group_request_prefix  => $amqp_group_request_prefix,
+    container_name        => $amqp_container_name,
+    idle_timeout          => $amqp_idle_timeout,
+    trace                 => $amqp_trace,
+    ssl_ca_file           => $amqp_ssl_ca_file,
+    ssl_cert_file         => $amqp_ssl_cert_file,
+    ssl_key_file          => $amqp_ssl_key_file,
+    ssl_key_password      => $amqp_ssl_key_password,
+    sasl_mechanisms       => $amqp_sasl_mechanisms,
+    sasl_config_dir       => $amqp_sasl_config_dir,
+    sasl_config_name      => $amqp_sasl_config_name,
+    username              => $amqp_username,
+    password              => $amqp_password,
   }
 }
