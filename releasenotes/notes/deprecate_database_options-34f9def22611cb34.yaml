@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The following parameters of the ``trove`` class have been deprecated.
+    Use parameters of the ``trove::db`` class instead.
+
+    - ``database_connection``
+    - ``database_idle_timeout``
+    - ``database_max_retries``
+    - ``database_retry_interval``
+    - ``database_max_pool_size``
+    - ``database_max_overflow``

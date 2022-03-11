@@ -158,31 +158,6 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
-# [*database_connection*]
-#   (optional) Connection url to connect to trove database.
-#   Defaults to undef.
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to undef.
-#
-# [*database_max_retries*]
-#   (optional) Maximum number of database connection retries during startup.
-#   Setting -1 implies an infinite retry count.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-#
 # [*single_tenant_mode*]
 #   (optional) If set to true, will configure Trove to work in single
 #   tenant mode.
@@ -289,6 +264,31 @@
 #   (optional) Use Neutron
 #   Defaults to undef
 #
+# [*database_connection*]
+#   (optional) Connection url to connect to trove database.
+#   Defaults to undef.
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Defaults to undef.
+#
+# [*database_max_retries*]
+#   (optional) Maximum number of database connection retries during startup.
+#   Setting -1 implies an infinite retry count.
+#   Defaults to undef.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   Defaults to undef.
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to: undef.
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to: undef.
+#
 class trove(
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
@@ -320,12 +320,6 @@ class trove(
   $amqp_sasl_config_name        = $::os_service_default,
   $amqp_username                = $::os_service_default,
   $amqp_password                = $::os_service_default,
-  $database_connection          = undef,
-  $database_idle_timeout        = undef,
-  $database_max_retries         = undef,
-  $database_retry_interval      = undef,
-  $database_max_pool_size       = undef,
-  $database_max_overflow        = undef,
   $single_tenant_mode           = false,
   $nova_compute_url             = false,
   $rpc_response_timeout         = $::os_service_default,
@@ -352,6 +346,12 @@ class trove(
   $nova_proxy_admin_tenant_name = undef,
   $os_region_name               = undef,
   $use_neutron                  = undef,
+  $database_connection          = undef,
+  $database_idle_timeout        = undef,
+  $database_max_retries         = undef,
+  $database_retry_interval      = undef,
+  $database_max_pool_size       = undef,
+  $database_max_overflow        = undef,
 ) {
 
   include trove::deps
@@ -360,6 +360,19 @@ class trove(
 
   if $use_neutron != undef {
     warning('The trove::use_neutron parameter has been deprecated and has no effect.')
+  }
+
+  [
+    'database_connection',
+    'database_idle_timeout',
+    'database_max_retries',
+    'database_retry_interval',
+    'database_max_pool_size',
+    'database_max_overflow'
+  ].each |String $db_opt| {
+    if getvar($db_opt) != undef {
+      warning("The ${db_opt} parameter is deprecated. Use the parameters of trove::db.")
+    }
   }
 
   if $nova_compute_url {
