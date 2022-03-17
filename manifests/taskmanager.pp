@@ -128,10 +128,7 @@ Please configure options directly with the trove::guestagent class using hiera."
         require => Anchor['trove::install::end'],
       }
     } else {
-      class {'trove::guestagent':
-        enabled        => false,
-        manage_service => false,
-      }
+      include trove::guestagent
     }
 
     trove_config {

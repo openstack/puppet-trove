@@ -22,9 +22,9 @@ describe 'trove::guestagent' do
       it 'installs trove-guestagent package and service' do
         is_expected.to contain_service('trove-guestagent').with(
           :name      => platform_params[:guestagent_service_name],
-          :ensure    => 'running',
+          :ensure    => 'stopped',
           :hasstatus => true,
-          :enable    => true
+          :enable    => false
         )
         is_expected.to contain_package('trove-guestagent').with(
           :name   => platform_params[:guestagent_package_name],

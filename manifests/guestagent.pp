@@ -6,7 +6,7 @@
 #
 # [*enabled*]
 #   (optional) Whether to enable the trove guest agent service
-#   Defaults to true
+#   Defaults to false
 #
 # [*manage_service*]
 #   (optional) Whether to start/stop the service
@@ -83,7 +83,7 @@
 #   Defaults to undef.
 #
 class trove::guestagent(
-  $enabled                 = true,
+  $enabled                 = false,
   $manage_service          = true,
   $package_ensure          = 'present',
   $debug                   = $::os_service_default,

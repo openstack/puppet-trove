@@ -62,10 +62,7 @@ describe 'trove::taskmanager' do
       end
 
       it 'configures trove-taskmanager with trove::guestagent' do
-        is_expected.to contain_class('trove::guestagent').with(
-          :enabled         => false,
-          :manage_service  => false,
-        )
+        is_expected.to contain_class('trove::guestagent')
       end
     end
   end

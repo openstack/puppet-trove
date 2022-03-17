@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    Now the ``trove-guestagent`` service is disabled by default, because this
+    service should be run in instances instead of in hosts. The service can be
+    still enabled by setting the ``trove::guestagent::enabled`` parameter to
+    ``true`` but this requires careful consideration.
