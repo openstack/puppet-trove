@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``trove::guestagent::backup_aes_cbc_key`` parameter has been deprecated
+    because the actual parameter in Trove was already deprecated.
