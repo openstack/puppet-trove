@@ -101,7 +101,7 @@ class trove::guestagent(
   $backup_aes_cbc_key      = $::os_service_default,
   #Deprecated
   $control_exchange        = undef,
-) {
+) inherits trove {
 
   include trove::deps
   include trove::params
