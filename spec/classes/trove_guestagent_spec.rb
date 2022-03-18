@@ -7,8 +7,7 @@ describe 'trove::guestagent' do
     context 'with default parameters' do
 
       let :pre_condition do
-        "class { 'trove': }
-         class { 'trove::guestagent::service_credentials':
+        "class { 'trove::guestagent::service_credentials':
            password => 'verysectrete',
          }"
       end
@@ -34,20 +33,49 @@ describe 'trove::guestagent' do
       end
 
       it 'configures trove-guestagent with default parameters' do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('trove')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
-          :rabbit_use_ssl => '<SERVICE DEFAULT>',
+        is_expected.to contain_oslo__messaging__default('trove_guestagent_config').with(
+          :transport_url        => '<SERVICE DEFAULT>',
+          :control_exchange     => 'trove',
+          :rpc_response_timeout => '<SERVICE DEFAULT>',
         )
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
+
+        is_expected.to contain_oslo__messaging__notifications('trove_guestagent_config').with(
+          :transport_url => '<SERVICE DEFAULT>',
+          :driver        => '<SERVICE DEFAULT>',
+          :topics        => '<SERVICE DEFAULT>'
+        )
+ 
+        is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
+          :rabbit_use_ssl          => '<SERVICE DEFAULT>',
+          :rabbit_ha_queues        => '<SERVICE DEFAULT>',
+          :heartbeat_in_pthread    => '<SERVICE DEFAULT>',
+          :kombu_reconnect_delay   => '<SERVICE DEFAULT>',
+          :kombu_failover_strategy => '<SERVICE DEFAULT>',
+          :amqp_durable_queues     => '<SERVICE DEFAULT>',
+          :kombu_ssl_ca_certs      => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile      => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile       => '<SERVICE DEFAULT>',
+          :kombu_ssl_version       => '<SERVICE DEFAULT>',
+        )
+
+        is_expected.to contain_oslo__messaging__amqp('trove_guestagent_config').with(
+          :server_request_prefix => '<SERVICE DEFAULT>',
+          :broadcast_prefix      => '<SERVICE DEFAULT>',
+          :group_request_prefix  => '<SERVICE DEFAULT>',
+          :container_name        => '<SERVICE DEFAULT>',
+          :idle_timeout          => '<SERVICE DEFAULT>',
+          :trace                 => '<SERVICE DEFAULT>',
+          :ssl_ca_file           => '<SERVICE DEFAULT>',
+          :ssl_cert_file         => '<SERVICE DEFAULT>',
+          :ssl_key_file          => '<SERVICE DEFAULT>',
+          :ssl_key_password      => '<SERVICE DEFAULT>',
+          :sasl_mechanisms       => '<SERVICE DEFAULT>',
+          :sasl_config_dir       => '<SERVICE DEFAULT>',
+          :sasl_config_name      => '<SERVICE DEFAULT>',
+          :username              => '<SERVICE DEFAULT>',
+          :password              => '<SERVICE DEFAULT>',
+        )
+
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant').with_value('<SERVICE DEFAULT>')
@@ -66,19 +94,7 @@ describe 'trove::guestagent' do
         )
       end
 
-      context 'when using a single RabbitMQ server' do
-        let :pre_condition do
-          "class { 'trove': }
-           class { 'trove::guestagent::service_credentials':
-             password => 'verysectrete',
-           }"
-        end
-        it 'configures trove-guestagent with RabbitMQ' do
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>')
-        end
-      end
-
-      context 'when using a single RabbitMQ server with enable ha options' do
+      context 'with custom rabbitmq parameters' do
         let :pre_condition do
           "class { 'trove':
              rabbit_ha_queues            => 'true',
@@ -90,27 +106,15 @@ describe 'trove::guestagent' do
            }"
         end
         it 'configures trove-api with RabbitMQ' do
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('true')
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('true')
+          is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
+            :rabbit_ha_queues        => true,
+            :heartbeat_in_pthread    => true,
+            :amqp_durable_queues     => true,
+          )
         end
       end
 
-      context 'when using multiple RabbitMQ servers' do
-        let :pre_condition do
-          "class { 'trove':
-             rabbit_ha_queues      => true,
-           }
-           class { 'trove::guestagent::service_credentials':
-             password => 'verysectrete',
-           }"
-        end
-        it 'configures trove-guestagent with RabbitMQ' do
-          is_expected.to contain_trove_guestagent_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-        end
-      end
-
-      context 'when using default transport url' do
+      context 'with custom messaging default parameters' do
         let :pre_condition do
           "class { 'trove':
              default_transport_url => 'rabbit://user:pass@host:1234/virt',
@@ -121,13 +125,15 @@ describe 'trove::guestagent' do
              password => 'verysectrete',
            }"
         end
-        it 'configures trove-guestagent with DEFAULT/transport_url' do
-          is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://user:pass@host:1234/virt')
-          is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('120')
-          is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('openstack')
+
+        it 'configures trove-guestagent with messaging default parameters' do
+          is_expected.to contain_oslo__messaging__default('trove_guestagent_config').with(
+            :transport_url        => 'rabbit://user:pass@host:1234/virt',
+            :control_exchange     => 'openstack',
+            :rpc_response_timeout => '120',
+          )
         end
       end
-
     end
 
     context 'with custom parameters' do
@@ -140,7 +146,7 @@ describe 'trove::guestagent' do
 
       let :params do
         {
-          :swift_url          => "http://10.0.0.1:8080/v1/AUTH_",
+          :swift_url          => 'http://10.0.0.1:8080/v1/AUTH_',
           :swift_service_type => 'object-store',
           :rabbit_use_ssl     => 'true'
         }
@@ -224,8 +230,6 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
-           rpc_response_timeout       => '60',
-           control_exchange           => 'exchange',
            notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673'
          }
          class { 'trove::guestagent::service_credentials':
@@ -234,40 +238,14 @@ describe 'trove::guestagent' do
       end
 
       it do
-        is_expected.to contain_trove_guestagent_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/rpc_response_timeout').with_value('60')
-        is_expected.to contain_trove_guestagent_config('DEFAULT/control_exchange').with_value('exchange')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+        is_expected.to contain_oslo__messaging__default('trove_guestagent_config').with(
+          :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        )
+        is_expected.to contain_oslo__messaging__notifications('trove_guestagent_config').with(
+          :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        )
       end
     end
-
-    context 'with amqp messaging' do
-      let :pre_condition do
-        "class { 'trove' : }
-         class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
-         }"
-      end
-
-      it do
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/container_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/idle_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/trace').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/ssl_ca_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/ssl_cert_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/ssl_key_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/ssl_key_password').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/sasl_mechanisms').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/sasl_config_dir').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/username').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>')
-      end
-    end
-
   end
 
   on_supported_os({
