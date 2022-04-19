@@ -51,36 +51,13 @@
 #   NOTE: The configuration MUST NOT be already handled by this module
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
-# DEPRECATED PARAMETERS
-#
-# [*trove_taskmanager_config*]
-#   (optional) Allow configuration of arbitrary trove taskmanager configurations.
-#   The value is an hash of trove_taskmanager_config resources.
-#   Defaults to undef
-#
-# [*trove_conductor_config*]
-#   (optional) Allow configuration of arbitrary trove conductor configurations.
-#   The value is an hash of trove_conductor_config resources.
-#   Defaults to undef
-#
 class trove::config (
-  $trove_config             = {},
-  $trove_guestagent_config  = {},
-  $trove_api_paste_ini      = {},
-  # DPERECATED PARAMETERS
-  $trove_taskmanager_config = undef,
-  $trove_conductor_config   = undef,
+  $trove_config            = {},
+  $trove_guestagent_config = {},
+  $trove_api_paste_ini     = {},
 ) {
 
   include trove::deps
-
-  if $trove_taskmanager_config != undef {
-    warning('The trove_taskmanager_config parmaeter is deprecated and has no effect.')
-  }
-
-  if $trove_conductor_config != undef {
-    warning('The trove_conductor_config parameter is deprecated and has no effect.')
-  }
 
   validate_legacy(Hash, 'validate_hash', $trove_config)
   validate_legacy(Hash, 'validate_hash', $trove_guestagent_config)

@@ -1,0 +1,33 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``trove::conductor`` class have been
+    removed.
+
+    - ``auth_url``
+    - ``debug``
+    - ``log_file``
+    - ``log_dir``
+    - ``use_rsyslog``
+    - ``log_facility``
+
+  - |
+    The following parameters of the ``trove::taskmanager`` class have been
+    removed.
+
+    - ``auth_url``
+    - ``debug``
+    - ``log_file``
+    - ``log_dir``
+    - ``use_rsyslog``
+    - ``log_facility``
+
+  - |
+    The ``trove::config::trove_conductor_config`` parameter and
+    the ``trove::config::trove_taskmanager_config`` parameter have been
+    removed.
+
+  - |
+    Template file for guest agent configuration has been removed. Because of
+    this change, the ``trove::taskmanager::use_guestagent_template`` parameter
+    has no effect now and the ``trove::guestagent`` class is always used.

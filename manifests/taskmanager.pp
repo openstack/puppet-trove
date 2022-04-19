@@ -46,37 +46,11 @@
 #   Trove taskmanager entry point.
 #   Defaults to 'trove.taskmanager.manager.Manager'.
 #
-# DEPRECATED OPTIONS
+# DEPRECATED PARAMETERS
 #
 # [*use_guestagent_template*]
 #   (optional) Use template to provision trove guest agent configuration file.
-#   Defaults to true.
-#
-# [*auth_url*]
-#   (optional) Authentication URL.
-#   Defaults to undef
-#
-# [*debug*]
-#   (optional) Rather to log the trove api service at debug level.
-#   Default: undef
-#
-# [*log_file*]
-#   (optional) The path of file used for logging
-#   If set to $::os_service_default, it will not log to any file.
-#   Default: undef
-#
-# [*log_dir*]
-#   (optional) directory to which trove logs are sent.
-#   If set to $::os_service_default, it will not log to any directory.
-#   Defaults to undef
-#
-# [*use_syslog*]
-#   (optional) Use syslog for logging.
-#   Defaults to undef
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines.
-#   Defaults to undef
+#   Defaults to false.
 #
 class trove::taskmanager(
   $enabled                  = true,
@@ -85,31 +59,19 @@ class trove::taskmanager(
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
-  #DEPRECATED OPTIONS
-  $use_guestagent_template  = true,
-  $auth_url                 = undef,
-  $debug                    = undef,
-  $log_file                 = undef,
-  $log_dir                  = undef,
-  $use_syslog               = undef,
-  $log_facility             = undef,
+  # DEPRECATED PARAMETERS
+  $use_guestagent_template  = undef,
 ) inherits trove {
 
   include trove::deps
   include trove::params
 
-  # Remove individual config files so that we do not leave any parameters
-  # configured by older version
-  file { '/etc/trove/trove-taskmanager.conf':
-    ensure  => absent,
-    require => Anchor['trove::config::begin'],
-    notify  => Anchor['trove::config::end']
-  }
-
   # basic service config
   trove_config {
+    'DEFAULT/guest_config':        value => $guestagent_config_file;
     'DEFAULT/taskmanager_manager': value => $taskmanager_manager;
   }
+  include trove::guestagent
 
   trove::generic_service { 'taskmanager':
     enabled        => $enabled,
@@ -117,23 +79,6 @@ class trove::taskmanager(
     package_name   => $::trove::params::taskmanager_package_name,
     service_name   => $::trove::params::taskmanager_service_name,
     package_ensure => $package_ensure,
-  }
-
-  if $guestagent_config_file {
-    if $use_guestagent_template {
-      warning("The tempated guestagent file is deprecated and will be removed in Ocata. \
-Please configure options directly with the trove::guestagent class using hiera.")
-      file { $guestagent_config_file:
-        content => template('trove/trove-guestagent.conf.erb'),
-        require => Anchor['trove::install::end'],
-      }
-    } else {
-      include trove::guestagent
-    }
-
-    trove_config {
-      'DEFAULT/guest_config': value => $guestagent_config_file
-    }
   }
 
   # TO-DO(mmagr): Disabling transformer workarounds bug #1402055.

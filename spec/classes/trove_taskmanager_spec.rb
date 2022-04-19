@@ -24,6 +24,12 @@ describe 'trove::taskmanager' do
   shared_examples 'trove-taskmanager' do
 
     context 'with default parameters' do
+      let :pre_condition do
+        "class { 'trove::guestagent::service_credentials':
+           password => 'verysectrete',
+         }"
+      end
+
       it 'includes required classes' do
         is_expected.to contain_class('trove::deps')
         is_expected.to contain_class('trove::params')
@@ -46,19 +52,6 @@ describe 'trove::taskmanager' do
       it 'configures trove-taskmanager with default parameters' do
         is_expected.to contain_trove_config('DEFAULT/taskmanager_manager').with_value('trove.taskmanager.manager.Manager')
         is_expected.to contain_trove_config('DEFAULT/guest_config').with_value('/etc/trove/trove-guestagent.conf')
-        is_expected.to contain_file('/etc/trove/trove-guestagent.conf')
-      end
-    end
-
-    context 'when set use_guestagent_template to false' do
-      let :pre_condition do
-        "class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
-         }"
-      end
-
-      let :params do
-        { :use_guestagent_template => false }
       end
 
       it 'configures trove-taskmanager with trove::guestagent' do
