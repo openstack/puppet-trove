@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``trove::use_neutron`` parameter has been removed.

@@ -241,10 +241,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*use_neutron*]
-#   (optional) Use Neutron
-#   Defaults to undef
-#
 # [*database_connection*]
 #   (optional) Connection url to connect to trove database.
 #   Defaults to undef.
@@ -322,7 +318,6 @@ class trove(
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
   # DEPRECATED PARAMETERS
-  $use_neutron                  = undef,
   $database_connection          = undef,
   $database_idle_timeout        = undef,
   $database_max_retries         = undef,
@@ -334,10 +329,6 @@ class trove(
   include trove::deps
   include trove::policy
   include trove::params
-
-  if $use_neutron != undef {
-    warning('The trove::use_neutron parameter has been deprecated and has no effect.')
-  }
 
   [
     'database_connection',
