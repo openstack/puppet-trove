@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``trove::default_neutron_networks`` parameter has been deprecated. Use
+    the new ``trove::management_networks`` parameter instead.
