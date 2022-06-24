@@ -68,23 +68,23 @@
 #
 # [*http_get_rate*]
 #   (optional) Default rate limit of GET request.
-#   Defaults to 200.
+#   Defaults to $::os_service_default.
 #
 # [*http_post_rate*]
 #   (optional) Default rate limit of POST request.
-#   Defaults to 200.
+#   Defaults to $::os_service_default.
 #
 # [*http_put_rate*]
 #   (optional) Default rate limit of PUT request.
-#   Defaults to 200.
+#   Defaults to $::os_service_default.
 #
 # [*http_delete_rate*]
 #   (optional) Default rate limit of DELETE request.
-#   Defaults to 200.
+#   Defaults to $::os_service_default.
 #
 # [*http_mgmt_post_rate*]
 #   (optional) Default rate limit of mgmt post request.
-#   Defaults to 200.
+#   Defaults to $::os_service_default.
 #
 # [*auth_strategy*]
 #   (optional) The strategy to use for authentication.
@@ -104,11 +104,11 @@ class trove::api(
   $cert_file           = false,
   $key_file            = false,
   $ca_file             = false,
-  $http_get_rate       = 200,
-  $http_post_rate      = 200,
-  $http_put_rate       = 200,
-  $http_delete_rate    = 200,
-  $http_mgmt_post_rate = 200,
+  $http_get_rate       = $::os_service_default,
+  $http_post_rate      = $::os_service_default,
+  $http_put_rate       = $::os_service_default,
+  $http_delete_rate    = $::os_service_default,
+  $http_mgmt_post_rate = $::os_service_default,
   $manage_service      = true,
   $package_ensure      = 'present',
   $auth_strategy       = 'keystone',
