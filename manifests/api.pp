@@ -31,15 +31,15 @@
 #
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
-#   Default: 0.0.0.0
+#   Default: $::os_service_default
 #
 # [*bind_port*]
 #   (optional) The port the server should bind to.
-#   Default: 8779
+#   Default: $::os_service_default
 #
 # [*backlog*]
 #   (optional) Backlog requests when creating socket
-#   Default: 4096
+#   Default: $::os_service_default
 #
 # [*workers*]
 #   (optional) Number of trove API worker processes to start
@@ -92,12 +92,12 @@
 #
 # [*taskmanager_queue*]
 #   (optional) Message queue name the Taskmanager will listen to.
-#   Defaults to 'taskmanager'.
+#   Defaults to $::os_service_default.
 #
 class trove::api(
-  $bind_host           = '0.0.0.0',
-  $bind_port           = '8779',
-  $backlog             = '4096',
+  $bind_host           = $::os_service_default,
+  $bind_port           = $::os_service_default,
+  $backlog             = $::os_service_default,
   $workers             = $::os_workers,
   $enabled             = true,
   $purge_config        = false,
@@ -112,7 +112,7 @@ class trove::api(
   $manage_service      = true,
   $package_ensure      = 'present',
   $auth_strategy       = 'keystone',
-  $taskmanager_queue   = 'taskmanager',
+  $taskmanager_queue   = $::os_service_default,
 ) {
 
   include trove::deps
