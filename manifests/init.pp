@@ -239,33 +239,6 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_connection*]
-#   (optional) Connection url to connect to trove database.
-#   Defaults to undef.
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to undef.
-#
-# [*database_max_retries*]
-#   (optional) Maximum number of database connection retries during startup.
-#   Setting -1 implies an infinite retry count.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-#
 class trove(
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
@@ -317,31 +290,11 @@ class trove(
   $neutron_endpoint_type        = $::os_service_default,
   $default_neutron_networks     = $::os_service_default,
   $package_ensure               = 'present',
-  # DEPRECATED PARAMETERS
-  $database_connection          = undef,
-  $database_idle_timeout        = undef,
-  $database_max_retries         = undef,
-  $database_retry_interval      = undef,
-  $database_max_pool_size       = undef,
-  $database_max_overflow        = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
-
-  [
-    'database_connection',
-    'database_idle_timeout',
-    'database_max_retries',
-    'database_retry_interval',
-    'database_max_pool_size',
-    'database_max_overflow'
-  ].each |String $db_opt| {
-    if getvar($db_opt) != undef {
-      warning("The ${db_opt} parameter is deprecated. Use the parameters of trove::db.")
-    }
-  }
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
