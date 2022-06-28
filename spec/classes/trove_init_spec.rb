@@ -101,6 +101,11 @@ describe 'trove' do
           :tag    => ['openstack', 'trove-package'],
         )
       end
+
+      it 'configures trove to use the Neutron network driver' do
+        is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
+        is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+      end
     end
 
     context 'with single tenant mode enabled' do
@@ -115,19 +120,13 @@ describe 'trove' do
       end
     end
 
-    context 'when using Neutron' do
+    context 'with default networks' do
       let :params do
-        { :use_neutron              => true,
-          :default_neutron_networks => 'trove_service' }
+        { :default_neutron_networks => 'trove_service' }
       end
 
-      it 'configures trove to use the Neutron network driver' do
+      it 'configures default networks' do
         is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
-        is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
-      end
-
-      it 'configures trove to use any network label' do
-        is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
       end
     end
   end
