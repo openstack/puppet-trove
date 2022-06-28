@@ -51,7 +51,7 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/trove_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/neutron_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/glance_endpoint_type').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/management_networks').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
         is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_ensure('absent')
         is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_ensure('absent')
@@ -120,13 +120,13 @@ describe 'trove' do
       end
     end
 
-    context 'with default networks' do
+    context 'with management networks' do
       let :params do
-        { :default_neutron_networks => 'trove_service' }
+        { :management_networks => 'trove_service' }
       end
 
-      it 'configures default networks' do
-        is_expected.to contain_trove_config('DEFAULT/default_neutron_networks').with_value('trove_service')
+      it 'configures management networks' do
+        is_expected.to contain_trove_config('DEFAULT/management_networks').with_value('trove_service')
       end
     end
   end
