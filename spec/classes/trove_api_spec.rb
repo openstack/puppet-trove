@@ -63,16 +63,16 @@ describe 'trove::api' do
       end
 
       it 'configures trove-api with default parameters' do
-        is_expected.to contain_trove_config('DEFAULT/bind_host').with_value('0.0.0.0')
-        is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('8779')
-        is_expected.to contain_trove_config('DEFAULT/backlog').with_value('4096')
+        is_expected.to contain_trove_config('DEFAULT/bind_host').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/bind_port').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/backlog').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/trove_api_workers').with_value('8')
         is_expected.to contain_trove_config('DEFAULT/http_get_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_post_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_put_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('taskmanager')
+        is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('ssl/cert_file').with_ensure('absent')
         is_expected.to contain_trove_config('ssl/key_file').with_ensure('absent')
         is_expected.to contain_trove_config('ssl/ca_file').with_ensure('absent')
