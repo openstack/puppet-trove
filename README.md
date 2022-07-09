@@ -76,34 +76,6 @@ Whether to hide the value from Puppet logs. Defaults to `false`.
 
 If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
 
-#### trove_conductor_config
-
-The `trove_conductor_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-conductor.conf` file.
-
-```puppet
-trove_conductor_config { 'DEFAULT/auth_url' :
-  value => http://localhost:5000/v3,
-}
-```
-
-This will write `auth_url=http://localhost:5000/v3` in the `[DEFAULT]` section.
-
-##### name
-
-Section/setting name to manage from `trove.conf`
-
-##### value
-
-The value of the setting to be defined.
-
-##### secret
-
-Whether to hide the value from Puppet logs. Defaults to `false`.
-
-##### ensure_absent_val
-
-If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
-
 #### trove_guestagent_config
 
 The `trove_guestagent_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-guestagent.conf` file.
@@ -115,34 +87,6 @@ trove_guestagent_config { 'DEFAULT/trove_auth_url' :
 ```
 
 This will write `trove_auth_url=http://localhost:5000/v3` in the `[DEFAULT]` section.
-
-##### name
-
-Section/setting name to manage from `trove.conf`
-
-##### value
-
-The value of the setting to be defined.
-
-##### secret
-
-Whether to hide the value from Puppet logs. Defaults to `false`.
-
-##### ensure_absent_val
-
-If value is equal to ensure_absent_val then the resource will behave as if `ensure => absent` was specified. Defaults to `<SERVICE DEFAULT>`
-
-#### trove_taskmanager_config
-
-The `trove_taskmanager_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/trove/trove-taskmanager.conf` file.
-
-```puppet
-trove_taskmanager_config { 'DEFAULT/network_driver' :
-  value => trove.network.neutron.NeutronDriver,
-}
-```
-
-This will write `network_driver=trove.network.neutron.NeutronDriver` in the `[DEFAULT]` section.
 
 ##### name
 
