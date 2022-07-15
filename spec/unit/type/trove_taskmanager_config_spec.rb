@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:trove_taskmanager_config)' do
     expect(@trove_taskmanager_config[:value]).to eq(['bar'])
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @trove_taskmanager_config[:value] = 'b ar'
     expect(@trove_taskmanager_config[:value]).to eq(['b ar'])
   end
