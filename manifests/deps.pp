@@ -28,12 +28,6 @@ class trove::deps {
   # Don't put them above because there's no chain between each individual part
   # of the config.
   Anchor['trove::config::begin']
-  -> Trove_taskmanager_config<||>
-  ~> Anchor['trove::config::end']
-  Anchor['trove::config::begin']
-  -> Trove_conductor_config<||>
-  ~> Anchor['trove::config::end']
-  Anchor['trove::config::begin']
   -> Trove_guestagent_config<||>
   ~> Anchor['trove::config::end']
 

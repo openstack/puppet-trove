@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The following resource types have been removed.
+
+    - ``trove_conductor_config``
+    - ``trove_taskmanager_config``
