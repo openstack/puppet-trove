@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``trove::guestagent::control_exchange`` parameter has been
+    removed.

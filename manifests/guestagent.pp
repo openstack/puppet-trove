@@ -74,10 +74,6 @@
 #
 #  DEPRECATED PARAMETERS
 #
-# [*control_exchange*]
-#   (Optional) Moved to init.pp. The default exchange to scope topics.
-#   Defaults to undef.
-#
 # [*backup_aes_cbc_key*]
 #   (optional) Default OpenSSL aes_cbc key
 #   Defaults to undef
@@ -98,19 +94,13 @@ class trove::guestagent(
   $root_grant              = $::os_service_default,
   $root_grant_option       = $::os_service_default,
   $default_password_length = $::os_service_default,
-  #Deprecated
-  $control_exchange        = undef,
+  # DEPRECATED PARAMETERS
   $backup_aes_cbc_key      = undef,
 ) inherits trove {
 
   include trove::deps
   include trove::params
   include trove::guestagent::service_credentials
-
-  if $control_exchange {
-    warning("control_exchange parameter is deprecated. Please use \
-trove::control_exchange instead.")
-  }
 
   if $backup_aes_cbc_key != undef {
     warning('The parameter backup_aes_cbc_key is deprecated for removal')
