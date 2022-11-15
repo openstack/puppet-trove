@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``trove::default_neutron_networks`` parameter has been removed.

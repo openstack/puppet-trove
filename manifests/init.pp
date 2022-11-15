@@ -239,12 +239,6 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
-# DEPRECATED PARAMETERS
-#
-# [*default_neutron_networks*]
-#   (optional) The network that trove will attach by default.
-#   Defaults to undef
-#
 class trove(
   $default_transport_url        = $::os_service_default,
   $notification_transport_url   = $::os_service_default,
@@ -296,18 +290,11 @@ class trove(
   $neutron_endpoint_type        = $::os_service_default,
   $management_networks          = $::os_service_default,
   $package_ensure               = 'present',
-  # DEPRECATED PARAMETERS
-  $default_neutron_networks     = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
-
-  if $default_neutron_networks != undef {
-    warning('The default_neutron_networks parameter is deprecated. \
-Use the management_networks parameter.')
-  }
 
   if $nova_compute_url {
     trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
@@ -377,15 +364,10 @@ Use the management_networks parameter.')
     }
   }
 
-  $management_networks_real = pick($default_neutron_networks, $management_networks)
-  trove_config {
-    'DEFAULT/default_neutron_networks': ensure => absent;
-  }
-
   trove_config {
     'DEFAULT/network_label_regex': value => '.*';
     'DEFAULT/network_driver':      value => 'trove.network.neutron.NeutronDriver';
-    'DEFAULT/management_networks': value => join(any2array($management_networks_real), ',');
+    'DEFAULT/management_networks': value => join(any2array($management_networks), ',');
   }
 
   oslo::messaging::default { 'trove_config':
