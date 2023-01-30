@@ -35,9 +35,9 @@ describe provider_class do
 
   describe "self.instances" do
     it 'lists datastores' do
-      provider_class.expects(:openstack)
+      expect(provider_class).to receive(:openstack)
         .with('datastore', 'list', '--quiet', '--format', 'csv', [])
-        .returns('"ID","Name"
+        .and_return('"ID","Name"
 "1275b24c-73af-4c51-98ec-c9938a94a153","store1"
 "18088802-efe2-42f8-ac85-ecfddd37d24e","store2"
 ')
@@ -52,13 +52,13 @@ describe provider_class do
 
   describe '#create' do
     it 'creates datastore' do
-      provider.expects(:trove_manage)
+      expect(provider).to receive(:trove_manage)
         .with(['trove-manage', 'datastore_update', datastore_name, "''"])
-        .returns(0)
+        .and_return(0)
 
-      provider.expects(:trove_manage)
+      expect(provider).to receive(:trove_manage)
         .with(['trove-manage', 'datastore_update', datastore_name, "0.1"])
-        .returns(0)
+        .and_return(0)
 
       provider.create
     end
