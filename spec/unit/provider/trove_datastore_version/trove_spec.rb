@@ -49,10 +49,10 @@ describe provider_class do
 
   describe '#create' do
     it 'should call trove-manage' do
-      provider.expects(:trove_manage).with(
+      expect(provider). to receive(:trove_manage).with(
         ['trove-manage', 'datastore_version_update', datastore_name,
          datastore_version, 'mysql', '1234', 'mysql', '1']
-      ).returns(0)
+      ).and_return(0)
 
       provider.create
     end
@@ -60,10 +60,10 @@ describe provider_class do
 
   describe '#exists' do
     it 'should list datastore versions' do
-      provider_class.expects(:openstack)
+      expect(provider_class).to receive(:openstack)
         .with('datastore version', 'list', '--quiet', '--format', 'csv',
               datastore_name)
-        .returns('"ID","Name","Version"
+        .and_return('"ID","Name","Version"
 "9c4d3fb1-644c-4543-9c37-49b3a801b66c","5.7.29","5.7.29"
 "406b75fb-0727-4923-a702-d677e3fd84ab","5.7.30","5.7.30"
 ')
