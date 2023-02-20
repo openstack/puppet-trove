@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``trove::taskmanager::use_guestagent_template`` parameter has been
+    removed.

@@ -46,12 +46,6 @@
 #   Trove taskmanager entry point.
 #   Defaults to 'trove.taskmanager.manager.Manager'.
 #
-# DEPRECATED PARAMETERS
-#
-# [*use_guestagent_template*]
-#   (optional) Use template to provision trove guest agent configuration file.
-#   Defaults to false.
-#
 class trove::taskmanager(
   $enabled                  = true,
   $manage_service           = true,
@@ -59,8 +53,6 @@ class trove::taskmanager(
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',
   $taskmanager_manager      = 'trove.taskmanager.manager.Manager',
-  # DEPRECATED PARAMETERS
-  $use_guestagent_template  = undef,
 ) inherits trove {
 
   include trove::deps
