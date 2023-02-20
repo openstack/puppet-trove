@@ -68,10 +68,6 @@
 #   (optional) Permissions to grant "root" user option.
 #   Defaults to $::os_service_default.
 #
-# [*default_password_length*]
-#   (optional) Default password Length for root password.
-#   Defaults to $::os_service_default.
-#
 # [*container_registry*]
 #   (optional) URL to the registry.
 #   Defaults to $::os_service_default.
@@ -85,6 +81,10 @@
 #   Defaults to $::os_service_default.
 #
 #  DEPRECATED PARAMETERS
+#
+# [*default_password_length*]
+#   (optional) Default password Length for root password.
+#   Defaults to undef
 #
 # [*backup_aes_cbc_key*]
 #   (optional) Default OpenSSL aes_cbc key
@@ -105,11 +105,11 @@ class trove::guestagent(
   $rabbit_use_ssl              = $::trove::rabbit_use_ssl,
   $root_grant                  = $::os_service_default,
   $root_grant_option           = $::os_service_default,
-  $default_password_length     = $::os_service_default,
   $container_registry          = $::os_service_default,
   $container_registry_username = $::os_service_default,
   $container_registry_password = $::os_service_default,
   # DEPRECATED PARAMETERS
+  $default_password_length     = undef,
   $backup_aes_cbc_key          = undef,
 ) inherits trove {
 
@@ -127,7 +127,7 @@ class trove::guestagent(
     'DEFAULT/swift_service_type':      value => $swift_service_type;
     'DEFAULT/root_grant':              value => $root_grant;
     'DEFAULT/root_grant_option':       value => $root_grant_option;
-    'DEFAULT/default_password_length': value => $default_password_length;
+    'DEFAULT/default_password_length': value => pick($default_password_length, $::os_service_default);
     'DEFAULT/backup_aes_cbc_key':      value => pick($backup_aes_cbc_key, $::os_service_default);
   }
 
