@@ -72,6 +72,18 @@
 #   (optional) Default password Length for root password.
 #   Defaults to $::os_service_default.
 #
+# [*container_registry*]
+#   (optional) URL to the registry.
+#   Defaults to $::os_service_default.
+#
+# [*container_registry_username*]
+#   (optional) The registry username.
+#   Defaults to $::os_service_default.
+#
+# [*container_registry_password*]
+#   (optional) The plaintext registry password.
+#   Defaults to $::os_service_default.
+#
 #  DEPRECATED PARAMETERS
 #
 # [*backup_aes_cbc_key*]
@@ -79,23 +91,26 @@
 #   Defaults to undef
 #
 class trove::guestagent(
-  $enabled                 = false,
-  $manage_service          = true,
-  $package_ensure          = 'present',
-  $debug                   = $::os_service_default,
-  $log_file                = '/var/log/trove/trove-guestagent.log',
-  $log_dir                 = '/var/log/trove',
-  $use_syslog              = $::os_service_default,
-  $log_facility            = $::os_service_default,
-  $swift_url               = $::os_service_default,
-  $swift_service_type      = $::os_service_default,
-  $default_transport_url   = $::trove::default_transport_url,
-  $rabbit_use_ssl          = $::trove::rabbit_use_ssl,
-  $root_grant              = $::os_service_default,
-  $root_grant_option       = $::os_service_default,
-  $default_password_length = $::os_service_default,
+  $enabled                     = false,
+  $manage_service              = true,
+  $package_ensure              = 'present',
+  $debug                       = $::os_service_default,
+  $log_file                    = '/var/log/trove/trove-guestagent.log',
+  $log_dir                     = '/var/log/trove',
+  $use_syslog                  = $::os_service_default,
+  $log_facility                = $::os_service_default,
+  $swift_url                   = $::os_service_default,
+  $swift_service_type          = $::os_service_default,
+  $default_transport_url       = $::trove::default_transport_url,
+  $rabbit_use_ssl              = $::trove::rabbit_use_ssl,
+  $root_grant                  = $::os_service_default,
+  $root_grant_option           = $::os_service_default,
+  $default_password_length     = $::os_service_default,
+  $container_registry          = $::os_service_default,
+  $container_registry_username = $::os_service_default,
+  $container_registry_password = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $backup_aes_cbc_key      = undef,
+  $backup_aes_cbc_key          = undef,
 ) inherits trove {
 
   include trove::deps
@@ -173,6 +188,12 @@ class trove::guestagent(
     package_name   => $::trove::params::guestagent_package_name,
     service_name   => $::trove::params::guestagent_service_name,
     package_ensure => $package_ensure,
+  }
+
+  trove_guestagent_config {
+    'guest_agent/container_registry':          value => $container_registry;
+    'guest_agent/container_registry_username': value => $container_registry_username;
+    'guest_agent/container_registry_password': value => $container_registry_password, secret => true;
   }
 
 }

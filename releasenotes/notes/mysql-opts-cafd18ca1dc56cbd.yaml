@@ -1,0 +1,15 @@
+---
+features:
+  - |
+    The following two new classes have been added.
+
+    - ``trove::guestagent::mariadb``
+    - ``trove::guestagent::mysql``
+
+  - |
+    The following three parameters have been added to the ``trove::guestagent``
+    class.
+
+    - ``container_registry``
+    - ``container_registry_username``
+    - ``container_registry_password``

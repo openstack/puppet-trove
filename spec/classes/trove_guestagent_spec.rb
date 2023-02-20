@@ -82,6 +82,9 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant_option').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/default_password_length').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/backup_aes_cbc_key').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('guest_agent/container_registry').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('guest_agent/container_registry_username').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('guest_agent/container_registry_password').with_value('<SERVICE DEFAULT>').with_secret(true)
       end
 
       it 'configures trove-guestagent with default logging parameters' do
