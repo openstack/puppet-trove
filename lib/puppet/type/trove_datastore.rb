@@ -19,10 +19,6 @@ Puppet::Type.newtype(:trove_datastore) do
     end
   end
 
-  validate do
-    raise(Puppet::Error, 'Version must be set') unless self[:version]
-  end
-
   autorequire(:anchor) do
     ['trove::service::end']
   end
