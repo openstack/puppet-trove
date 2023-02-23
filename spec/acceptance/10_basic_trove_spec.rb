@@ -22,7 +22,6 @@ describe 'basic trove' do
         manager   => 'mysql',
         image_id  => 'dummy',
         packages  => '',
-        active    => 1,
       }
       EOS
 
