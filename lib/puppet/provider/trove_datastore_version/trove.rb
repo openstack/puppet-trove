@@ -51,10 +51,15 @@ Puppet::Type.type(:trove_datastore_version).provide(
 
   def self.build_datastore_version_hash(datastore)
     dvs = {}
-    request('datastore version', 'list', datastore).each do |attrs|
-      dvs[attrs[:name]] = attrs
+    begin
+      request('datastore version', 'list', datastore).each do |attrs|
+        dvs[attrs[:name]] = attrs
+      end
+    rescue Puppet::ExecutionFailure => e
+      if ! e.message.match("Datastore '#{datastore}' cannot be found")
+        raise e
+      end
     end
     dvs
   end
-
 end
