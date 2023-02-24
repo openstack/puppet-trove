@@ -35,4 +35,8 @@ Puppet::Type.newtype(:trove_datastore_version) do
     raise(Puppet::Error, 'Packages must be set') unless self[:packages]
     raise(Puppet::Error, 'State must be set') unless self[:active]
   end
+
+  autorequire(:anchor) do
+    ['trove::service::end']
+  end
 end
