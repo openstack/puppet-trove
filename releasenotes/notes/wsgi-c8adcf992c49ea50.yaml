@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Now this module supports deploying trove-api using httpd and mod_wsgi.
+    Use the ``trove::wsgi::apache`` class to set up vhost for trove API. Note
+    the ``trove::api::service_name`` parameter should be set to ``httpd`` in
+    case httpd is used.

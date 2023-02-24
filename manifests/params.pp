@@ -20,6 +20,8 @@ class trove::params {
       $guestagent_service_name  = 'openstack-trove-guestagent'
       $taskmanager_package_name = 'openstack-trove-taskmanager'
       $taskmanager_service_name = 'openstack-trove-taskmanager'
+      $trove_wsgi_script_dir    = '/var/www/cgi-bin/trove'
+      $trove_wsgi_script_source = '/usr/bin/trove-api'
     }
     'Debian': {
       $common_package_name      = 'trove-common'
@@ -31,6 +33,8 @@ class trove::params {
       $guestagent_service_name  = 'trove-guestagent'
       $taskmanager_package_name = 'trove-taskmanager'
       $taskmanager_service_name = 'trove-taskmanager'
+      $trove_wsgi_script_dir    = '/usr/lib/cgi-bin/trove'
+      $trove_wsgi_script_source = '/usr/bin/trove-api'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
