@@ -14,8 +14,17 @@ describe 'basic trove' do
       include openstack_integration::memcached
       include openstack_integration::keystone
       include openstack_integration::trove
-      EOS
 
+      trove_datastore { 'mysql':
+      }
+      -> trove_datastore_version { '5.7.29':
+        datastore => 'mysql',
+        manager   => 'mysql',
+        image_id  => 'dummy',
+        packages  => '',
+        active    => 1,
+      }
+      EOS
 
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)

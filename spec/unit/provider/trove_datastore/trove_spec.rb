@@ -17,12 +17,15 @@ describe provider_class do
     'foo'
   end
 
+  let :datastore_attrs do
+    {
+      :name   => datastore_name,
+      :ensure => 'present',
+    }
+  end
+
   let :resource do
-    Puppet::Type::Trove_datastore.new({
-      :name         => datastore_name,
-      :version      => '0.1',
-      :ensure       => 'present',
-    })
+    Puppet::Type::Trove_datastore.new(datastore_attrs)
   end
 
   let :provider do
@@ -51,17 +54,32 @@ describe provider_class do
   end
 
   describe '#create' do
-    it 'creates datastore' do
-      expect(provider).to receive(:trove_manage)
-        .with(['trove-manage', 'datastore_update', datastore_name, "''"])
-        .and_return(0)
+    context 'without version' do
+      it 'creates datastore' do
+        expect(provider).to receive(:trove_manage)
+          .with(['trove-manage', 'datastore_update', datastore_name, "''"])
+          .and_return(0)
+        provider.create
+      end
+    end
 
-      expect(provider).to receive(:trove_manage)
-        .with(['trove-manage', 'datastore_update', datastore_name, "0.1"])
-        .and_return(0)
+    context 'with version' do
+      before do
+        datastore_attrs.merge!(
+          :version => '0.1',
+        )
+      end
 
-      provider.create
+      it 'creates datastore' do
+        expect(provider).to receive(:trove_manage)
+          .with(['trove-manage', 'datastore_update', datastore_name, "''"])
+          .and_return(0)
+
+        expect(provider).to receive(:trove_manage)
+          .with(['trove-manage', 'datastore_update', datastore_name, "0.1"])
+          .and_return(0)
+        provider.create
+      end
     end
   end
-
 end
