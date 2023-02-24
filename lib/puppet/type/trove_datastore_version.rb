@@ -9,7 +9,7 @@ Puppet::Type.newtype(:trove_datastore_version) do
   end
 
   newparam(:datastore) do
-    desc "Datastore name)"
+    desc "Datastore name"
   end
 
   newparam(:manager) do
@@ -26,6 +26,8 @@ Puppet::Type.newtype(:trove_datastore_version) do
 
   newparam(:active) do
     desc "State"
+    newvalues('0', '1')
+    defaultto('1')
   end
 
   validate do
@@ -33,7 +35,6 @@ Puppet::Type.newtype(:trove_datastore_version) do
     raise(Puppet::Error, 'Manager must be set') unless self[:manager]
     raise(Puppet::Error, 'Image must be set') unless self[:image_id]
     raise(Puppet::Error, 'Packages must be set') unless self[:packages]
-    raise(Puppet::Error, 'State must be set') unless self[:active]
   end
 
   autorequire(:anchor) do
