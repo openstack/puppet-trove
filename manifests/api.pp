@@ -40,19 +40,19 @@
 #
 # [*bind_host*]
 #   (optional) The address of the host to bind to.
-#   Default: $::os_service_default
+#   Default: $facts['os_service_default']
 #
 # [*bind_port*]
 #   (optional) The port the server should bind to.
-#   Default: $::os_service_default
+#   Default: $facts['os_service_default']
 #
 # [*backlog*]
 #   (optional) Backlog requests when creating socket
-#   Default: $::os_service_default
+#   Default: $facts['os_service_default']
 #
 # [*workers*]
 #   (optional) Number of trove API worker processes to start
-#   Default: $::os_workers
+#   Default: $facts['os_workers']
 #
 # [*enabled*]
 #   (optional) Whether to enable services.
@@ -77,23 +77,23 @@
 #
 # [*http_get_rate*]
 #   (optional) Default rate limit of GET request.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*http_post_rate*]
 #   (optional) Default rate limit of POST request.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*http_put_rate*]
 #   (optional) Default rate limit of PUT request.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*http_delete_rate*]
 #   (optional) Default rate limit of DELETE request.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*http_mgmt_post_rate*]
 #   (optional) Default rate limit of mgmt post request.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*auth_strategy*]
 #   (optional) The strategy to use for authentication.
@@ -101,28 +101,28 @@
 #
 # [*taskmanager_queue*]
 #   (optional) Message queue name the Taskmanager will listen to.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class trove::api(
   $manage_service      = true,
   $service_name        = $::trove::params::api_service_name,
   $package_ensure      = 'present',
-  $bind_host           = $::os_service_default,
-  $bind_port           = $::os_service_default,
-  $backlog             = $::os_service_default,
-  $workers             = $::os_workers,
+  $bind_host           = $facts['os_service_default'],
+  $bind_port           = $facts['os_service_default'],
+  $backlog             = $facts['os_service_default'],
+  $workers             = $facts['os_workers'],
   $enabled             = true,
   $purge_config        = false,
   $cert_file           = false,
   $key_file            = false,
   $ca_file             = false,
-  $http_get_rate       = $::os_service_default,
-  $http_post_rate      = $::os_service_default,
-  $http_put_rate       = $::os_service_default,
-  $http_delete_rate    = $::os_service_default,
-  $http_mgmt_post_rate = $::os_service_default,
+  $http_get_rate       = $facts['os_service_default'],
+  $http_post_rate      = $facts['os_service_default'],
+  $http_put_rate       = $facts['os_service_default'],
+  $http_delete_rate    = $facts['os_service_default'],
+  $http_mgmt_post_rate = $facts['os_service_default'],
   $auth_strategy       = 'keystone',
-  $taskmanager_queue   = $::os_service_default,
+  $taskmanager_queue   = $facts['os_service_default'],
 ) inherits trove::params {
 
   include trove::deps

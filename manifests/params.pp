@@ -9,7 +9,7 @@ class trove::params {
   $user                = 'trove'
   $group               = 'trove'
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $common_package_name      = 'openstack-trove'
       $conductor_package_name   = 'openstack-trove-conductor'
@@ -21,7 +21,7 @@ class trove::params {
       $taskmanager_package_name = 'openstack-trove-taskmanager'
       $taskmanager_service_name = 'openstack-trove-taskmanager'
       $trove_wsgi_script_dir    = '/var/www/cgi-bin/trove'
-      $trove_wsgi_script_source = '/usr/bin/trove-api'
+      $trove_wsgi_script_source = '/usr/bin/trove-wsgi'
     }
     'Debian': {
       $common_package_name      = 'trove-common'
@@ -34,12 +34,11 @@ class trove::params {
       $taskmanager_package_name = 'trove-taskmanager'
       $taskmanager_service_name = 'trove-taskmanager'
       $trove_wsgi_script_dir    = '/usr/lib/cgi-bin/trove'
-      $trove_wsgi_script_source = '/usr/bin/trove-api'
+      $trove_wsgi_script_source = '/usr/bin/trove-wsgi'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
-module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
 
-  } # Case $::osfamily
+  } # Case $facts['os']['family']
 }

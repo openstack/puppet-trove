@@ -140,7 +140,7 @@ describe 'trove' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :package_name => 'trove-common', }
         when 'RedHat'

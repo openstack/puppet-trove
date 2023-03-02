@@ -31,22 +31,22 @@
 #
 # [*database_pool_timeout*]
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*mysql_enable_ndb*]
 #   (Optional) If True, transparently enables support for handling MySQL
 #   Cluster (NDB).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class trove::db (
   $database_connection              = 'sqlite:////var/lib/trove/trove.sqlite',
-  $database_connection_recycle_time = $::os_service_default,
-  $database_max_pool_size           = $::os_service_default,
-  $database_max_retries             = $::os_service_default,
-  $database_retry_interval          = $::os_service_default,
-  $database_max_overflow            = $::os_service_default,
-  $database_pool_timeout            = $::os_service_default,
-  $mysql_enable_ndb                 = $::os_service_default,
+  $database_connection_recycle_time = $facts['os_service_default'],
+  $database_max_pool_size           = $facts['os_service_default'],
+  $database_max_retries             = $facts['os_service_default'],
+  $database_retry_interval          = $facts['os_service_default'],
+  $database_max_overflow            = $facts['os_service_default'],
+  $database_pool_timeout            = $facts['os_service_default'],
+  $mysql_enable_ndb                 = $facts['os_service_default'],
 ) {
 
   include trove::deps

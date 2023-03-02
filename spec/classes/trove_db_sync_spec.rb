@@ -32,8 +32,7 @@ describe 'trove::db::sync' do
     context "on #{os}" do
       let (:facts) do
         facts.merge(OSDefaults.get_facts({
-          :os_workers     => 8,
-          :concat_basedir => '/var/lib/puppet/concat'
+          :os_workers => 8,
         }))
       end
 

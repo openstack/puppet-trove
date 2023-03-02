@@ -39,7 +39,7 @@ describe 'trove::conductor' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :conductor_package_name => 'trove-conductor',
             :conductor_service_name => 'trove-conductor' }

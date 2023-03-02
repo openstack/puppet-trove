@@ -69,7 +69,7 @@ describe 'trove::taskmanager' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :taskmanager_package_name => 'trove-taskmanager',
             :taskmanager_service_name => 'trove-taskmanager' }

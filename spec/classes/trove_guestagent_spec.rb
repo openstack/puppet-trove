@@ -260,7 +260,7 @@ describe 'trove::guestagent' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :guestagent_package_name => 'trove-guestagent',
             :guestagent_service_name => 'trove-guestagent' }

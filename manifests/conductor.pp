@@ -22,24 +22,24 @@
 #
 # [*workers*]
 #   (optional) Number of trove conductor worker processes to start
-#   Default: $::os_workers
+#   Default: $facts['os_workers']
 #
 # [*enable_profiler*]
 #   (optional) If False fully disable profiling feature.
-#   Default: $::os_service_default
+#   Default: $facts['os_service_default']
 #
 # [*trace_sqlalchemy*]
 #   (optional) If False doesn't trace SQL requests.
-#   Default: $::os_service_default
+#   Default: $facts['os_service_default']
 #
 class trove::conductor(
   $enabled           = true,
   $manage_service    = true,
   $package_ensure    = 'present',
   $conductor_manager = 'trove.conductor.manager.Manager',
-  $workers           = $::os_workers,
-  $enable_profiler   = $::os_service_default,
-  $trace_sqlalchemy  = $::os_service_default,
+  $workers           = $facts['os_workers'],
+  $enable_profiler   = $facts['os_service_default'],
+  $trace_sqlalchemy  = $facts['os_service_default'],
 ) {
 
   include trove::deps

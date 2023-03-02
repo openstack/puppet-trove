@@ -22,17 +22,17 @@
 #
 # [*log_file*]
 #   (optional) The path of file used for logging
-#   If set to $::os_service_default, it will not log to any file.
+#   If set to $facts['os_service_default'], it will not log to any file.
 #   Default: /var/log/trove/trove-guestagent.log
 #
 # [*log_dir*]
 #    (optional) directory to which trove logs are sent.
-#    If set to $::os_service_default, it will not log to any directory.
+#    If set to $facts['os_service_default'], it will not log to any directory.
 #    Defaults to '/var/log/trove'
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines.
@@ -41,11 +41,11 @@
 # [*swift_url*]
 #   (optional) Swift URL. If this is unset in the class, Trove will
 #   lookup the URL using the Keystone catalog.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_service_type*]
 #   (optional) Service type to use when searching catalog
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_transport_url*]
 #   (optional) A URL representing the messaging driver to use and its full
@@ -62,23 +62,23 @@
 #
 # [*root_grant*]
 #   (optional) Permissions to grant "root" user.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*root_grant_option*]
 #   (optional) Permissions to grant "root" user option.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*container_registry*]
 #   (optional) URL to the registry.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*container_registry_username*]
 #   (optional) The registry username.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*container_registry_password*]
 #   (optional) The plaintext registry password.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 #  DEPRECATED PARAMETERS
 #
@@ -94,20 +94,20 @@ class trove::guestagent(
   $enabled                     = false,
   $manage_service              = true,
   $package_ensure              = 'present',
-  $debug                       = $::os_service_default,
+  $debug                       = $facts['os_service_default'],
   $log_file                    = '/var/log/trove/trove-guestagent.log',
   $log_dir                     = '/var/log/trove',
-  $use_syslog                  = $::os_service_default,
-  $log_facility                = $::os_service_default,
-  $swift_url                   = $::os_service_default,
-  $swift_service_type          = $::os_service_default,
+  $use_syslog                  = $facts['os_service_default'],
+  $log_facility                = $facts['os_service_default'],
+  $swift_url                   = $facts['os_service_default'],
+  $swift_service_type          = $facts['os_service_default'],
   $default_transport_url       = $::trove::default_transport_url,
   $rabbit_use_ssl              = $::trove::rabbit_use_ssl,
-  $root_grant                  = $::os_service_default,
-  $root_grant_option           = $::os_service_default,
-  $container_registry          = $::os_service_default,
-  $container_registry_username = $::os_service_default,
-  $container_registry_password = $::os_service_default,
+  $root_grant                  = $facts['os_service_default'],
+  $root_grant_option           = $facts['os_service_default'],
+  $container_registry          = $facts['os_service_default'],
+  $container_registry_username = $facts['os_service_default'],
+  $container_registry_password = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $default_password_length     = undef,
   $backup_aes_cbc_key          = undef,
@@ -127,8 +127,8 @@ class trove::guestagent(
     'DEFAULT/swift_service_type':      value => $swift_service_type;
     'DEFAULT/root_grant':              value => $root_grant;
     'DEFAULT/root_grant_option':       value => $root_grant_option;
-    'DEFAULT/default_password_length': value => pick($default_password_length, $::os_service_default);
-    'DEFAULT/backup_aes_cbc_key':      value => pick($backup_aes_cbc_key, $::os_service_default);
+    'DEFAULT/default_password_length': value => pick($default_password_length, $facts['os_service_default']);
+    'DEFAULT/backup_aes_cbc_key':      value => pick($backup_aes_cbc_key, $facts['os_service_default']);
   }
 
   oslo::messaging::default { 'trove_guestagent_config':

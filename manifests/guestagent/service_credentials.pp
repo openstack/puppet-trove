@@ -31,7 +31,7 @@
 #
 # [*system_scope*]
 #   (optional) Scope for system operations.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class trove::guestagent::service_credentials (
   $password,
@@ -41,7 +41,7 @@ class trove::guestagent::service_credentials (
   $project_name        = 'services',
   $project_domain_name = 'Default',
   $user_domain_name    = 'Default',
-  $system_scope        = $::os_service_default,
+  $system_scope        = $facts['os_service_default'],
 ) {
 
   include trove::deps
@@ -50,8 +50,8 @@ class trove::guestagent::service_credentials (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   trove_guestagent_config {
