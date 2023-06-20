@@ -163,10 +163,6 @@
 #   tenant mode.
 #   Defaults to false.
 #
-# [*nova_compute_url*]
-#   (optional) URL without the tenant segment.
-#   Defaults to false.
-#
 # [*rpc_response_timeout*]
 #  (Optional) Seconds to wait for a response from a call.
 #  Defaults to $facts['os_service_default']
@@ -175,17 +171,21 @@
 #   (optional) Control exchange.
 #   Defaults to 'trove'.
 #
+# [*nova_compute_url*]
+#   (optional) URL without the tenant segment.
+#   Defaults to $facts['os_service_default'].
+#
 # [*cinder_url*]
 #   (optional) Cinder URL without the tenant segment.
-#   Defaults to false.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_url*]
 #   (optional) Swift URL ending in AUTH_.
-#   Defaults to false.
+#   Defaults to $facts['os_service_default'].
 #
 # [*neutron_url*]
 #   (optional) Neutron URL without the tenant segment.
-#   Defaults to false.
+#   Defaults to $facts['os_service_default'].
 #
 # [*nova_compute_service_type*]
 #   (optional) Nova service type to use when searching catalog.
@@ -240,94 +240,74 @@
 #   Defaults to 'present'
 #
 class trove(
-  $default_transport_url        = $facts['os_service_default'],
-  $notification_transport_url   = $facts['os_service_default'],
-  $notification_driver          = $facts['os_service_default'],
-  $notification_topics          = $facts['os_service_default'],
-  $rabbit_use_ssl               = $facts['os_service_default'],
-  $rabbit_ha_queues             = $facts['os_service_default'],
-  $rabbit_notification_topic    = $facts['os_service_default'],
-  $rabbit_heartbeat_in_pthread  = $facts['os_service_default'],
-  $kombu_ssl_ca_certs           = $facts['os_service_default'],
-  $kombu_ssl_certfile           = $facts['os_service_default'],
-  $kombu_ssl_keyfile            = $facts['os_service_default'],
-  $kombu_ssl_version            = $facts['os_service_default'],
-  $kombu_reconnect_delay        = $facts['os_service_default'],
-  $kombu_failover_strategy      = $facts['os_service_default'],
-  $amqp_durable_queues          = $facts['os_service_default'],
-  $amqp_server_request_prefix   = $facts['os_service_default'],
-  $amqp_broadcast_prefix        = $facts['os_service_default'],
-  $amqp_group_request_prefix    = $facts['os_service_default'],
-  $amqp_container_name          = $facts['os_service_default'],
-  $amqp_idle_timeout            = $facts['os_service_default'],
-  $amqp_trace                   = $facts['os_service_default'],
-  $amqp_ssl_ca_file             = $facts['os_service_default'],
-  $amqp_ssl_cert_file           = $facts['os_service_default'],
-  $amqp_ssl_key_file            = $facts['os_service_default'],
-  $amqp_ssl_key_password        = $facts['os_service_default'],
-  $amqp_sasl_mechanisms         = $facts['os_service_default'],
-  $amqp_sasl_config_dir         = $facts['os_service_default'],
-  $amqp_sasl_config_name        = $facts['os_service_default'],
-  $amqp_username                = $facts['os_service_default'],
-  $amqp_password                = $facts['os_service_default'],
-  Boolean $single_tenant_mode   = false,
-  $nova_compute_url             = false,
-  $rpc_response_timeout         = $facts['os_service_default'],
-  $control_exchange             = 'trove',
-  $cinder_url                   = false,
-  $swift_url                    = false,
-  $neutron_url                  = false,
-  $nova_compute_service_type    = 'compute',
-  $cinder_service_type          = 'volumev3',
-  $swift_service_type           = 'object-store',
-  $neutron_service_type         = 'network',
-  $glance_service_type          = 'image',
-  $nova_compute_endpoint_type   = $facts['os_service_default'],
-  $cinder_endpoint_type         = $facts['os_service_default'],
-  $swift_endpoint_type          = $facts['os_service_default'],
-  $glance_endpoint_type         = $facts['os_service_default'],
-  $trove_endpoint_type          = $facts['os_service_default'],
-  $neutron_endpoint_type        = $facts['os_service_default'],
-  $management_networks          = $facts['os_service_default'],
-  $package_ensure               = 'present',
+  $default_transport_url       = $facts['os_service_default'],
+  $notification_transport_url  = $facts['os_service_default'],
+  $notification_driver         = $facts['os_service_default'],
+  $notification_topics         = $facts['os_service_default'],
+  $rabbit_use_ssl              = $facts['os_service_default'],
+  $rabbit_ha_queues            = $facts['os_service_default'],
+  $rabbit_notification_topic   = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread = $facts['os_service_default'],
+  $kombu_ssl_ca_certs          = $facts['os_service_default'],
+  $kombu_ssl_certfile          = $facts['os_service_default'],
+  $kombu_ssl_keyfile           = $facts['os_service_default'],
+  $kombu_ssl_version           = $facts['os_service_default'],
+  $kombu_reconnect_delay       = $facts['os_service_default'],
+  $kombu_failover_strategy     = $facts['os_service_default'],
+  $amqp_durable_queues         = $facts['os_service_default'],
+  $amqp_server_request_prefix  = $facts['os_service_default'],
+  $amqp_broadcast_prefix       = $facts['os_service_default'],
+  $amqp_group_request_prefix   = $facts['os_service_default'],
+  $amqp_container_name         = $facts['os_service_default'],
+  $amqp_idle_timeout           = $facts['os_service_default'],
+  $amqp_trace                  = $facts['os_service_default'],
+  $amqp_ssl_ca_file            = $facts['os_service_default'],
+  $amqp_ssl_cert_file          = $facts['os_service_default'],
+  $amqp_ssl_key_file           = $facts['os_service_default'],
+  $amqp_ssl_key_password       = $facts['os_service_default'],
+  $amqp_sasl_mechanisms        = $facts['os_service_default'],
+  $amqp_sasl_config_dir        = $facts['os_service_default'],
+  $amqp_sasl_config_name       = $facts['os_service_default'],
+  $amqp_username               = $facts['os_service_default'],
+  $amqp_password               = $facts['os_service_default'],
+  Boolean $single_tenant_mode  = false,
+  $rpc_response_timeout        = $facts['os_service_default'],
+  $control_exchange            = 'trove',
+  $nova_compute_url            = $facts['os_service_default'],
+  $cinder_url                  = $facts['os_service_default'],
+  $swift_url                   = $facts['os_service_default'],
+  $neutron_url                 = $facts['os_service_default'],
+  $nova_compute_service_type   = 'compute',
+  $cinder_service_type         = 'volumev3',
+  $swift_service_type          = 'object-store',
+  $neutron_service_type        = 'network',
+  $glance_service_type         = 'image',
+  $nova_compute_endpoint_type  = $facts['os_service_default'],
+  $cinder_endpoint_type        = $facts['os_service_default'],
+  $swift_endpoint_type         = $facts['os_service_default'],
+  $glance_endpoint_type        = $facts['os_service_default'],
+  $trove_endpoint_type         = $facts['os_service_default'],
+  $neutron_endpoint_type       = $facts['os_service_default'],
+  $management_networks         = $facts['os_service_default'],
+  $package_ensure              = 'present',
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
 
-  if $nova_compute_url {
-    trove_config { 'DEFAULT/nova_compute_url': value => $nova_compute_url }
-  }
-  else {
-    trove_config { 'DEFAULT/nova_compute_url': ensure => absent }
-  }
-
-  if $cinder_url {
-    trove_config { 'DEFAULT/cinder_url': value => $cinder_url }
-  }
-  else {
-    trove_config { 'DEFAULT/cinder_url': ensure => absent }
-  }
-
-  if $swift_url {
-    trove_config { 'DEFAULT/swift_url': value => $swift_url }
-  }
-  else {
-    trove_config { 'DEFAULT/swift_url': ensure => absent }
-  }
-
-  if $neutron_url {
-    trove_config { 'DEFAULT/neutron_url': value => $neutron_url }
-  }
-  else {
-    trove_config { 'DEFAULT/neutron_url': ensure => absent }
-  }
-
   package { 'trove':
     ensure => $package_ensure,
     name   => $::trove::params::common_package_name,
     tag    => ['openstack', 'trove-package'],
+  }
+
+  # endpoint url
+  trove_config {
+    'DEFAULT/nova_compute_url': value => $nova_compute_url;
+    'DEFAULT/cinder_url':       value => $cinder_url;
+    'DEFAULT/swift_url':        value => $swift_url;
+    'DEFAULT/neutron_url':      value => $neutron_url;
   }
 
   # services type

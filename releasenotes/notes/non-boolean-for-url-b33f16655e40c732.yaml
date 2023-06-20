@@ -1,0 +1,11 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``trove`` class no longer treat `fase`
+    as a special value to purge the option. Use the `os_service_default` fact
+    which is not default.
+
+    - `nova_compute_url`
+    - `cinder_url`
+    - `neutron_url`
+    - `swift_url`

@@ -22,24 +22,15 @@ require 'spec_helper'
 
 describe 'trove' do
 
-  let :params do
-    { 
-      :nova_compute_url          => 'http://localhost:8774/v2',
-      :cinder_url                => 'http://localhost:8776/v1',
-      :swift_url                 => 'http://localhost:8080/v1/AUTH_',
-      :neutron_url               => 'http://localhost:9696/',
-    }
-  end
-
   shared_examples_for 'trove' do
 
     context 'with default parameters' do
-      it {
+      it 'configures the default values' do
         is_expected.to contain_class('trove::params')
-        is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
-        is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
-        is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
-        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volumev3')
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
@@ -92,7 +83,7 @@ describe 'trove' do
           :driver        => '<SERVICE DEFAULT>',
           :topics        => '<SERVICE DEFAULT>'
         )
-      }
+      end
 
       it 'installs common package' do
         is_expected.to contain_package('trove').with(
@@ -105,6 +96,24 @@ describe 'trove' do
       it 'configures trove to use the Neutron network driver' do
         is_expected.to contain_trove_config('DEFAULT/network_label_regex').with_value('.*')
         is_expected.to contain_trove_config('DEFAULT/network_driver').with_value('trove.network.neutron.NeutronDriver')
+      end
+    end
+
+    context 'with parameters' do
+      let :params do
+        {
+          :nova_compute_url => 'http://localhost:8774/v2',
+          :cinder_url       => 'http://localhost:8776/v1',
+          :swift_url        => 'http://localhost:8080/v1/AUTH_',
+          :neutron_url      => 'http://localhost:9696/',
+        }
+      end
+
+      it 'configures the given values' do
+        is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
+        is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
+        is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
+        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
       end
     end
 
