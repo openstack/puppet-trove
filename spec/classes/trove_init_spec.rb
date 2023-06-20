@@ -31,6 +31,7 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/glance_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/nova_compute_service_type').with_value('compute')
         is_expected.to contain_trove_config('DEFAULT/cinder_service_type').with_value('volumev3')
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
@@ -105,7 +106,8 @@ describe 'trove' do
           :nova_compute_url => 'http://localhost:8774/v2',
           :cinder_url       => 'http://localhost:8776/v1',
           :swift_url        => 'http://localhost:8080/v1/AUTH_',
-          :neutron_url      => 'http://localhost:9696/',
+          :neutron_url      => 'http://localhost:9696',
+          :glance_url       => 'http://localhost:9292' 
         }
       end
 
@@ -113,7 +115,8 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/nova_compute_url').with_value('http://localhost:8774/v2')
         is_expected.to contain_trove_config('DEFAULT/cinder_url').with_value('http://localhost:8776/v1')
         is_expected.to contain_trove_config('DEFAULT/swift_url').with_value('http://localhost:8080/v1/AUTH_')
-        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696/')
+        is_expected.to contain_trove_config('DEFAULT/neutron_url').with_value('http://localhost:9696')
+        is_expected.to contain_trove_config('DEFAULT/glance_url').with_value('http://localhost:9292')
       end
     end
 

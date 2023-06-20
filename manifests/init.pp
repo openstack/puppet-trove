@@ -187,6 +187,10 @@
 #   (optional) Neutron URL without the tenant segment.
 #   Defaults to $facts['os_service_default'].
 #
+# [*glance_url*]
+#   (optional) Glance URL without the tenant segment.
+#   Defaults to $facts['os_service_default'].
+#
 # [*nova_compute_service_type*]
 #   (optional) Nova service type to use when searching catalog.
 #   Defaults to 'compute'.
@@ -277,6 +281,7 @@ class trove(
   $cinder_url                  = $facts['os_service_default'],
   $swift_url                   = $facts['os_service_default'],
   $neutron_url                 = $facts['os_service_default'],
+  $glance_url                  = $facts['os_service_default'],
   $nova_compute_service_type   = 'compute',
   $cinder_service_type         = 'volumev3',
   $swift_service_type          = 'object-store',
@@ -308,6 +313,7 @@ class trove(
     'DEFAULT/cinder_url':       value => $cinder_url;
     'DEFAULT/swift_url':        value => $swift_url;
     'DEFAULT/neutron_url':      value => $neutron_url;
+    'DEFAULT/glance_url':       value => $glance_url;
   }
 
   # services type
