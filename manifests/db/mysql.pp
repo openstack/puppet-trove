@@ -50,7 +50,7 @@
 #   Defaults 'utf8_general_ci'.
 #
 class trove::db::mysql(
-  $password,
+  String[1] $password,
   $dbname        = 'trove',
   $user          = 'trove',
   $host          = '127.0.0.1',
@@ -60,8 +60,6 @@ class trove::db::mysql(
 ) {
 
   include trove::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql { 'trove':
     user          => $user,

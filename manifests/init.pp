@@ -270,7 +270,7 @@ class trove(
   $amqp_sasl_config_name        = $facts['os_service_default'],
   $amqp_username                = $facts['os_service_default'],
   $amqp_password                = $facts['os_service_default'],
-  $single_tenant_mode           = false,
+  Boolean $single_tenant_mode   = false,
   $nova_compute_url             = false,
   $rpc_response_timeout         = $facts['os_service_default'],
   $control_exchange             = 'trove',

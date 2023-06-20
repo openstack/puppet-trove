@@ -52,16 +52,12 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class trove::config (
-  $trove_config            = {},
-  $trove_guestagent_config = {},
-  $trove_api_paste_ini     = {},
+  Hash $trove_config            = {},
+  Hash $trove_guestagent_config = {},
+  Hash $trove_api_paste_ini     = {},
 ) {
 
   include trove::deps
-
-  validate_legacy(Hash, 'validate_hash', $trove_config)
-  validate_legacy(Hash, 'validate_hash', $trove_guestagent_config)
-  validate_legacy(Hash, 'validate_hash', $trove_api_paste_ini)
 
   create_resources('trove_config', $trove_config)
   create_resources('trove_guestagent_config', $trove_guestagent_config)

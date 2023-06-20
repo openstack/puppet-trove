@@ -91,8 +91,8 @@
 #   Defaults to undef
 #
 class trove::guestagent(
-  $enabled                     = false,
-  $manage_service              = true,
+  Boolean $enabled             = false,
+  Boolean $manage_service      = true,
   $package_ensure              = 'present',
   $debug                       = $facts['os_service_default'],
   $log_file                    = '/var/log/trove/trove-guestagent.log',

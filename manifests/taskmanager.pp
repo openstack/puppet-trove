@@ -47,8 +47,8 @@
 #   Defaults to 'trove.taskmanager.manager.Manager'.
 #
 class trove::taskmanager(
-  $enabled                  = true,
-  $manage_service           = true,
+  Boolean $enabled          = true,
+  Boolean $manage_service   = true,
   $guest_log_file           = '/var/log/trove/trove-guestagent.log',
   $package_ensure           = 'present',
   $guestagent_config_file   = '/etc/trove/trove-guestagent.conf',

@@ -25,7 +25,7 @@
 #   Default to 'ALL'
 #
 class trove::db::postgresql(
-  $password,
+  String[1] $password,
   $dbname     = 'trove',
   $user       = 'trove',
   $encoding   = undef,
@@ -33,8 +33,6 @@ class trove::db::postgresql(
 ) {
 
   include trove::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::postgresql { 'trove':
     password   => $password,
