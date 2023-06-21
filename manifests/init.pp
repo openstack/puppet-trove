@@ -193,23 +193,23 @@
 #
 # [*nova_compute_service_type*]
 #   (optional) Nova service type to use when searching catalog.
-#   Defaults to 'compute'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*cinder_service_type*]
 #   (optional) Cinder service type to use when searching catalog.
-#   Defaults to 'volumev3'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*swift_service_type*]
 #   (optional) Swift service type to use when searching catalog.
-#   Defaults to 'object-store'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*neutron_service_type*]
 #   (optional) Neutron service type to use when searching catalog.
-#   Defaults to 'network'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*glance_service_type*]
 #   (optional) Glance service type to use when searching catalog.
-#   Defaults to 'image'.
+#   Defaults to $facts['os_service_default'].
 #
 # [*nova_compute_endpoint_type*]
 #   (optional) Service endpoint type to use when searching catalog.
@@ -282,11 +282,11 @@ class trove(
   $swift_url                   = $facts['os_service_default'],
   $neutron_url                 = $facts['os_service_default'],
   $glance_url                  = $facts['os_service_default'],
-  $nova_compute_service_type   = 'compute',
-  $cinder_service_type         = 'volumev3',
-  $swift_service_type          = 'object-store',
-  $neutron_service_type        = 'network',
-  $glance_service_type         = 'image',
+  $nova_compute_service_type   = $facts['os_service_default'],
+  $cinder_service_type         = $facts['os_service_default'],
+  $swift_service_type          = $facts['os_service_default'],
+  $neutron_service_type        = $facts['os_service_default'],
+  $glance_service_type         = $facts['os_service_default'],
   $nova_compute_endpoint_type  = $facts['os_service_default'],
   $cinder_endpoint_type        = $facts['os_service_default'],
   $swift_endpoint_type         = $facts['os_service_default'],
