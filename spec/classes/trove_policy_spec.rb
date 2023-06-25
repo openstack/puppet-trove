@@ -33,6 +33,7 @@ describe 'trove::policy' do
           :file_group   => 'trove',
           :file_format  => 'yaml',
           :purge_config => false,
+          :tag          => 'trove',
         )
         is_expected.to contain_oslo__policy('trove_config').with(
           :enforce_scope        => false,
@@ -63,6 +64,7 @@ describe 'trove::policy' do
           :file_group   => 'trove',
           :file_format  => 'yaml',
           :purge_config => true,
+          :tag          => 'trove',
         )
         is_expected.to contain_oslo__policy('trove_config').with(
           :enforce_scope        => false,
