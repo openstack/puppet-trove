@@ -67,6 +67,7 @@ class trove::policy (
     file_group   => $::trove::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'trove',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
