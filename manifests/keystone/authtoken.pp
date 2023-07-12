@@ -4,13 +4,12 @@
 #
 # === Parameters
 #
+# [*password*]
+#   (Required) Password to create for the service user
+#
 # [*username*]
 #   (Optional) The name of the service user
 #   Defaults to 'trove'
-#
-# [*password*]
-#   (Optional) Password to create for the service user
-#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (Optional) The URL to use for authentication.
@@ -197,8 +196,8 @@
 #  Defaults to $facts['os_service_default'].
 #
 class trove::keystone::authtoken(
+  String[1] $password,
   $username                       = 'trove',
-  $password                       = $facts['os_service_default'],
   $auth_url                       = 'http://localhost:5000',
   $project_name                   = 'services',
   $user_domain_name               = 'Default',
@@ -237,10 +236,6 @@ class trove::keystone::authtoken(
 ) {
 
   include trove::deps
-
-  if is_service_default($password) {
-    fail('Please set password for trove service user')
-  }
 
   keystone::resource::authtoken { 'trove_config':
     username                       => $username,
