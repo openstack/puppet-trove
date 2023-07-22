@@ -112,7 +112,7 @@ class trove::api(
   $backlog                = $facts['os_service_default'],
   $workers                = $facts['os_workers'],
   Boolean $enabled        = true,
-  $purge_config           = false,
+  Boolean $purge_config   = false,
   $cert_file              = false,
   $key_file               = false,
   $ca_file                = false,
