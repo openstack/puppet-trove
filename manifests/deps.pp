@@ -40,7 +40,7 @@ class trove::deps {
   # puppet-trove supports it. Leave commented out for now.
   Anchor['trove::config::begin']
   -> Openstacklib::Policy<| tag == 'trove' |>
-  ~> Anchor['trove::config::end']
+  -> Anchor['trove::config::end']
 
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
