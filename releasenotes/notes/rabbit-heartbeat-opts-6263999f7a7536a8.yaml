@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``trove`` class.
+
+    - ``rabbit_heartbeat_timeout_threshold``
+    - ``rabbit_heartbeat_rate``
+
+fixes:
+  - |
+    Fixed the ignored ``rabbitmq::rabbit_heartbeat_in_pthread`` parameter.

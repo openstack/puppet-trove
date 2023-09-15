@@ -73,6 +73,21 @@
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
 #   Defaults to $facts['os_service_default']
 #
+# [*rabbit_heartbeat_timeout_threshold*]
+#   (optional) Number of seconds after which the RabbitMQ broker is considered
+#   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
+#   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
+#   closed, resulting in missed or lost messages from the queue.
+#   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_heartbeat_rate*]
+#   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
+#   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
+#   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
+#   every 30 seconds.
+#   Defaults to $facts['os_service_default']
+#
 # [*rabbit_heartbeat_in_pthread*]
 #   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
 #   through a native python thread. By default if this
@@ -244,57 +259,59 @@
 #   Defaults to 'present'
 #
 class trove(
-  $default_transport_url       = $facts['os_service_default'],
-  $notification_transport_url  = $facts['os_service_default'],
-  $notification_driver         = $facts['os_service_default'],
-  $notification_topics         = $facts['os_service_default'],
-  $rabbit_use_ssl              = $facts['os_service_default'],
-  $rabbit_ha_queues            = $facts['os_service_default'],
-  $rabbit_notification_topic   = $facts['os_service_default'],
-  $rabbit_heartbeat_in_pthread = $facts['os_service_default'],
-  $kombu_ssl_ca_certs          = $facts['os_service_default'],
-  $kombu_ssl_certfile          = $facts['os_service_default'],
-  $kombu_ssl_keyfile           = $facts['os_service_default'],
-  $kombu_ssl_version           = $facts['os_service_default'],
-  $kombu_reconnect_delay       = $facts['os_service_default'],
-  $kombu_failover_strategy     = $facts['os_service_default'],
-  $amqp_durable_queues         = $facts['os_service_default'],
-  $amqp_server_request_prefix  = $facts['os_service_default'],
-  $amqp_broadcast_prefix       = $facts['os_service_default'],
-  $amqp_group_request_prefix   = $facts['os_service_default'],
-  $amqp_container_name         = $facts['os_service_default'],
-  $amqp_idle_timeout           = $facts['os_service_default'],
-  $amqp_trace                  = $facts['os_service_default'],
-  $amqp_ssl_ca_file            = $facts['os_service_default'],
-  $amqp_ssl_cert_file          = $facts['os_service_default'],
-  $amqp_ssl_key_file           = $facts['os_service_default'],
-  $amqp_ssl_key_password       = $facts['os_service_default'],
-  $amqp_sasl_mechanisms        = $facts['os_service_default'],
-  $amqp_sasl_config_dir        = $facts['os_service_default'],
-  $amqp_sasl_config_name       = $facts['os_service_default'],
-  $amqp_username               = $facts['os_service_default'],
-  $amqp_password               = $facts['os_service_default'],
-  Boolean $single_tenant_mode  = false,
-  $rpc_response_timeout        = $facts['os_service_default'],
-  $control_exchange            = 'trove',
-  $nova_compute_url            = $facts['os_service_default'],
-  $cinder_url                  = $facts['os_service_default'],
-  $swift_url                   = $facts['os_service_default'],
-  $neutron_url                 = $facts['os_service_default'],
-  $glance_url                  = $facts['os_service_default'],
-  $nova_compute_service_type   = $facts['os_service_default'],
-  $cinder_service_type         = $facts['os_service_default'],
-  $swift_service_type          = $facts['os_service_default'],
-  $neutron_service_type        = $facts['os_service_default'],
-  $glance_service_type         = $facts['os_service_default'],
-  $nova_compute_endpoint_type  = $facts['os_service_default'],
-  $cinder_endpoint_type        = $facts['os_service_default'],
-  $swift_endpoint_type         = $facts['os_service_default'],
-  $glance_endpoint_type        = $facts['os_service_default'],
-  $trove_endpoint_type         = $facts['os_service_default'],
-  $neutron_endpoint_type       = $facts['os_service_default'],
-  $management_networks         = $facts['os_service_default'],
-  $package_ensure              = 'present',
+  $default_transport_url              = $facts['os_service_default'],
+  $notification_transport_url         = $facts['os_service_default'],
+  $notification_driver                = $facts['os_service_default'],
+  $notification_topics                = $facts['os_service_default'],
+  $rabbit_use_ssl                     = $facts['os_service_default'],
+  $rabbit_ha_queues                   = $facts['os_service_default'],
+  $rabbit_notification_topic          = $facts['os_service_default'],
+  $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
+  $rabbit_heartbeat_rate              = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread        = $facts['os_service_default'],
+  $kombu_ssl_ca_certs                 = $facts['os_service_default'],
+  $kombu_ssl_certfile                 = $facts['os_service_default'],
+  $kombu_ssl_keyfile                  = $facts['os_service_default'],
+  $kombu_ssl_version                  = $facts['os_service_default'],
+  $kombu_reconnect_delay              = $facts['os_service_default'],
+  $kombu_failover_strategy            = $facts['os_service_default'],
+  $amqp_durable_queues                = $facts['os_service_default'],
+  $amqp_server_request_prefix         = $facts['os_service_default'],
+  $amqp_broadcast_prefix              = $facts['os_service_default'],
+  $amqp_group_request_prefix          = $facts['os_service_default'],
+  $amqp_container_name                = $facts['os_service_default'],
+  $amqp_idle_timeout                  = $facts['os_service_default'],
+  $amqp_trace                         = $facts['os_service_default'],
+  $amqp_ssl_ca_file                   = $facts['os_service_default'],
+  $amqp_ssl_cert_file                 = $facts['os_service_default'],
+  $amqp_ssl_key_file                  = $facts['os_service_default'],
+  $amqp_ssl_key_password              = $facts['os_service_default'],
+  $amqp_sasl_mechanisms               = $facts['os_service_default'],
+  $amqp_sasl_config_dir               = $facts['os_service_default'],
+  $amqp_sasl_config_name              = $facts['os_service_default'],
+  $amqp_username                      = $facts['os_service_default'],
+  $amqp_password                      = $facts['os_service_default'],
+  Boolean $single_tenant_mode         = false,
+  $rpc_response_timeout               = $facts['os_service_default'],
+  $control_exchange                   = 'trove',
+  $nova_compute_url                   = $facts['os_service_default'],
+  $cinder_url                         = $facts['os_service_default'],
+  $swift_url                          = $facts['os_service_default'],
+  $neutron_url                        = $facts['os_service_default'],
+  $glance_url                         = $facts['os_service_default'],
+  $nova_compute_service_type          = $facts['os_service_default'],
+  $cinder_service_type                = $facts['os_service_default'],
+  $swift_service_type                 = $facts['os_service_default'],
+  $neutron_service_type               = $facts['os_service_default'],
+  $glance_service_type                = $facts['os_service_default'],
+  $nova_compute_endpoint_type         = $facts['os_service_default'],
+  $cinder_endpoint_type               = $facts['os_service_default'],
+  $swift_endpoint_type                = $facts['os_service_default'],
+  $glance_endpoint_type               = $facts['os_service_default'],
+  $trove_endpoint_type                = $facts['os_service_default'],
+  $neutron_endpoint_type              = $facts['os_service_default'],
+  $management_networks                = $facts['os_service_default'],
+  $package_ensure                     = 'present',
 ) {
 
   include trove::deps
@@ -369,15 +386,18 @@ class trove(
   }
 
   oslo::messaging::rabbit { 'trove_config':
-    rabbit_ha_queues        => $rabbit_ha_queues,
-    rabbit_use_ssl          => $rabbit_use_ssl,
-    kombu_reconnect_delay   => $kombu_reconnect_delay,
-    kombu_failover_strategy => $kombu_failover_strategy,
-    amqp_durable_queues     => $amqp_durable_queues,
-    kombu_ssl_ca_certs      => $kombu_ssl_ca_certs,
-    kombu_ssl_certfile      => $kombu_ssl_certfile,
-    kombu_ssl_keyfile       => $kombu_ssl_keyfile,
-    kombu_ssl_version       => $kombu_ssl_version
+    rabbit_ha_queues            => $rabbit_ha_queues,
+    heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate              => $rabbit_heartbeat_rate,
+    heartbeat_in_pthread        => $rabbit_heartbeat_in_pthread,
+    rabbit_use_ssl              => $rabbit_use_ssl,
+    kombu_reconnect_delay       => $kombu_reconnect_delay,
+    kombu_failover_strategy     => $kombu_failover_strategy,
+    amqp_durable_queues         => $amqp_durable_queues,
+    kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+    kombu_ssl_certfile          => $kombu_ssl_certfile,
+    kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+    kombu_ssl_version           => $kombu_ssl_version
   }
 
   oslo::messaging::amqp { 'trove_config':
