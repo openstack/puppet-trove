@@ -50,7 +50,7 @@ describe provider_class do
   describe '#create' do
     it 'should call trove-manage' do
       expect(provider). to receive(:trove_manage).with(
-        ['trove-manage', 'datastore_version_update', datastore_name,
+        ['datastore_version_update', datastore_name,
          datastore_version, 'mysql', '1234', 'mysql', '1']
       ).and_return(0)
 

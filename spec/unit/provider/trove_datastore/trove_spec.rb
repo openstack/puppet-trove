@@ -57,7 +57,7 @@ describe provider_class do
     context 'without version' do
       it 'creates datastore' do
         expect(provider).to receive(:trove_manage)
-          .with(['trove-manage', 'datastore_update', datastore_name, "''"])
+          .with(['datastore_update', datastore_name, "''"])
           .and_return(0)
         provider.create
       end
@@ -72,11 +72,11 @@ describe provider_class do
 
       it 'creates datastore' do
         expect(provider).to receive(:trove_manage)
-          .with(['trove-manage', 'datastore_update', datastore_name, "''"])
+          .with(['datastore_update', datastore_name, "''"])
           .and_return(0)
 
         expect(provider).to receive(:trove_manage)
-          .with(['trove-manage', 'datastore_update', datastore_name, "0.1"])
+          .with(['datastore_update', datastore_name, "0.1"])
           .and_return(0)
         provider.create
       end
