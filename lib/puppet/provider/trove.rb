@@ -20,6 +20,7 @@ class Puppet::Provider::Trove < Puppet::Provider::Openstack
   end
 
   def self.trove_request(service, action, error, properties=nil)
+    warning('Usage of keystone_authtoken parameters is deprecated.')
     properties ||= []
     @credentials.username = trove_credentials['username']
     @credentials.password = trove_credentials['password']
