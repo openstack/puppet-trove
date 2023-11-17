@@ -37,18 +37,11 @@ Puppet::Type.type(:trove_datastore).provide(
   end
 
   def create
-    if trove_manage(['trove-manage', 'datastore_update',
-                     "#{@resource[:name]}", "''"]) != 0
-      fail("Failed to create datastore #{@resource[:name]}")
-    end
+    trove_manage(['datastore_update', "#{@resource[:name]}", "''"])
 
     if @resource[:version]
-      if trove_manage(['trove-manage', 'datastore_update',
-                       "#{@resource[:name]}", "#{@resource[:version]}"]) != 0
-        fail("Failed to set version for datastore #{@resource[:name]}")
-      end
+      trove_manage(['datastore_update', "#{@resource[:name]}", "#{@resource[:version]}"])
     end
   end
-
 end
 

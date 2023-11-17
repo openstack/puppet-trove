@@ -11,6 +11,9 @@ class Puppet::Provider::Trove < Puppet::Provider::Openstack
 
   extend Puppet::Provider::Openstack::Auth
 
+  initvars # so commands will work
+  commands :trove_manage => 'trove-manage'
+
   def self.request(service, action, properties=nil)
     begin
       super
@@ -106,8 +109,6 @@ class Puppet::Provider::Trove < Puppet::Provider::Openstack
   end
 
   def trove_manage(*args)
-    cmd = args.join(" ")
-    output = `#{cmd}`
-    $?.exitstatus
+    execute([command(:trove_manage)] + args)
   end
 end

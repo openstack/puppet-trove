@@ -34,13 +34,12 @@ Puppet::Type.type(:trove_datastore_version).provide(
   end
 
   def create
-    cmd = ['trove-manage', 'datastore_version_update',
-           "#{@resource[:datastore]}", "#{@resource[:name]}",
-           "#{@resource[:manager]}", "#{@resource[:image_id]}",
-           "#{@resource[:packages]}", "#{@resource[:active]}"]
-    if trove_manage(cmd) != 0
-      fail("Failed to create datastore version #{@resource[:name]}")
-    end
+    trove_manage([
+      'datastore_version_update',
+      "#{@resource[:datastore]}", "#{@resource[:name]}",
+      "#{@resource[:manager]}", "#{@resource[:image_id]}",
+      "#{@resource[:packages]}", "#{@resource[:active]}"
+    ])
   end
 
   def destroy
