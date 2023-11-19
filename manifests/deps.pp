@@ -46,16 +46,14 @@ class trove::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['trove::dbsync::begin']
 
-  # We need troveclient installed before marking service end so that trove
+  # We need openstackclient installed before marking service end so that trove
   # will have clients available to create resources. This tag handles the
-  # troveclient but indirectly since the client is not available in
+  # openstackclient but indirectly since the client is not available in
   # all catalogs that don't need the client class (like many spec tests).
-  # Once the troveclient is installed we will setup the datastores and
+  # Once the openstackclient is installed we will setup the datastores and
   # datastore_versions. Datastore_versions must come after datastores.
-  Package<| tag == 'openstack'|>
-  ~> Anchor['trove::service::end']
-  -> Trove_datastore<||>
-  -> Trove_datastore_version<||>
+  Package<| tag == 'openstackclient'|>
+  -> Anchor['trove::service::end']
 
   # Installation or config changes will always restart services.
   Anchor['trove::install::end'] ~> Anchor['trove::service::begin']

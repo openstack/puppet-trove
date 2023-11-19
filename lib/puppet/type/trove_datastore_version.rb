@@ -40,4 +40,8 @@ Puppet::Type.newtype(:trove_datastore_version) do
   autorequire(:anchor) do
     ['trove::service::end']
   end
+
+  autorequire(:trove_datastore) do
+    [self[:datastore]]
+  end
 end
