@@ -37,10 +37,12 @@ class trove::client (
 
   include trove::deps
 
+  # NOTE(tkajinam): trove-package tag is used because troveclient is required
+  #                 by trove
   package { 'python-troveclient':
     ensure => $package_ensure,
     name   => $client_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'openstackclient', 'trove-package'],
   }
 
   include openstacklib::openstackclient

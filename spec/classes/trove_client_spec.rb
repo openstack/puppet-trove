@@ -28,8 +28,9 @@ describe 'trove::client' do
 
     context 'with default parameters' do
       it { is_expected.to contain_package('python-troveclient').with(
-        'ensure' => 'present',
-        'name'   => platform_params[:client_package_name],
+        :ensure => 'present',
+        :name   => platform_params[:client_package_name],
+        :tag    => ['openstack', 'openstackclient', 'trove-package']
       )}
     end
 
@@ -38,8 +39,9 @@ describe 'trove::client' do
         { :package_ensure => false }
       end
       it { is_expected.to contain_package('python-troveclient').with(
-        'ensure' => false,
-        'name'   => platform_params[:client_package_name],
+        :ensure => false,
+        :name   => platform_params[:client_package_name],
+        :tag    => ['openstack', 'openstackclient', 'trove-package']
       )}
     end
 
