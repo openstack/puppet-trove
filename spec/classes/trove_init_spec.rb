@@ -44,6 +44,9 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/neutron_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/glance_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/management_networks').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/trove_volume_support').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_support').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_size').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
         is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_ensure('absent')
         is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_ensure('absent')
@@ -120,6 +123,9 @@ describe 'trove' do
           :swift_service_type        => 'object-store',
           :neutron_service_type      => 'network',
           :glance_service_type       => 'image',
+          :trove_volume_support      => true,
+          :volume_rootdisk_support   => true,
+          :volume_rootdisk_size      => 10,
         }
       end
 
@@ -134,6 +140,9 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/swift_service_type').with_value('object-store')
         is_expected.to contain_trove_config('DEFAULT/neutron_service_type').with_value('network')
         is_expected.to contain_trove_config('DEFAULT/glance_service_type').with_value('image')
+        is_expected.to contain_trove_config('DEFAULT/trove_volume_support').with_value(true)
+        is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_support').with_value(true)
+        is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_size').with_value(10)
       end
     end
 

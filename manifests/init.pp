@@ -272,6 +272,18 @@
 #   (optional) The network that trove will attach by default.
 #   Defaults to $facts['os_service_default'].
 #
+# [*trove_volume_support*]
+#   (optional) Whether to provision a Cinder volume for datadir.
+#   Defaults to $facts['os_service_default'].
+#
+# [*volume_rootdisk_support*]
+#   (optional) Whether to provision a Cinder volume for rootdisk.
+#   Defaults to $facts['os_service_default'].
+#
+# [*volume_rootdisk_size*]
+#   (optional) Size of volume rootdisk for Database instance.
+#   Defaults to $facts['os_service_default'].
+#
 # [*package_ensure*]
 #   (optional) The state of the package.
 #   Defaults to 'present'
@@ -333,6 +345,9 @@ class trove(
   $trove_endpoint_type                = $facts['os_service_default'],
   $neutron_endpoint_type              = $facts['os_service_default'],
   $management_networks                = $facts['os_service_default'],
+  $trove_volume_support               = $facts['os_service_default'],
+  $volume_rootdisk_support            = $facts['os_service_default'],
+  $volume_rootdisk_size               = $facts['os_service_default'],
   $package_ensure                     = 'present',
 ) {
 
@@ -389,10 +404,18 @@ class trove(
     }
   }
 
+  # network
   trove_config {
     'DEFAULT/network_label_regex': value => '.*';
     'DEFAULT/network_driver':      value => 'trove.network.neutron.NeutronDriver';
     'DEFAULT/management_networks': value => join(any2array($management_networks), ',');
+  }
+
+  # volume
+  trove_config {
+    'DEFAULT/trove_volume_support':    value => $trove_volume_support;
+    'DEFAULT/volume_rootdisk_support': value => $volume_rootdisk_support;
+    'DEFAULT/volume_rootdisk_size':    value => $volume_rootdisk_size;
   }
 
   oslo::messaging::default { 'trove_config':

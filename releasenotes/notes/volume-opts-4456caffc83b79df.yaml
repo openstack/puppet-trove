@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``trove`` class.
+
+    - ``trove_volume_support``
+    - ``volume_rootdisk_support``
+    - ``volume_rootdisk_size``
