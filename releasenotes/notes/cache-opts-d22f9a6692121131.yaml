@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following two classes have been added, to support caching options.
+
+    - ``trove::cache``
+    - ``trove::cache::instance_ports``
