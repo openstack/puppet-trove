@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Default values of the ``trove::quota`` class parameters have been updated
+    and now the service default values are used by default.
