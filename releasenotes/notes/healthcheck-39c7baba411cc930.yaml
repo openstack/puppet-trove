@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``trove::healthcheck`` class has been added.
