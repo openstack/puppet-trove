@@ -276,4 +276,6 @@ class trove::keystone::authtoken(
     service_type                   => $service_type,
     interface                      => $interface,
   }
+
+  Keystone::Resource::Authtoken['trove_config'] -> Anchor['trove::config::end']
 }
