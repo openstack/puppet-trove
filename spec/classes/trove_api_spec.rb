@@ -73,9 +73,9 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('ssl/cert_file').with_ensure('absent')
-        is_expected.to contain_trove_config('ssl/key_file').with_ensure('absent')
-        is_expected.to contain_trove_config('ssl/ca_file').with_ensure('absent')
+        is_expected.to contain_trove_config('ssl/cert_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('ssl/key_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_config('ssl/ca_file').with_value('<SERVICE DEFAULT>')
       end
 
       context 'with SSL enabled on API' do
