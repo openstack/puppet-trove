@@ -24,27 +24,13 @@ class trove::deps {
   ~> Service<| tag == 'trove-service' |>
   ~> anchor { 'trove::service::end': }
 
-  # Include all the other trove config pieces in the config block.
-  # Don't put them above because there's no chain between each individual part
-  # of the config.
   Anchor['trove::config::begin']
   -> Trove_guestagent_config<||>
-  ~> Anchor['trove::config::end']
-
-  # Also include paste ini config in the config section
-  Anchor['trove::config::begin']
-  -> Trove_api_paste_ini<||>
-  ~> Anchor['trove::config::end']
-
-  # policy config should occur in the config block also as soon as
-  # puppet-trove supports it. Leave commented out for now.
-  Anchor['trove::config::begin']
-  -> Openstacklib::Policy<| tag == 'trove' |>
   -> Anchor['trove::config::end']
 
-  # all db settings should be applied and all packages should be installed
-  # before dbsync starts
-  Oslo::Db<||> -> Anchor['trove::dbsync::begin']
+  Anchor['trove::config::begin']
+  -> Trove_api_paste_ini<||>
+  -> Anchor['trove::config::end']
 
   # We need openstackclient installed before marking service end so that trove
   # will have clients available to create resources. This tag handles the

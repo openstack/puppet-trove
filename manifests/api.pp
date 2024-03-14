@@ -196,6 +196,9 @@ class trove::api(
       package_name   => $::trove::params::api_package_name,
       service_name   => $service_name,
     }
+    if $manage_service {
+      Trove_api_paste_ini<||> ~> Service['trove-api']
+    }
   } elsif $service_name == 'httpd' {
     trove::generic_service { 'api':
       enabled        => false,
@@ -207,6 +210,7 @@ class trove::api(
     if $manage_service {
       Service<| title == 'httpd' |> { tag +> 'trove-service' }
       Service['trove-api'] -> Service[$service_name]
+      Trove_api_paste_ini<||> ~> Service['httpd']
     }
   } else {
     fail("Invalid service_name. Either trove-api/openstack-trove-api for \

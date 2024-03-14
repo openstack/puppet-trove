@@ -61,4 +61,8 @@ class trove::db (
     pool_timeout            => $database_pool_timeout,
     mysql_enable_ndb        => $mysql_enable_ndb,
   }
+
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db['trove_config'] -> Anchor['trove::dbsync::begin']
 }

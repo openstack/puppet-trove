@@ -70,6 +70,12 @@ class trove::policy (
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
+  # policy config should occur in the config block also as soon as
+  # puppet-trove supports it. Leave commented out for now.
+  Anchor['trove::config::begin']
+  -> Openstacklib::Policy[$policy_path]
+  -> Anchor['trove::config::end']
+
   oslo::policy { 'trove_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
