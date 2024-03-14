@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``trove`` class no longer treat ``false``
+    as an indicator to remove the option. Use os_service_default fact instead.
+
+    - ``ca_file``
+    - ``cert_file``
+    - ``key_file``

@@ -113,9 +113,9 @@ class trove::api(
   $workers                = $facts['os_workers'],
   Boolean $enabled        = true,
   Boolean $purge_config   = false,
-  $cert_file              = false,
-  $key_file               = false,
-  $ca_file                = false,
+  $cert_file              = $facts['os_service_default'],
+  $key_file               = $facts['os_service_default'],
+  $ca_file                = $facts['os_service_default'],
   $http_get_rate          = $facts['os_service_default'],
   $http_post_rate         = $facts['os_service_default'],
   $http_put_rate          = $facts['os_service_default'],
@@ -142,33 +142,10 @@ class trove::api(
     include trove::keystone::authtoken
   }
 
-  # SSL Options
-  if $cert_file {
-    trove_config {
-      'ssl/cert_file': value => $cert_file;
-    }
-  } else {
-    trove_config {
-      'ssl/cert_file': ensure => absent;
-    }
-  }
-  if $key_file {
-    trove_config {
-      'ssl/key_file': value => $key_file;
-    }
-  } else {
-    trove_config {
-      'ssl/key_file': ensure => absent;
-    }
-  }
-  if $ca_file {
-    trove_config {
-      'ssl/ca_file': value => $ca_file;
-    }
-  } else {
-    trove_config {
-      'ssl/ca_file': ensure => absent;
-    }
+  trove_config {
+    'ssl/cert_file': value => $cert_file;
+    'ssl/key_file':  value => $key_file;
+    'ssl/ca_file':   value => $ca_file;
   }
 
   # rate limits
