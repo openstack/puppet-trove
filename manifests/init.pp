@@ -195,11 +195,6 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $facts['os_service_default'].
 #
-# [*single_tenant_mode*]
-#   (optional) If set to true, will configure Trove to work in single
-#   tenant mode.
-#   Defaults to false.
-#
 # [*rpc_response_timeout*]
 #  (Optional) Seconds to wait for a response from a call.
 #  Defaults to $facts['os_service_default']
@@ -292,6 +287,13 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
+# DEPRECATED PARAMETERS
+#
+# [*single_tenant_mode*]
+#   (optional) If set to true, will configure Trove to work in single
+#   tenant mode.
+#   Defaults to undef.
+#
 class trove(
   $default_transport_url              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
@@ -330,7 +332,6 @@ class trove(
   $amqp_sasl_config_name              = $facts['os_service_default'],
   $amqp_username                      = $facts['os_service_default'],
   $amqp_password                      = $facts['os_service_default'],
-  Boolean $single_tenant_mode         = false,
   $rpc_response_timeout               = $facts['os_service_default'],
   $control_exchange                   = 'trove',
   $nova_compute_url                   = $facts['os_service_default'],
@@ -354,11 +355,17 @@ class trove(
   $volume_rootdisk_support            = $facts['os_service_default'],
   $volume_rootdisk_size               = $facts['os_service_default'],
   $package_ensure                     = 'present',
+  # DEPRECATED PARAMETERS
+  $single_tenant_mode                 = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
+
+  if $single_tenant_mode != undef {
+    warning('The single_tenant_mode parameter is deprecated and has no effect.')
+  }
 
   package { 'trove':
     ensure => $package_ensure,
@@ -392,21 +399,6 @@ class trove(
     'DEFAULT/swift_endpoint_type':        value => $swift_endpoint_type;
     'DEFAULT/glance_endpoint_type':       value => $glance_endpoint_type;
     'DEFAULT/trove_endpoint_type':        value => $trove_endpoint_type;
-  }
-
-  if $single_tenant_mode {
-    trove_config {
-      'DEFAULT/remote_nova_client':    value => 'trove.common.single_tenant_remote.nova_client_trove_admin';
-      'DEFAULT/remote_cinder_client':  value => 'trove.common.single_tenant_remote.cinder_client_trove_admin';
-      'DEFAULT/remote_neutron_client': value => 'trove.common.single_tenant_remote.neutron_client_trove_admin';
-    }
-  }
-  else {
-    trove_config {
-      'DEFAULT/remote_nova_client':    ensure => absent;
-      'DEFAULT/remote_cinder_client':  ensure => absent;
-      'DEFAULT/remote_neutron_client': ensure => absent;
-    }
   }
 
   # network

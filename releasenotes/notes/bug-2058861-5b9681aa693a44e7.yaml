@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``trove::single_tenant_mode`` parameter has been deprecated and it has
+    no effect now.

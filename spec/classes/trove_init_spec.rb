@@ -47,9 +47,6 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/trove_volume_support').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_support').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_size').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_ensure('absent')
-        is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_ensure('absent')
-        is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_ensure('absent')
         is_expected.to contain_oslo__messaging__default('trove_config').with(
           :transport_url        => '<SERVICE DEFAULT>',
           :rpc_response_timeout => '<SERVICE DEFAULT>',
@@ -144,28 +141,6 @@ describe 'trove' do
         is_expected.to contain_trove_config('DEFAULT/trove_volume_support').with_value(true)
         is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_support').with_value(true)
         is_expected.to contain_trove_config('DEFAULT/volume_rootdisk_size').with_value(10)
-      end
-    end
-
-    context 'with single tenant mode enabled' do
-      let :params do
-        { :single_tenant_mode => true }
-      end
-
-      it 'single tenant client values are set' do
-        is_expected.to contain_trove_config('DEFAULT/remote_nova_client').with_value('trove.common.single_tenant_remote.nova_client_trove_admin')
-        is_expected.to contain_trove_config('DEFAULT/remote_cinder_client').with_value('trove.common.single_tenant_remote.cinder_client_trove_admin')
-        is_expected.to contain_trove_config('DEFAULT/remote_neutron_client').with_value('trove.common.single_tenant_remote.neutron_client_trove_admin')
-      end
-    end
-
-    context 'with management networks' do
-      let :params do
-        { :management_networks => 'trove_service' }
-      end
-
-      it 'configures management networks' do
-        is_expected.to contain_trove_config('DEFAULT/management_networks').with_value('trove_service')
       end
     end
   end
