@@ -1,4 +1,4 @@
-# The trove::api::service_credentials class helps configure auth settings
+# The trove::service_credentials class helps configure auth settings
 #
 # == Parameters
 #
@@ -33,7 +33,7 @@
 #   (optional) Scope for system operations.
 #   Defaults to $facts['os_service_default']
 #
-class trove::api::service_credentials (
+class trove::service_credentials (
   $password,
   $auth_url            = 'http://127.0.0.1:5000',
   $region_name         = 'RegionOne',
@@ -46,17 +46,23 @@ class trove::api::service_credentials (
 
   include trove::deps
 
-  warning("The trove::api::service_credentials class is deprecated. \
-Use the trove::service_credentials class instead.")
-
-  class { 'trove::service_credentials':
-    password            => $password,
-    auth_url            => $auth_url,
-    region_name         => $region_name,
-    username            => $username,
-    project_name        => $project_name,
-    project_domain_name => $project_domain_name,
-    user_domain_name    => $user_domain_name,
-    system_scope        => $system_scope,
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
+
+  trove_config {
+    'service_credentials/auth_url':            value => $auth_url;
+    'service_credentials/username':            value => $username;
+    'service_credentials/password':            value => $password, secret => true;
+    'service_credentials/project_name':        value => $project_name_real;
+    'service_credentials/project_domain_name': value => $project_domain_name_real;
+    'service_credentials/system_scope':        value => $system_scope;
+    'service_credentials/user_domain_name':    value => $user_domain_name;
+    'service_credentials/region_name':         value => $region_name;
+  }
+
 }

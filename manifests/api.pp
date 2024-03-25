@@ -128,7 +128,9 @@ class trove::api(
   include trove::deps
   include trove::db
   include trove::db::sync
-  include trove::api::service_credentials
+  if (!defined(Class[trove::service_credentials])) {
+    include trove::api::service_credentials
+  }
 
   # basic service config
   trove_config {
