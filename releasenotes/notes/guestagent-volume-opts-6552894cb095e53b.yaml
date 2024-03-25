@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``trove::guestagent``
+    class.
+
+    - ``num_tries``
+    - ``volume_fstype``
+    - ``format_options``
+    - ``volume_format_timeout``
+    - ``mount_options``

@@ -80,6 +80,26 @@
 #   (optional) The plaintext registry password.
 #   Defaults to $facts['os_service_default'].
 #
+# [*num_tries*]
+#   (optional) Number of times to check if a volume exists.
+#   Defaults to $facts['os_service_default'].
+#
+# [*volume_fstype*]
+#   (optional) File system type used to format a volume.
+#   Defaults to $facts['os_service_default'].
+#
+# [*format_options*]
+#   (optional) Options to use when formatting a volume.
+#   Defaults to $facts['os_service_default'].
+#
+# [*volume_format_timeout*]
+#   (optional) Maximum time (in seconds) to wait for a volume format.
+#   Defaults to $facts['os_service_default'].
+#
+# [*mount_options*]
+#   (optional) Options to use when mounting a volume.
+#   Defaults to $facts['os_service_default'].
+#
 #  DEPRECATED PARAMETERS
 #
 # [*default_password_length*]
@@ -108,6 +128,11 @@ class trove::guestagent(
   $container_registry          = $facts['os_service_default'],
   $container_registry_username = $facts['os_service_default'],
   $container_registry_password = $facts['os_service_default'],
+  $num_tries                   = $facts['os_service_default'],
+  $volume_fstype               = $facts['os_service_default'],
+  $format_options              = $facts['os_service_default'],
+  $volume_format_timeout       = $facts['os_service_default'],
+  $mount_options               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $default_password_length     = undef,
   $backup_aes_cbc_key          = undef,
@@ -196,4 +221,11 @@ class trove::guestagent(
     'guest_agent/container_registry_password': value => $container_registry_password, secret => true;
   }
 
+  trove_guestagent_config {
+    'DEFAULT/num_tries':             value => $num_tries;
+    'DEFAULT/volume_fstype':         value => $volume_fstype;
+    'DEFAULT/format_options':        value => $format_options;
+    'DEFAULT/volume_format_timeout': value => $volume_format_timeout;
+    'DEFAULT/mount_options':         value => $mount_options;
+  }
 }
