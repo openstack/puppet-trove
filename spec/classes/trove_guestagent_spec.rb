@@ -85,6 +85,11 @@ describe 'trove::guestagent' do
         is_expected.to contain_trove_guestagent_config('guest_agent/container_registry').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('guest_agent/container_registry_username').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('guest_agent/container_registry_password').with_value('<SERVICE DEFAULT>').with_secret(true)
+        is_expected.to contain_trove_guestagent_config('DEFAULT/num_tries').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/volume_fstype').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/format_options').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/volume_format_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/mount_options').with_value('<SERVICE DEFAULT>')
       end
 
       it 'configures trove-guestagent with default logging parameters' do
