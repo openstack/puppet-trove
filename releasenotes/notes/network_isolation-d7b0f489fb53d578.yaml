@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``trove::network_isolation`` parameter has been added.

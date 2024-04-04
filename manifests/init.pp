@@ -276,6 +276,10 @@
 #   (optional) The network that trove will attach by default.
 #   Defaults to $facts['os_service_default'].
 #
+# [*network_isolation*]
+#   (optional) Whether to plug user defined port to database container.
+#   Defaults to $facts['os_service_default'].
+#
 # [*trove_volume_support*]
 #   (optional) Whether to provision a Cinder volume for datadir.
 #   Defaults to $facts['os_service_default'].
@@ -350,6 +354,7 @@ class trove(
   $trove_endpoint_type                = $facts['os_service_default'],
   $neutron_endpoint_type              = $facts['os_service_default'],
   $management_networks                = $facts['os_service_default'],
+  $network_isolation                  = $facts['os_service_default'],
   $trove_volume_support               = $facts['os_service_default'],
   $volume_rootdisk_support            = $facts['os_service_default'],
   $volume_rootdisk_size               = $facts['os_service_default'],
@@ -414,6 +419,7 @@ class trove(
     'DEFAULT/network_label_regex': value => '.*';
     'DEFAULT/network_driver':      value => 'trove.network.neutron.NeutronDriver';
     'DEFAULT/management_networks': value => join(any2array($management_networks), ',');
+    'network/network_isolation':   value => $network_isolation;
   }
 
   # volume
