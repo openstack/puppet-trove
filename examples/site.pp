@@ -21,7 +21,7 @@ class { 'trove':
   default_transport_url => 'rabbit://trove:an_even_bigger_secret@10.0.0.1:5672/trove',
 }
 
-class { 'trove::api::service_credentials':
+class { 'trove::service_credentials':
   password => 'verysecrete',
 }
 

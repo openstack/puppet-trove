@@ -32,9 +32,6 @@ describe 'trove::api' do
       let :pre_condition do
         "class { 'trove':
          }
-         class { 'trove::api::service_credentials':
-           password => 'verysectrete',
-         }
          class { 'trove::keystone::authtoken':
            password => 'a_big_secret',
          }"
@@ -45,7 +42,6 @@ describe 'trove::api' do
         is_expected.to contain_class('trove::db')
         is_expected.to contain_class('trove::db::sync')
         is_expected.to contain_class('trove::params')
-        is_expected.to contain_class('trove::api::service_credentials')
       end
 
       it 'installs trove-api package and service' do
