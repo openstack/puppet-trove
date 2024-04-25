@@ -291,13 +291,6 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
-# DEPRECATED PARAMETERS
-#
-# [*single_tenant_mode*]
-#   (optional) If set to true, will configure Trove to work in single
-#   tenant mode.
-#   Defaults to undef.
-#
 class trove(
   $default_transport_url              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
@@ -360,17 +353,11 @@ class trove(
   $volume_rootdisk_support            = $facts['os_service_default'],
   $volume_rootdisk_size               = $facts['os_service_default'],
   $package_ensure                     = 'present',
-  # DEPRECATED PARAMETERS
-  $single_tenant_mode                 = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
-
-  if $single_tenant_mode != undef {
-    warning('The single_tenant_mode parameter is deprecated and has no effect.')
-  }
 
   package { 'trove':
     ensure => $package_ensure,

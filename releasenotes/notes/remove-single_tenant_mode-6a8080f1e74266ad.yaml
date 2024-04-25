@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated ``trove::single_tenant_mode`` parameter has been removed.
