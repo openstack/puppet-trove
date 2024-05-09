@@ -58,24 +58,6 @@ describe 'trove::guestagent' do
           :kombu_ssl_version       => '<SERVICE DEFAULT>',
         )
 
-        is_expected.to contain_oslo__messaging__amqp('trove_guestagent_config').with(
-          :server_request_prefix => '<SERVICE DEFAULT>',
-          :broadcast_prefix      => '<SERVICE DEFAULT>',
-          :group_request_prefix  => '<SERVICE DEFAULT>',
-          :container_name        => '<SERVICE DEFAULT>',
-          :idle_timeout          => '<SERVICE DEFAULT>',
-          :trace                 => '<SERVICE DEFAULT>',
-          :ssl_ca_file           => '<SERVICE DEFAULT>',
-          :ssl_cert_file         => '<SERVICE DEFAULT>',
-          :ssl_key_file          => '<SERVICE DEFAULT>',
-          :ssl_key_password      => '<SERVICE DEFAULT>',
-          :sasl_mechanisms       => '<SERVICE DEFAULT>',
-          :sasl_config_dir       => '<SERVICE DEFAULT>',
-          :sasl_config_name      => '<SERVICE DEFAULT>',
-          :username              => '<SERVICE DEFAULT>',
-          :password              => '<SERVICE DEFAULT>',
-        )
-
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant').with_value('<SERVICE DEFAULT>')
