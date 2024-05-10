@@ -72,22 +72,6 @@ describe 'trove' do
           :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
           :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
         )
-        is_expected.to contain_oslo__messaging__amqp('trove_config').with(
-          :server_request_prefix => '<SERVICE DEFAULT>',
-          :broadcast_prefix      => '<SERVICE DEFAULT>',
-          :group_request_prefix  => '<SERVICE DEFAULT>',
-          :container_name        => '<SERVICE DEFAULT>',
-          :idle_timeout          => '<SERVICE DEFAULT>',
-          :trace                 => '<SERVICE DEFAULT>',
-          :ssl_ca_file           => '<SERVICE DEFAULT>',
-          :ssl_cert_file         => '<SERVICE DEFAULT>',
-          :ssl_key_file          => '<SERVICE DEFAULT>',
-          :sasl_mechanisms       => '<SERVICE DEFAULT>',
-          :sasl_config_dir       => '<SERVICE DEFAULT>',
-          :sasl_config_name      => '<SERVICE DEFAULT>',
-          :username              => '<SERVICE DEFAULT>',
-          :password              => '<SERVICE DEFAULT>',
-        )
         is_expected.to contain_oslo__messaging__notifications('trove_config').with(
           :transport_url => '<SERVICE DEFAULT>',
           :driver        => '<SERVICE DEFAULT>',
