@@ -169,16 +169,23 @@ class trove::guestagent(
   }
 
   oslo::messaging::rabbit {'trove_guestagent_config':
-    rabbit_use_ssl          => $rabbit_use_ssl,
-    rabbit_ha_queues        => $::trove::rabbit_ha_queues,
-    heartbeat_in_pthread    => $::trove::rabbit_heartbeat_in_pthread,
-    kombu_reconnect_delay   => $::trove::kombu_reconnect_delay,
-    kombu_failover_strategy => $::trove::kombu_failover_strategy,
-    amqp_durable_queues     => $::trove::amqp_durable_queues,
-    kombu_ssl_ca_certs      => $::trove::kombu_ssl_ca_certs,
-    kombu_ssl_certfile      => $::trove::kombu_ssl_certfile,
-    kombu_ssl_keyfile       => $::trove::kombu_ssl_keyfile,
-    kombu_ssl_version       => $::trove::kombu_ssl_version
+    rabbit_ha_queues                => $::trove::rabbit_ha_queues,
+    heartbeat_timeout_threshold     => $::trove::rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate                  => $::trove::rabbit_heartbeat_rate,
+    heartbeat_in_pthread            => $::trove::rabbit_heartbeat_in_pthread,
+    rabbit_use_ssl                  => $rabbit_use_ssl,
+    kombu_reconnect_delay           => $::trove::kombu_reconnect_delay,
+    kombu_failover_strategy         => $::trove::kombu_failover_strategy,
+    amqp_durable_queues             => $::trove::amqp_durable_queues,
+    kombu_ssl_ca_certs              => $::trove::kombu_ssl_ca_certs,
+    kombu_ssl_certfile              => $::trove::kombu_ssl_certfile,
+    kombu_ssl_keyfile               => $::trove::kombu_ssl_keyfile,
+    kombu_ssl_version               => $::trove::kombu_ssl_version,
+    rabbit_quorum_queue             => $::trove::rabbit_quorum_queue,
+    rabbit_transient_quorum_queue   => $::trove::rabbit_transient_quorum_queue,
+    rabbit_quorum_delivery_limit    => $::trove::rabbit_quorum_delivery_limit,
+    rabbit_quorum_max_memory_length => $::trove::rabbit_quorum_max_memory_length,
+    rabbit_quorum_max_memory_bytes  => $::trove::rabbit_quorum_max_memory_bytes,
   }
 
   oslo::log { 'trove_guestagent_config':
