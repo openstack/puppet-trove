@@ -46,16 +46,23 @@ describe 'trove::guestagent' do
         )
  
         is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
-          :rabbit_use_ssl          => '<SERVICE DEFAULT>',
-          :rabbit_ha_queues        => '<SERVICE DEFAULT>',
-          :heartbeat_in_pthread    => '<SERVICE DEFAULT>',
-          :kombu_reconnect_delay   => '<SERVICE DEFAULT>',
-          :kombu_failover_strategy => '<SERVICE DEFAULT>',
-          :amqp_durable_queues     => '<SERVICE DEFAULT>',
-          :kombu_ssl_ca_certs      => '<SERVICE DEFAULT>',
-          :kombu_ssl_certfile      => '<SERVICE DEFAULT>',
-          :kombu_ssl_keyfile       => '<SERVICE DEFAULT>',
-          :kombu_ssl_version       => '<SERVICE DEFAULT>',
+          :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+          :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+          :heartbeat_rate                  => '<SERVICE DEFAULT>',
+          :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+          :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+          :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+          :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+          :amqp_durable_queues             => '<SERVICE DEFAULT>',
+          :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+          :kombu_ssl_version               => '<SERVICE DEFAULT>',
+          :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+          :rabbit_transient_quorum_queue   => '<SERVICE DEFAULT>',
+          :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+          :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+          :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
         )
 
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
