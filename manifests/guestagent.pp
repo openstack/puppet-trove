@@ -173,6 +173,7 @@ class trove::guestagent(
     heartbeat_timeout_threshold     => $::trove::rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                  => $::trove::rabbit_heartbeat_rate,
     heartbeat_in_pthread            => $::trove::rabbit_heartbeat_in_pthread,
+    rabbit_qos_prefetch_count       => $::trove::rabbit_qos_prefetch_count,
     rabbit_use_ssl                  => $rabbit_use_ssl,
     kombu_reconnect_delay           => $::trove::kombu_reconnect_delay,
     kombu_failover_strategy         => $::trove::kombu_failover_strategy,
