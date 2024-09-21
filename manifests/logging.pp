@@ -38,10 +38,6 @@
 #   If set to $facts['os_service_default'], it will not log to any file.
 #   Defaults to $facts['os_service_default']
 #
-# [*watch_log_file*]
-#   (Optional) Uses logging handler designed to watch file system (boolean value).
-#   Defaults to $facts['os_service_default']
-#
 # [*logging_context_format_string*]
 #   (Optional) Format string to use for log messages with context.
 #   Defaults to $facts['os_service_default']
@@ -102,6 +98,12 @@
 #   Defaults to $facts['os_service_default']
 #   Example: 'Y-%m-%d %H:%M:%S'
 #
+# DEPRECATED PARAMETERS
+#
+# [*watch_log_file*]
+#   (Optional) Uses logging handler designed to watch file system (boolean value).
+#   Defaults to undef
+#
 class trove::logging(
   $use_syslog                    = $facts['os_service_default'],
   $use_json                      = $facts['os_service_default'],
@@ -110,7 +112,6 @@ class trove::logging(
   $log_facility                  = $facts['os_service_default'],
   $log_dir                       = '/var/log/trove',
   $log_file                      = $facts['os_service_default'],
-  $watch_log_file                = $facts['os_service_default'],
   $debug                         = $facts['os_service_default'],
   $logging_context_format_string = $facts['os_service_default'],
   $logging_default_format_string = $facts['os_service_default'],
@@ -123,6 +124,8 @@ class trove::logging(
   $instance_format               = $facts['os_service_default'],
   $instance_uuid_format          = $facts['os_service_default'],
   $log_date_format               = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $watch_log_file                = undef,
 ) {
 
   include trove::deps
