@@ -187,6 +187,7 @@ class trove::guestagent(
     rabbit_quorum_delivery_limit    => $::trove::rabbit_quorum_delivery_limit,
     rabbit_quorum_max_memory_length => $::trove::rabbit_quorum_max_memory_length,
     rabbit_quorum_max_memory_bytes  => $::trove::rabbit_quorum_max_memory_bytes,
+    enable_cancel_on_failover       => $::trove::rabbit_enable_cancel_on_failover,
   }
 
   oslo::log { 'trove_guestagent_config':
