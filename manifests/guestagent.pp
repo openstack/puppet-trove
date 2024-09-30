@@ -162,12 +162,9 @@ class trove::guestagent(
     rpc_response_timeout => $::trove::rpc_response_timeout,
   }
 
-  oslo::messaging::notifications { 'trove_guestagent_config':
-    transport_url => $::trove::notification_transport_url,
-    driver        => $::trove::notification_driver,
-    topics        => $::trove::notification_topics,
-    retry         => $::trove::notification_retry,
-  }
+  # TODO(tkajinam): This is kept to purge unused options. Remove this after
+  #                 2025.1 release
+  oslo::messaging::notifications { 'trove_guestagent_config': }
 
   oslo::messaging::rabbit {'trove_guestagent_config':
     rabbit_ha_queues                => $::trove::rabbit_ha_queues,

@@ -39,13 +39,6 @@ describe 'trove::guestagent' do
           :rpc_response_timeout => '<SERVICE DEFAULT>',
         )
 
-        is_expected.to contain_oslo__messaging__notifications('trove_guestagent_config').with(
-          :transport_url => '<SERVICE DEFAULT>',
-          :driver        => '<SERVICE DEFAULT>',
-          :topics        => '<SERVICE DEFAULT>',
-          :retry         => '<SERVICE DEFAULT>',
-        )
- 
         is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
           :rabbit_ha_queues                => '<SERVICE DEFAULT>',
           :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
@@ -229,8 +222,7 @@ describe 'trove::guestagent' do
     context 'with transport_url entries' do
       let :pre_condition do
         "class { 'trove':
-           default_transport_url      => 'rabbit://rabbit_user:password@localhost:5673',
-           notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673'
+           default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
          }
          class { 'trove::guestagent::service_credentials':
            password => 'verysectrete',
@@ -239,9 +231,6 @@ describe 'trove::guestagent' do
 
       it do
         is_expected.to contain_oslo__messaging__default('trove_guestagent_config').with(
-          :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-        )
-        is_expected.to contain_oslo__messaging__notifications('trove_guestagent_config').with(
           :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         )
       end
