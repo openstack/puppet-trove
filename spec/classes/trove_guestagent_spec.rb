@@ -42,7 +42,8 @@ describe 'trove::guestagent' do
         is_expected.to contain_oslo__messaging__notifications('trove_guestagent_config').with(
           :transport_url => '<SERVICE DEFAULT>',
           :driver        => '<SERVICE DEFAULT>',
-          :topics        => '<SERVICE DEFAULT>'
+          :topics        => '<SERVICE DEFAULT>',
+          :retry         => '<SERVICE DEFAULT>',
         )
  
         is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(

@@ -165,7 +165,8 @@ class trove::guestagent(
   oslo::messaging::notifications { 'trove_guestagent_config':
     transport_url => $::trove::notification_transport_url,
     driver        => $::trove::notification_driver,
-    topics        => $::trove::notification_topics
+    topics        => $::trove::notification_topics,
+    retry         => $::trove::notification_retry,
   }
 
   oslo::messaging::rabbit {'trove_guestagent_config':

@@ -77,7 +77,8 @@ describe 'trove' do
         is_expected.to contain_oslo__messaging__notifications('trove_config').with(
           :transport_url => '<SERVICE DEFAULT>',
           :driver        => '<SERVICE DEFAULT>',
-          :topics        => '<SERVICE DEFAULT>'
+          :topics        => '<SERVICE DEFAULT>',
+          :retry         => '<SERVICE DEFAULT>',
         )
       end
 
