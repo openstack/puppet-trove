@@ -52,10 +52,6 @@
 #   (optional) Connect over SSL for RabbitMQ
 #   Defaults to $facts['os_service_default']
 #
-# [*rabbit_notification_topic*]
-#   (optional) Notification topic.
-#   Defaults to $facts['os_service_default']
-#
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
 #   Defaults to $facts['os_service_default']
@@ -245,6 +241,12 @@
 #   (optional) The state of the package.
 #   Defaults to 'present'
 #
+# DEPRECATED PARAMETERS
+#
+# [*rabbit_notification_topic*]
+#   (optional) Notification topic.
+#   Defaults to undef
+#
 class trove(
   $default_transport_url              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
@@ -253,7 +255,6 @@ class trove(
   $notification_retry                 = $facts['os_service_default'],
   $rabbit_use_ssl                     = $facts['os_service_default'],
   $rabbit_ha_queues                   = $facts['os_service_default'],
-  $rabbit_notification_topic          = $facts['os_service_default'],
   $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
   $rabbit_heartbeat_rate              = $facts['os_service_default'],
   $rabbit_heartbeat_in_pthread        = $facts['os_service_default'],
@@ -295,11 +296,17 @@ class trove(
   $volume_rootdisk_support            = $facts['os_service_default'],
   $volume_rootdisk_size               = $facts['os_service_default'],
   $package_ensure                     = 'present',
+  # DEPRECATED PARAMETERS
+  $rabbit_notification_topic          = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
+
+  if $rabbit_notification_topic != undef {
+    warning('The rabbit_notification_topic parameter is deprecated and has no effect.')
+  }
 
   package { 'trove':
     ensure => $package_ensure,

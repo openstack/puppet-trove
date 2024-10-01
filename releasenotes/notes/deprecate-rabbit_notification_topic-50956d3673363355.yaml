@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``trove::rabbit_notification_topic`` parameter has been deperecated,
+    because it has had no effect.
