@@ -141,10 +141,10 @@ class trove::api(
     include trove::keystone::authtoken
   }
 
-  trove_config {
-    'ssl/cert_file': value => $cert_file;
-    'ssl/key_file':  value => $key_file;
-    'ssl/ca_file':   value => $ca_file;
+  oslo::service::ssl { 'trove_config':
+    cert_file => $cert_file,
+    key_file  => $key_file,
+    ca_file   => $ca_file,
   }
 
   # rate limits

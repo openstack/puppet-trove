@@ -69,24 +69,28 @@ describe 'trove::api' do
         is_expected.to contain_trove_config('DEFAULT/http_delete_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_config('DEFAULT/taskmanager_queue').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('ssl/cert_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('ssl/key_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_config('ssl/ca_file').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__service__ssl('trove_config').with(
+          :cert_file => '<SERVICE DEFAULT>',
+          :key_file  => '<SERVICE DEFAULT>',
+          :ca_file   => '<SERVICE DEFAULT>'
+        )
       end
 
       context 'with SSL enabled on API' do
         before :each do
           params.merge!(
-            :cert_file => 'cert',
-            :key_file  => 'key',
-            :ca_file   => 'ca',
+            :cert_file => '/path/to/cert',
+            :key_file  => '/path/to/key',
+            :ca_file   => '/path/to/ca',
           )
         end
 
         it 'contains ssl parameters' do
-          is_expected.to contain_trove_config('ssl/cert_file').with_value('cert')
-          is_expected.to contain_trove_config('ssl/key_file').with_value('key')
-          is_expected.to contain_trove_config('ssl/ca_file').with_value('ca')
+          is_expected.to contain_oslo__service__ssl('trove_config').with(
+            :cert_file => '/path/to/cert',
+            :key_file  => '/path/to/key',
+            :ca_file   => '/path/to/ca'
+          )
         end
       end
 
