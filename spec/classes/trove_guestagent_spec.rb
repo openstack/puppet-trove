@@ -63,6 +63,7 @@ describe 'trove::guestagent' do
 
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/swift_endpoint_type').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/root_grant_option').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('DEFAULT/default_password_length').with_value('<SERVICE DEFAULT>')
@@ -139,14 +140,16 @@ describe 'trove::guestagent' do
 
       let :params do
         {
-          :swift_url          => 'http://10.0.0.1:8080/v1/AUTH_',
-          :swift_service_type => 'object-store',
-          :rabbit_use_ssl     => 'true'
+          :swift_url           => 'http://10.0.0.1:8080/v1/AUTH_',
+          :swift_service_type  => 'object-store',
+          :swift_endpoint_type => 'publicURL',
+          :rabbit_use_ssl      => 'true'
         }
       end
       it 'configures trove-guestagent with custom parameters' do
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_url').with_value('http://10.0.0.1:8080/v1/AUTH_')
         is_expected.to contain_trove_guestagent_config('DEFAULT/swift_service_type').with_value('object-store')
+        is_expected.to contain_trove_guestagent_config('DEFAULT/swift_endpoint_type').with_value('publicURL')
         is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
           :rabbit_use_ssl => 'true',
         )
