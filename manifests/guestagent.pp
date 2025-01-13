@@ -47,6 +47,10 @@
 #   (optional) Service type to use when searching catalog
 #   Defaults to $facts['os_service_default'].
 #
+# [*swift_endpoint_type*]
+#   (optional) Service endpoint type to use when searching catalog.
+#   Defaults to $facts['os_service_default']
+#
 # [*default_transport_url*]
 #   (optional) A URL representing the messaging driver to use and its full
 #   configuration. Transport URLs take the form:
@@ -121,6 +125,7 @@ class trove::guestagent(
   $log_facility                = $facts['os_service_default'],
   $swift_url                   = $facts['os_service_default'],
   $swift_service_type          = $facts['os_service_default'],
+  $swift_endpoint_type         = $facts['os_service_default'],
   $default_transport_url       = $::trove::default_transport_url,
   $rabbit_use_ssl              = $::trove::rabbit_use_ssl,
   $root_grant                  = $facts['os_service_default'],
@@ -150,6 +155,7 @@ class trove::guestagent(
   trove_guestagent_config {
     'DEFAULT/swift_url':               value => $swift_url;
     'DEFAULT/swift_service_type':      value => $swift_service_type;
+    'DEFAULT/swift_endpoint_type':     value => $swift_endpoint_type;
     'DEFAULT/root_grant':              value => $root_grant;
     'DEFAULT/root_grant_option':       value => $root_grant_option;
     'DEFAULT/default_password_length': value => pick($default_password_length, $facts['os_service_default']);

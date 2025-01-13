@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The ``trove::guestagent::swift_endpoint_type`` parameter has been added.
