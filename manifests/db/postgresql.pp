@@ -34,7 +34,7 @@ class trove::db::postgresql(
 
   include trove::deps
 
-  ::openstacklib::db::postgresql { 'trove':
+  openstacklib::db::postgresql { 'trove':
     password   => $password,
     dbname     => $dbname,
     user       => $user,

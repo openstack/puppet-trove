@@ -61,7 +61,7 @@ class trove::db::mysql(
 
   include trove::deps
 
-  ::openstacklib::db::mysql { 'trove':
+  openstacklib::db::mysql { 'trove':
     user          => $user,
     password      => $password,
     dbname        => $dbname,
