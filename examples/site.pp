@@ -3,25 +3,28 @@
 class { 'trove::client': }
 
 class { 'trove::keystone::auth':
-  admin_address    => '10.0.0.1',
-  internal_address => '10.0.0.1',
-  public_address   => '10.0.0.1',
-  password         => 'verysecrete',
-  region           => 'OpenStack'
+  public_url   => 'http://localhost:8779/v1.0/%(tenant_id)s',
+  internal_url => 'http://localhost:8779/v1.0/%(tenant_id)s',
+  admin_url    => 'http://localhost:8779/v1.0/%(tenant_id)s',
+  password     => 'verysecrete',
 }
 
 class { 'trove::db::mysql':
   password      => 'dbpass',
-  host          => '10.0.0.1',
-  allowed_hosts => ['10.0.0.1']
+  host          => 'localhost',
+  allowed_hosts => ['localhost']
+}
+
+class { 'trove::db':
+  database_connection => 'mysql://trove:dbpass@localhost/trove?charset=utf8',
 }
 
 class { 'trove':
-  database_connection   => 'mysql://trove:secrete@10.0.0.1/trove?charset=utf8',
-  default_transport_url => 'rabbit://trove:an_even_bigger_secret@10.0.0.1:5672/trove',
+  default_transport_url => 'rabbit://trove:an_even_bigger_secret@localhost:5672/trove',
 }
 
 class { 'trove::service_credentials':
+  auth_url => 'https://identity.openstack.org:5000/v3',
   password => 'verysecrete',
 }
 
@@ -34,19 +37,19 @@ class { 'trove::task_manager::service_credentials':
 }
 
 class { 'trove::guestagent::service_credentials':
+  auth_url => 'https://identity.openstack.org:5000/v3',
+  password => 'verysecrete',
+}
+
+class { 'trove::keystone::authtoken':
+  auth_url => 'https://identity.openstack.org:5000/v3',
   password => 'verysecrete',
 }
 
 class { 'trove::api':
-  bind_host         => '10.0.0.1',
-  auth_url          => 'https://identity.openstack.org:5000/v3',
-  keystone_password => 'verysecrete'
+  bind_host => '10.0.0.1',
 }
 
-class { 'trove::conductor':
-  auth_url          => 'https://identity.openstack.org:5000/v3'
-}
+class { 'trove::conductor': }
 
-class { 'trove::taskmanager':
-  auth_url          => 'https://identity.openstack.org:5000/v3'
-}
+class { 'trove::taskmanager': }
