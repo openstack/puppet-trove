@@ -245,10 +245,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*rabbit_notification_topic*]
-#   (optional) Notification topic.
-#   Defaults to undef
-#
 # [*rabbit_heartbeat_in_pthread*]
 #   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
 #   through a native python thread. By default if this
@@ -310,17 +306,12 @@ class trove(
   $volume_rootdisk_size               = $facts['os_service_default'],
   $package_ensure                     = 'present',
   # DEPRECATED PARAMETERS
-  $rabbit_notification_topic          = undef,
   $rabbit_heartbeat_in_pthread        = undef,
 ) {
 
   include trove::deps
   include trove::policy
   include trove::params
-
-  if $rabbit_notification_topic != undef {
-    warning('The rabbit_notification_topic parameter is deprecated and has no effect.')
-  }
 
   package { 'trove':
     ensure => $package_ensure,

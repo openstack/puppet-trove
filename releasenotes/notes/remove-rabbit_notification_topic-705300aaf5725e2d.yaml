@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``trove::rabbit_notification_topic`` parameter has been removed.
