@@ -168,10 +168,6 @@ class trove::guestagent(
     rpc_response_timeout => $::trove::rpc_response_timeout,
   }
 
-  # TODO(tkajinam): This is kept to purge unused options. Remove this after
-  #                 2025.1 release
-  oslo::messaging::notifications { 'trove_guestagent_config': }
-
   oslo::messaging::rabbit {'trove_guestagent_config':
     rabbit_ha_queues                => $::trove::rabbit_ha_queues,
     heartbeat_timeout_threshold     => $::trove::rabbit_heartbeat_timeout_threshold,
