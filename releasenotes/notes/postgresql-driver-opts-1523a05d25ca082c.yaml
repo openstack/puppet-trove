@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``trove::guestagent::postgresql`` class has been added.
