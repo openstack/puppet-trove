@@ -41,14 +41,16 @@
 #   (optional) List of Guest Logs to expose for publishing.
 #   Defaults to $facts['os_service_default']
 #
-# [*guest_log_long_query_time*]
-#   (optional) The time in milliseconds that a statement must take in in order
-#   to be logged in the slow_query log.
-#   Defaults to $facts['os_service_default']
-#
 # [*default_password_length*]
 #   (optional) Character length of generated passwords.
 #   Defaults to $facts['os_service_default']
+#
+# DEPRECATED PARAMETERS
+#
+# [*guest_log_long_query_time*]
+#   (optional) The time in milliseconds that a statement must take in in order
+#   to be logged in the slow_query log.
+#   Defaults to undef
 #
 class trove::guestagent::mysql (
   $docker_image              = $facts['os_service_default'],
@@ -60,11 +62,16 @@ class trove::guestagent::mysql (
   $ignore_users              = $facts['os_service_default'],
   $ignore_dbs                = $facts['os_service_default'],
   $guest_log_exposed_logs    = $facts['os_service_default'],
-  $guest_log_long_query_time = $facts['os_service_default'],
   $default_password_length   = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $guest_log_long_query_time = undef,
 ) {
 
   include trove::deps
+
+  if $guest_log_long_query_time != undef {
+    warning('The guest_log_long_query_time parameter is deprecated.')
+  }
 
   trove_guestagent_config {
     'mysql/docker_image':              value => $docker_image;
@@ -76,7 +83,7 @@ class trove::guestagent::mysql (
     'mysql/ignore_users':              value => join(any2array($ignore_users), ',');
     'mysql/ignore_dbs':                value => join(any2array($ignore_dbs), ',');
     'mysql/guest_log_exposed_logs':    value => join(any2array($guest_log_exposed_logs), ',');
-    'mysql/guest_log_long_query_time': value => $guest_log_long_query_time;
+    'mysql/guest_log_long_query_time': value => pick($guest_log_long_query_time, $facts['os_service_default']);
     'mysql/default_password_length':   value => $default_password_length;
   }
 
