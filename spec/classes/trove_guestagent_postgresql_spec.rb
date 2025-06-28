@@ -8,7 +8,6 @@ describe 'trove::guestagent::postgresql' do
       it 'configures postgresql options with defaultss' do
         is_expected.to contain_trove_guestagent_config('postgresql/docker_image').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('postgresql/backup_docker_image').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_trove_guestagent_config('postgresql/icmp').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('postgresql/root_on_create').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('postgresql/usage_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_trove_guestagent_config('postgresql/volume_support').with_value('<SERVICE DEFAULT>')
@@ -24,7 +23,6 @@ describe 'trove::guestagent::postgresql' do
         {
           :docker_image              => 'postgresql',
           :backup_docker_image       => 'openstacktrove/db-backup-postgresql:1.1.0',
-          :icmp                      => false,
           :root_on_create            => false,
           :usage_timeout             => 400,
           :volume_support            => true,
@@ -38,7 +36,6 @@ describe 'trove::guestagent::postgresql' do
       it 'configures postgresql options with given values' do
         is_expected.to contain_trove_guestagent_config('postgresql/docker_image').with_value('postgresql')
         is_expected.to contain_trove_guestagent_config('postgresql/backup_docker_image').with_value('openstacktrove/db-backup-postgresql:1.1.0')
-        is_expected.to contain_trove_guestagent_config('postgresql/icmp').with_value(false)
         is_expected.to contain_trove_guestagent_config('postgresql/root_on_create').with_value(false)
         is_expected.to contain_trove_guestagent_config('postgresql/usage_timeout').with_value(400)
         is_expected.to contain_trove_guestagent_config('postgresql/volume_support').with_value(true)

@@ -12,10 +12,6 @@
 #   (optional) The docker image used for backup and restore.
 #   Defaults to $facts['os_service_default']
 #
-# [*icmp*]
-#   (optional) Whether to permit ICMP.
-#   Defaults to $facts['os_service_default'].
-#
 # [*root_on_create*]
 #   (optional) Enable the automatic creation of the root user for the service
 #   during instance-create.
@@ -52,10 +48,13 @@
 #   to be logged in the slow_query log.
 #   Defaults to undef
 #
+# [*icmp*]
+#   (optional) Whether to permit ICMP.
+#   Defaults to undef
+#
 class trove::guestagent::mysql (
   $docker_image              = $facts['os_service_default'],
   $backup_docker_image       = $facts['os_service_default'],
-  $icmp                      = $facts['os_service_default'],
   $root_on_create            = $facts['os_service_default'],
   $usage_timeout             = $facts['os_service_default'],
   $volume_support            = $facts['os_service_default'],
@@ -65,6 +64,7 @@ class trove::guestagent::mysql (
   $default_password_length   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $guest_log_long_query_time = undef,
+  $icmp                      = undef,
 ) {
 
   include trove::deps
@@ -72,11 +72,14 @@ class trove::guestagent::mysql (
   if $guest_log_long_query_time != undef {
     warning('The guest_log_long_query_time parameter is deprecated.')
   }
+  if $icmp != undef {
+    warning('The icmp parameter is deprecated.')
+  }
 
   trove_guestagent_config {
     'mysql/docker_image':              value => $docker_image;
     'mysql/backup_docker_image':       value => $backup_docker_image;
-    'mysql/icmp':                      value => $icmp;
+    'mysql/icmp':                      value => pick($icmp, $facts['os_service_default']);
     'mysql/root_on_create':            value => $root_on_create;
     'mysql/usage_timeout':             value => $usage_timeout;
     'mysql/volume_support':            value => $volume_support;

@@ -12,10 +12,6 @@
 #   (optional) The docker image used for backup and restore.
 #   Defaults to $facts['os_service_default']
 #
-# [*icmp*]
-#   (optional) Whether to permit ICMP.
-#   Defaults to $facts['os_service_default'].
-#
 # [*root_on_create*]
 #   (optional) Enable the automatic creation of the root user for the service
 #   during instance-create.
@@ -48,7 +44,6 @@
 class trove::guestagent::postgresql (
   $docker_image            = $facts['os_service_default'],
   $backup_docker_image     = $facts['os_service_default'],
-  $icmp                    = $facts['os_service_default'],
   $root_on_create          = $facts['os_service_default'],
   $usage_timeout           = $facts['os_service_default'],
   $volume_support          = $facts['os_service_default'],
@@ -63,7 +58,6 @@ class trove::guestagent::postgresql (
   trove_guestagent_config {
     'postgresql/docker_image':            value => $docker_image;
     'postgresql/backup_docker_image':     value => $backup_docker_image;
-    'postgresql/icmp':                    value => $icmp;
     'postgresql/root_on_create':          value => $root_on_create;
     'postgresql/usage_timeout':           value => $usage_timeout;
     'postgresql/volume_support':          value => $volume_support;

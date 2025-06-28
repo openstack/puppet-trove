@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The following parameters have been deprecated and will be removed in
+    a future release.
+
+    - ``trove::guestagent::mariadb::icmp``
+    - ``trove::guestagent::mysql::icmp``
