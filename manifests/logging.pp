@@ -141,6 +141,6 @@ class trove::logging(
     fatal_deprecations            => $fatal_deprecations,
     instance_format               => $instance_format,
     instance_uuid_format          => $instance_uuid_format,
-    log_date_format               => $log_date_format
+    log_date_format               => $log_date_format,
   }
 }

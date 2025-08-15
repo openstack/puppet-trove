@@ -12,7 +12,7 @@ class { 'trove::keystone::auth':
 class { 'trove::db::mysql':
   password      => 'dbpass',
   host          => 'localhost',
-  allowed_hosts => ['localhost']
+  allowed_hosts => ['localhost'],
 }
 
 class { 'trove::db':

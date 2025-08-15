@@ -325,7 +325,7 @@ class trove(
 
   package { 'trove':
     ensure => $package_ensure,
-    name   => $::trove::params::common_package_name,
+    name   => $trove::params::common_package_name,
     tag    => ['openstack', 'trove-package'],
   }
 

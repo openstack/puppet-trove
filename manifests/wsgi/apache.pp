@@ -105,11 +105,11 @@
 #
 # [*wsgi_script_dir*]
 #   (Optional) The directory to install the WSGI script for apache to read.
-#   Defaults to $::trove::params::trove_wsgi_script_path
+#   Defaults to $trove::params::trove_wsgi_script_path
 #
 # [*wsgi_script_source*]
 #   (Optional) The location of the trove WSGI script
-#   Defaults to $::trove::params::trove_wsgi_script_source
+#   Defaults to $trove::params::trove_wsgi_script_source
 #
 # [*headers*]
 #   (Optional) Headers for the vhost.
@@ -159,8 +159,8 @@ class trove::wsgi::apache (
   $error_log_pipe              = undef,
   $error_log_syslog            = undef,
   $custom_wsgi_process_options = {},
-  $wsgi_script_dir             = $::trove::params::trove_wsgi_script_dir,
-  $wsgi_script_source          = $::trove::params::trove_wsgi_script_source,
+  $wsgi_script_dir             = $trove::params::trove_wsgi_script_dir,
+  $wsgi_script_source          = $trove::params::trove_wsgi_script_source,
   $headers                     = undef,
   $request_headers             = undef,
   $vhost_custom_fragment       = undef,
@@ -173,7 +173,7 @@ class trove::wsgi::apache (
   openstacklib::wsgi::apache { 'trove_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => $::trove::params::group,
+    group                       => $trove::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
@@ -186,7 +186,7 @@ class trove::wsgi::apache (
     ssl_crl_path                => $ssl_crl_path,
     ssl_key                     => $ssl_key,
     threads                     => $threads,
-    user                        => $::trove::params::user,
+    user                        => $trove::params::user,
     vhost_custom_fragment       => $vhost_custom_fragment,
     workers                     => $workers,
     wsgi_daemon_process         => 'trove',

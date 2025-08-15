@@ -68,8 +68,8 @@ class trove::taskmanager(
   trove::generic_service { 'taskmanager':
     enabled        => $enabled,
     manage_service => $manage_service,
-    package_name   => $::trove::params::taskmanager_package_name,
-    service_name   => $::trove::params::taskmanager_service_name,
+    package_name   => $trove::params::taskmanager_package_name,
+    service_name   => $trove::params::taskmanager_service_name,
     package_ensure => $package_ensure,
   }
 

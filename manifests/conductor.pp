@@ -59,8 +59,8 @@ class trove::conductor(
   trove::generic_service { 'conductor':
     enabled        => $enabled,
     manage_service => $manage_service,
-    package_name   => $::trove::params::conductor_package_name,
-    service_name   => $::trove::params::conductor_service_name,
+    package_name   => $trove::params::conductor_package_name,
+    service_name   => $trove::params::conductor_service_name,
     package_ensure => $package_ensure,
   }
 
