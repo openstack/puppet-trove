@@ -32,7 +32,7 @@
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'trove::wsgi::apache'...}
 #   to make trove-api be a web app using apache mod_wsgi.
-#   Defaults to '$::trove::params::api_service'
+#   Defaults to '$trove::params::api_service'
 #
 # [*package_ensure*]
 #   (optional) Whether the trove api package will be installed
@@ -105,7 +105,7 @@
 #
 class trove::api(
   Boolean $manage_service = true,
-  $service_name           = $::trove::params::api_service_name,
+  $service_name           = $trove::params::api_service_name,
   $package_ensure         = 'present',
   $bind_host              = $facts['os_service_default'],
   $bind_port              = $facts['os_service_default'],
@@ -164,12 +164,12 @@ class trove::api(
     'DEFAULT/taskmanager_queue': value => $taskmanager_queue;
   }
 
-  if $service_name == $::trove::params::api_service_name {
+  if $service_name == $trove::params::api_service_name {
     trove::generic_service { 'api':
       enabled        => $enabled,
       manage_service => $manage_service,
       package_ensure => $package_ensure,
-      package_name   => $::trove::params::api_package_name,
+      package_name   => $trove::params::api_package_name,
       service_name   => $service_name,
     }
     if $manage_service {
@@ -180,8 +180,8 @@ class trove::api(
       enabled        => false,
       manage_service => $manage_service,
       package_ensure => $package_ensure,
-      package_name   => $::trove::params::api_package_name,
-      service_name   => $::trove::params::api_service_name,
+      package_name   => $trove::params::api_package_name,
+      service_name   => $trove::params::api_service_name,
     }
     if $manage_service {
       Service<| title == 'httpd' |> { tag +> 'trove-service' }

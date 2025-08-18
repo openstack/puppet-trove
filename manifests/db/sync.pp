@@ -30,7 +30,7 @@ class trove::db::sync(
 
   exec { 'trove-manage db_sync':
     path        => '/usr/bin',
-    user        => $::trove::params::user,
+    user        => $trove::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

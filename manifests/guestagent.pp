@@ -55,7 +55,7 @@
 #   (optional) A URL representing the messaging driver to use and its full
 #   configuration. Transport URLs take the form:
 #     transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#   Defaults to $::trove::default_transport_url
+#   Defaults to $trove::default_transport_url
 #
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ
@@ -126,8 +126,8 @@ class trove::guestagent(
   $swift_url                   = $facts['os_service_default'],
   $swift_service_type          = $facts['os_service_default'],
   $swift_endpoint_type         = $facts['os_service_default'],
-  $default_transport_url       = $::trove::default_transport_url,
-  $rabbit_use_ssl              = $::trove::rabbit_use_ssl,
+  $default_transport_url       = $trove::default_transport_url,
+  $rabbit_use_ssl              = $trove::rabbit_use_ssl,
   $root_grant                  = $facts['os_service_default'],
   $root_grant_option           = $facts['os_service_default'],
   $container_registry          = $facts['os_service_default'],
@@ -164,32 +164,32 @@ class trove::guestagent(
 
   oslo::messaging::default { 'trove_guestagent_config':
     transport_url        => $default_transport_url,
-    control_exchange     => $::trove::control_exchange,
-    rpc_response_timeout => $::trove::rpc_response_timeout,
+    control_exchange     => $trove::control_exchange,
+    rpc_response_timeout => $trove::rpc_response_timeout,
   }
 
   oslo::messaging::rabbit {'trove_guestagent_config':
-    rabbit_ha_queues                => $::trove::rabbit_ha_queues,
-    heartbeat_timeout_threshold     => $::trove::rabbit_heartbeat_timeout_threshold,
-    heartbeat_rate                  => $::trove::rabbit_heartbeat_rate,
-    heartbeat_in_pthread            => $::trove::rabbit_heartbeat_in_pthread,
-    rabbit_qos_prefetch_count       => $::trove::rabbit_qos_prefetch_count,
+    rabbit_ha_queues                => $trove::rabbit_ha_queues,
+    heartbeat_timeout_threshold     => $trove::rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate                  => $trove::rabbit_heartbeat_rate,
+    heartbeat_in_pthread            => $trove::rabbit_heartbeat_in_pthread,
+    rabbit_qos_prefetch_count       => $trove::rabbit_qos_prefetch_count,
     rabbit_use_ssl                  => $rabbit_use_ssl,
-    kombu_reconnect_delay           => $::trove::kombu_reconnect_delay,
-    kombu_failover_strategy         => $::trove::kombu_failover_strategy,
-    amqp_durable_queues             => $::trove::amqp_durable_queues,
-    amqp_auto_delete                => $::trove::amqp_auto_delete,
-    kombu_ssl_ca_certs              => $::trove::kombu_ssl_ca_certs,
-    kombu_ssl_certfile              => $::trove::kombu_ssl_certfile,
-    kombu_ssl_keyfile               => $::trove::kombu_ssl_keyfile,
-    kombu_ssl_version               => $::trove::kombu_ssl_version,
-    rabbit_quorum_queue             => $::trove::rabbit_quorum_queue,
-    rabbit_transient_quorum_queue   => $::trove::rabbit_transient_quorum_queue,
-    rabbit_transient_queues_ttl     => $::trove::rabbit_transient_queues_ttl,
-    rabbit_quorum_delivery_limit    => $::trove::rabbit_quorum_delivery_limit,
-    rabbit_quorum_max_memory_length => $::trove::rabbit_quorum_max_memory_length,
-    rabbit_quorum_max_memory_bytes  => $::trove::rabbit_quorum_max_memory_bytes,
-    enable_cancel_on_failover       => $::trove::rabbit_enable_cancel_on_failover,
+    kombu_reconnect_delay           => $trove::kombu_reconnect_delay,
+    kombu_failover_strategy         => $trove::kombu_failover_strategy,
+    amqp_durable_queues             => $trove::amqp_durable_queues,
+    amqp_auto_delete                => $trove::amqp_auto_delete,
+    kombu_ssl_ca_certs              => $trove::kombu_ssl_ca_certs,
+    kombu_ssl_certfile              => $trove::kombu_ssl_certfile,
+    kombu_ssl_keyfile               => $trove::kombu_ssl_keyfile,
+    kombu_ssl_version               => $trove::kombu_ssl_version,
+    rabbit_quorum_queue             => $trove::rabbit_quorum_queue,
+    rabbit_transient_quorum_queue   => $trove::rabbit_transient_quorum_queue,
+    rabbit_transient_queues_ttl     => $trove::rabbit_transient_queues_ttl,
+    rabbit_quorum_delivery_limit    => $trove::rabbit_quorum_delivery_limit,
+    rabbit_quorum_max_memory_length => $trove::rabbit_quorum_max_memory_length,
+    rabbit_quorum_max_memory_bytes  => $trove::rabbit_quorum_max_memory_bytes,
+    enable_cancel_on_failover       => $trove::rabbit_enable_cancel_on_failover,
   }
 
   oslo::log { 'trove_guestagent_config':
@@ -197,14 +197,14 @@ class trove::guestagent(
     log_file            => $log_file,
     log_dir             => $log_dir,
     use_syslog          => $use_syslog,
-    syslog_log_facility => $log_facility
+    syslog_log_facility => $log_facility,
   }
 
   trove::generic_service { 'guestagent':
     enabled        => $enabled,
     manage_service => $manage_service,
-    package_name   => $::trove::params::guestagent_package_name,
-    service_name   => $::trove::params::guestagent_service_name,
+    package_name   => $trove::params::guestagent_package_name,
+    service_name   => $trove::params::guestagent_service_name,
     package_ensure => $package_ensure,
   }
 
