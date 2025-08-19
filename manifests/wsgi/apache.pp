@@ -165,7 +165,6 @@ class trove::wsgi::apache (
   $request_headers             = undef,
   $vhost_custom_fragment       = undef,
 ) inherits trove::params {
-
   include trove::deps
 
   Anchor['trove::install::end'] -> Class['apache']

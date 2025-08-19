@@ -39,6 +39,5 @@ class trove::params {
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")
     }
-
   } # Case $facts['os']['family']
 }

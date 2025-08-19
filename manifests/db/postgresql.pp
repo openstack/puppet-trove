@@ -24,14 +24,13 @@
 #   (Optional) Privileges given to the database user.
 #   Default to 'ALL'
 #
-class trove::db::postgresql(
+class trove::db::postgresql (
   String[1] $password,
   $dbname     = 'trove',
   $user       = 'trove',
   $encoding   = undef,
   $privileges = 'ALL',
 ) {
-
   include trove::deps
 
   openstacklib::db::postgresql { 'trove':

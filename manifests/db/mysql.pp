@@ -49,7 +49,7 @@
 #   (optional) Charset collate of trove database
 #   Defaults 'utf8_general_ci'.
 #
-class trove::db::mysql(
+class trove::db::mysql (
   String[1] $password,
   $dbname        = 'trove',
   $user          = 'trove',
@@ -58,7 +58,6 @@ class trove::db::mysql(
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
 ) {
-
   include trove::deps
 
   openstacklib::db::mysql { 'trove':

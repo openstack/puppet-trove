@@ -103,7 +103,7 @@
 #   (optional) Message queue name the Taskmanager will listen to.
 #   Defaults to $facts['os_service_default'].
 #
-class trove::api(
+class trove::api (
   Boolean $manage_service = true,
   $service_name           = $trove::params::api_service_name,
   $package_ensure         = 'present',
@@ -124,7 +124,6 @@ class trove::api(
   $auth_strategy          = 'keystone',
   $taskmanager_queue      = $facts['os_service_default'],
 ) inherits trove::params {
-
   include trove::deps
   include trove::db
   include trove::db::sync

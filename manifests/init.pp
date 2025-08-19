@@ -263,7 +263,7 @@
 #   will be run through a green thread.
 #   Defaults to undef
 #
-class trove(
+class trove (
   $default_transport_url              = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
@@ -318,7 +318,6 @@ class trove(
   # DEPRECATED PARAMETERS
   $rabbit_heartbeat_in_pthread        = undef,
 ) {
-
   include trove::deps
   include trove::policy
   include trove::params

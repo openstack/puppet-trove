@@ -76,7 +76,6 @@ class trove::guestagent::mariadb (
   $guest_log_long_query_time = undef,
   $icmp                      = undef,
 ) {
-
   include trove::deps
 
   if $guest_log_long_query_time != undef {
@@ -101,5 +100,4 @@ class trove::guestagent::mariadb (
     'mariadb/min_cluster_member_count':  value => $min_cluster_member_count;
     'mariadb/default_password_length':   value => $default_password_length;
   }
-
 }

@@ -52,7 +52,6 @@ class trove::guestagent::postgresql (
   $guest_log_exposed_logs  = $facts['os_service_default'],
   $default_password_length = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   trove_guestagent_config {
@@ -66,5 +65,4 @@ class trove::guestagent::postgresql (
     'postgresql/guest_log_exposed_logs':  value => join(any2array($guest_log_exposed_logs), ',');
     'postgresql/default_password_length': value => $default_password_length;
   }
-
 }
