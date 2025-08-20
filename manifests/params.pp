@@ -5,6 +5,8 @@
 class trove::params {
   include openstacklib::defaults
 
+  $pyver3 = $openstacklib::defaults::pyver3
+
   $client_package_name = 'python3-troveclient'
   $user                = 'trove'
   $group               = 'trove'
@@ -21,7 +23,7 @@ class trove::params {
       $taskmanager_package_name = 'openstack-trove-taskmanager'
       $taskmanager_service_name = 'openstack-trove-taskmanager'
       $trove_wsgi_script_dir    = '/var/www/cgi-bin/trove'
-      $trove_wsgi_script_source = '/usr/bin/trove-wsgi'
+      $trove_wsgi_script_source = "/usr/lib/python${pyver3}/site-packages/trove/cmd/app_wsgi.py"
     }
     'Debian': {
       $common_package_name      = 'trove-common'

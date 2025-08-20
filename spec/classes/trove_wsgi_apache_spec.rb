@@ -163,7 +163,7 @@ describe 'trove::wsgi::apache' do
         when 'RedHat'
           {
             :wsgi_script_path   => '/var/www/cgi-bin/trove',
-            :wsgi_script_source => '/usr/bin/trove-wsgi'
+            :wsgi_script_source => '/usr/lib/python3.9/site-packages/trove/cmd/app_wsgi.py',
           }
 
         end
