@@ -34,7 +34,6 @@ class trove::client (
   $client_package_name = $trove::params::client_package_name,
   $package_ensure = present,
 ) inherits trove::params {
-
   include trove::deps
 
   # NOTE(tkajinam): trove-package tag is used because troveclient is required
@@ -46,5 +45,4 @@ class trove::client (
   }
 
   include openstacklib::openstackclient
-
 }

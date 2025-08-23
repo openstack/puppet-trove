@@ -37,7 +37,6 @@ class trove::quota (
   $max_backups_per_tenant   = $facts['os_service_default'],
   $quota_driver             = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   trove_config {

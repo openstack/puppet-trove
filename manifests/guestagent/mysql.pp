@@ -66,7 +66,6 @@ class trove::guestagent::mysql (
   $guest_log_long_query_time = undef,
   $icmp                      = undef,
 ) {
-
   include trove::deps
 
   if $guest_log_long_query_time != undef {
@@ -89,5 +88,4 @@ class trove::guestagent::mysql (
     'mysql/guest_log_long_query_time': value => pick($guest_log_long_query_time, $facts['os_service_default']);
     'mysql/default_password_length':   value => $default_password_length;
   }
-
 }

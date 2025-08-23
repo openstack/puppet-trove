@@ -259,7 +259,6 @@ class trove::cache (
   $dead_timeout                         = $facts['os_service_default'],
   Boolean $manage_backend_package       = true,
 ) {
-
   include trove::deps
 
   oslo::cache { 'trove_config':

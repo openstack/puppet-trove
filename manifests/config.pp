@@ -56,7 +56,6 @@ class trove::config (
   Hash $trove_guestagent_config = {},
   Hash $trove_api_paste_ini     = {},
 ) {
-
   include trove::deps
 
   create_resources('trove_config', $trove_config)

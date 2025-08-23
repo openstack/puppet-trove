@@ -114,7 +114,7 @@
 #   (optional) Default OpenSSL aes_cbc key
 #   Defaults to undef
 #
-class trove::guestagent(
+class trove::guestagent (
   Boolean $enabled             = false,
   Boolean $manage_service      = true,
   $package_ensure              = 'present',
@@ -142,7 +142,6 @@ class trove::guestagent(
   $default_password_length     = undef,
   $backup_aes_cbc_key          = undef,
 ) inherits trove {
-
   include trove::deps
   include trove::params
   include trove::guestagent::service_credentials
@@ -168,7 +167,7 @@ class trove::guestagent(
     rpc_response_timeout => $trove::rpc_response_timeout,
   }
 
-  oslo::messaging::rabbit {'trove_guestagent_config':
+  oslo::messaging::rabbit { 'trove_guestagent_config':
     rabbit_ha_queues                => $trove::rabbit_ha_queues,
     heartbeat_timeout_threshold     => $trove::rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                  => $trove::rabbit_heartbeat_rate,

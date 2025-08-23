@@ -48,7 +48,6 @@ class trove::db (
   $database_pool_timeout            = $facts['os_service_default'],
   $mysql_enable_ndb                 = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   oslo::db { 'trove_config':

@@ -195,7 +195,7 @@
 #  "public", "internal" or "admin".
 #  Defaults to $facts['os_service_default'].
 #
-class trove::keystone::authtoken(
+class trove::keystone::authtoken (
   String[1] $password,
   $username                       = 'trove',
   $auth_url                       = 'http://localhost:5000',
@@ -234,7 +234,6 @@ class trove::keystone::authtoken(
   $service_type                   = $facts['os_service_default'],
   $interface                      = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   keystone::resource::authtoken { 'trove_config':

@@ -43,7 +43,6 @@ class trove::guestagent::service_credentials (
   $user_domain_name    = 'Default',
   $system_scope        = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   if is_service_default($system_scope) {
@@ -64,5 +63,4 @@ class trove::guestagent::service_credentials (
     'service_credentials/system_scope':        value => $system_scope;
     'service_credentials/region_name':         value => $region_name;
   }
-
 }

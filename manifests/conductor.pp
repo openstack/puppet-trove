@@ -32,7 +32,7 @@
 #   (optional) If False doesn't trace SQL requests.
 #   Default: $facts['os_service_default']
 #
-class trove::conductor(
+class trove::conductor (
   Boolean $enabled        = true,
   Boolean $manage_service = true,
   $package_ensure         = 'present',
@@ -41,7 +41,6 @@ class trove::conductor(
   $enable_profiler        = $facts['os_service_default'],
   $trace_sqlalchemy       = $facts['os_service_default'],
 ) {
-
   include trove::deps
   include trove::params
 
@@ -63,5 +62,4 @@ class trove::conductor(
     service_name   => $trove::params::conductor_service_name,
     package_ensure => $package_ensure,
   }
-
 }

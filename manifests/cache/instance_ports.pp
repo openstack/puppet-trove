@@ -18,7 +18,6 @@ class trove::cache::instance_ports (
   $expiration_time = $facts['os_service_default'],
   $caching         = $facts['os_service_default'],
 ) {
-
   include trove::deps
 
   trove_config {
