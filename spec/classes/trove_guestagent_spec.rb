@@ -43,7 +43,6 @@ describe 'trove::guestagent' do
           :rabbit_ha_queues                => '<SERVICE DEFAULT>',
           :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
           :heartbeat_rate                  => '<SERVICE DEFAULT>',
-          :heartbeat_in_pthread            => nil,
           :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
           :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
           :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
@@ -93,9 +92,8 @@ describe 'trove::guestagent' do
       context 'with custom rabbitmq parameters' do
         let :pre_condition do
           "class { 'trove':
-             rabbit_ha_queues            => true,
-             rabbit_heartbeat_in_pthread => true,
-             amqp_durable_queues         => true,
+             rabbit_ha_queues    => true,
+             amqp_durable_queues => true,
            }
            class { 'trove::guestagent::service_credentials':
              password => 'verysectrete',
@@ -103,9 +101,8 @@ describe 'trove::guestagent' do
         end
         it 'configures trove-api with RabbitMQ' do
           is_expected.to contain_oslo__messaging__rabbit('trove_guestagent_config').with(
-            :rabbit_ha_queues        => true,
-            :heartbeat_in_pthread    => true,
-            :amqp_durable_queues     => true,
+            :rabbit_ha_queues    => true,
+            :amqp_durable_queues => true,
           )
         end
       end
