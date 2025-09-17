@@ -63,6 +63,10 @@
 #   in the api config.
 #   Defaults to false.
 #
+# [*sync_db*]
+#   (optional) Enable dbsync.
+#   Defaults to true.
+#
 # [*cert_file*]
 #   (optinal) Certificate file to use when starting API server securely
 #   Defaults to false, not set
@@ -113,6 +117,7 @@ class trove::api (
   $workers                = $facts['os_workers'],
   Boolean $enabled        = true,
   Boolean $purge_config   = false,
+  Boolean $sync_db        = true,
   $cert_file              = $facts['os_service_default'],
   $key_file               = $facts['os_service_default'],
   $ca_file                = $facts['os_service_default'],
@@ -126,8 +131,11 @@ class trove::api (
 ) inherits trove::params {
   include trove::deps
   include trove::db
-  include trove::db::sync
   include trove::policy
+
+  if $sync_db {
+    include trove::db::sync
+  }
 
   # basic service config
   trove_config {

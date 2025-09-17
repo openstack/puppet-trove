@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``trove::api::sync_db`` parameter has been added.
