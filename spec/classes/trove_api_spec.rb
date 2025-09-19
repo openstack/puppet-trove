@@ -113,6 +113,18 @@ describe 'trove::api' do
           is_expected.to contain_trove_config('DEFAULT/http_mgmt_post_rate').with_value('2000')
         end
       end
+
+      context 'with db sync disabled' do
+        before :each do
+          params.merge!(
+            :sync_db => false,
+          )
+        end
+
+        it 'does not run db sync' do
+          is_expected.to_not contain_class('trove::db::sync')
+        end
+      end
     end
   end
 
