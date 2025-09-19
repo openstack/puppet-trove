@@ -305,7 +305,6 @@ class trove (
   $package_ensure                     = 'present',
 ) {
   include trove::deps
-  include trove::policy
   include trove::params
 
   package { 'trove':

@@ -127,6 +127,7 @@ class trove::api (
   include trove::deps
   include trove::db
   include trove::db::sync
+  include trove::policy
 
   # basic service config
   trove_config {
