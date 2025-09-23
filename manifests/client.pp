@@ -31,8 +31,8 @@
 #
 #
 class trove::client (
-  $client_package_name = $trove::params::client_package_name,
-  $package_ensure = present,
+  $client_package_name                    = $trove::params::client_package_name,
+  Stdlib::Ensure::Package $package_ensure = present,
 ) inherits trove::params {
   include trove::deps
 

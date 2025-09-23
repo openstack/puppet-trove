@@ -50,9 +50,9 @@
 define trove::generic_service (
   $package_name,
   $service_name,
-  Boolean $enabled        = false,
-  Boolean $manage_service = true,
-  $package_ensure         = 'present',
+  Boolean $enabled                        = false,
+  Boolean $manage_service                 = true,
+  Stdlib::Ensure::Package $package_ensure = present,
 ) {
   include trove::deps
   include trove::params

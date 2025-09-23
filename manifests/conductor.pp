@@ -33,13 +33,13 @@
 #   Default: $facts['os_service_default']
 #
 class trove::conductor (
-  Boolean $enabled        = true,
-  Boolean $manage_service = true,
-  $package_ensure         = 'present',
-  $conductor_manager      = 'trove.conductor.manager.Manager',
-  $workers                = $facts['os_workers'],
-  $enable_profiler        = $facts['os_service_default'],
-  $trace_sqlalchemy       = $facts['os_service_default'],
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  Stdlib::Ensure::Package $package_ensure = present,
+  $conductor_manager                      = 'trove.conductor.manager.Manager',
+  $workers                                = $facts['os_workers'],
+  $enable_profiler                        = $facts['os_service_default'],
+  $trace_sqlalchemy                       = $facts['os_service_default'],
 ) {
   include trove::deps
   include trove::params

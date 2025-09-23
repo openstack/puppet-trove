@@ -36,10 +36,10 @@ describe 'trove::client' do
 
     context 'with package_ensure parameter provided' do
       let :params do
-        { :package_ensure => false }
+        { :package_ensure => 'latest' }
       end
       it { is_expected.to contain_package('python-troveclient').with(
-        :ensure => false,
+        :ensure => 'latest',
         :name   => platform_params[:client_package_name],
         :tag    => ['openstack', 'openstackclient', 'trove-package']
       )}
