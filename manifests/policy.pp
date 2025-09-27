@@ -46,13 +46,13 @@
 #    Defaults to false.
 #
 class trove::policy (
-  $enforce_scope        = $facts['os_service_default'],
-  $enforce_new_defaults = $facts['os_service_default'],
-  Hash $policies        = {},
-  $policy_path          = '/etc/trove/policy.yaml',
-  $policy_default_rule  = $facts['os_service_default'],
-  $policy_dirs          = $facts['os_service_default'],
-  Boolean $purge_config = false,
+  $enforce_scope                    = $facts['os_service_default'],
+  $enforce_new_defaults             = $facts['os_service_default'],
+  Openstacklib::Policies $policies  = {},
+  Stdlib::Absolutepath $policy_path = '/etc/trove/policy.yaml',
+  $policy_default_rule              = $facts['os_service_default'],
+  $policy_dirs                      = $facts['os_service_default'],
+  Boolean $purge_config             = false,
 ) {
   include trove::deps
   include trove::params
@@ -64,13 +64,11 @@ class trove::policy (
     file_group   => $trove::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
-    tag          => 'trove',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
-  # policy config should occur in the config block also as soon as
-  # puppet-trove supports it. Leave commented out for now.
+  # policy config should occur in the config block also.
   Anchor['trove::config::begin']
   -> Openstacklib::Policy[$policy_path]
   -> Anchor['trove::config::end']
