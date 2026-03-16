@@ -158,7 +158,7 @@ describe 'trove::wsgi::apache' do
         when 'Debian'
           {
             :wsgi_script_path   => '/usr/lib/cgi-bin/trove',
-            :wsgi_script_source => '/usr/bin/trove-wsgi'
+            :wsgi_script_source => '/usr/lib/python3/dist-packages/trove/cmd/app_wsgi.py',
           }
         when 'RedHat'
           {
