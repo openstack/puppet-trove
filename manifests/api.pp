@@ -197,6 +197,8 @@ class trove::api (
       }
       if $manage_service {
         Trove_api_paste_ini<||> ~> Service['trove-api']
+        # On any uwsgi config change, we must restart Trove API.
+        Trove_api_uwsgi_config<||> ~> Service['trove-api']
       }
     }
   }
