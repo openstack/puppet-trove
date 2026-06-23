@@ -32,6 +32,10 @@ class trove::deps {
   -> Trove_api_paste_ini<||>
   -> Anchor['trove::config::end']
 
+  Anchor['trove::config::begin']
+  -> Trove_api_uwsgi_config<||>
+  -> Anchor['trove::config::end']
+
   # We need openstackclient installed before marking service end so that trove
   # will have clients available to create resources. This tag handles the
   # openstackclient but indirectly since the client is not available in
