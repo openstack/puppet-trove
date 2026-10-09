@@ -144,7 +144,6 @@ class trove::guestagent (
 ) inherits trove {
   include trove::deps
   include trove::params
-  include trove::guestagent::service_credentials
 
   if $backup_aes_cbc_key != undef {
     warning('The parameter backup_aes_cbc_key is deprecated for removal')

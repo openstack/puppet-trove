@@ -1,4 +1,7 @@
-# The trove::guestagent::service_credentials class helps configure auth settings
+# == Class trove::guestagent::service_credentials
+#
+# DEPRECATED !!
+# Configure auth settings for trove-guest-agent
 #
 # == Parameters
 #
@@ -44,6 +47,8 @@ class trove::guestagent::service_credentials (
   $system_scope        = $facts['os_service_default'],
 ) {
   include trove::deps
+
+  warning('This class is deprecated and will be removed in a future release')
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

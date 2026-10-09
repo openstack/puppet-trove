@@ -6,16 +6,9 @@ describe 'trove::guestagent' do
 
     context 'with default parameters' do
 
-      let :pre_condition do
-        "class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
-         }"
-      end
-
       it 'includes required classes' do
         is_expected.to contain_class('trove::deps')
         is_expected.to contain_class('trove::params')
-        is_expected.to contain_class('trove::guestagent::service_credentials')
       end
 
       it 'installs trove-guestagent package and service' do
@@ -94,9 +87,6 @@ describe 'trove::guestagent' do
           "class { 'trove':
              rabbit_ha_queues    => true,
              amqp_durable_queues => true,
-           }
-           class { 'trove::guestagent::service_credentials':
-             password => 'verysectrete',
            }"
         end
         it 'configures trove-api with RabbitMQ' do
@@ -113,9 +103,6 @@ describe 'trove::guestagent' do
              default_transport_url => 'rabbit://user:pass@host:1234/virt',
              rpc_response_timeout  => '120',
              control_exchange      => 'openstack',
-           }
-           class { 'trove::guestagent::service_credentials':
-             password => 'verysectrete',
            }"
         end
 
@@ -131,10 +118,7 @@ describe 'trove::guestagent' do
 
     context 'with custom parameters' do
       let :pre_condition do
-        "class { 'trove': }
-         class { 'trove::guestagent::service_credentials':
-          password => 'verysectrete',
-         }"
+        "class { 'trove': }"
       end
 
       let :params do
@@ -162,9 +146,7 @@ describe 'trove::guestagent' do
            kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
            kombu_ssl_certfile => '/path/to/ssl/cert/file',
            kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-           kombu_ssl_version  => 'TLSv1'}
-         class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
+           kombu_ssl_version  => 'TLSv1'
          }"
       end
 
@@ -183,9 +165,6 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            rabbit_use_ssl => true
-         }
-         class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
          }"
       end
 
@@ -204,9 +183,6 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            rabbit_use_ssl => false
-         }
-         class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
          }"
       end
 
@@ -225,9 +201,6 @@ describe 'trove::guestagent' do
       let :pre_condition do
         "class { 'trove':
            default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-         }
-         class { 'trove::guestagent::service_credentials':
-           password => 'verysectrete',
          }"
       end
 
